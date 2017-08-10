@@ -22,22 +22,52 @@ Image Raytrace (Camera cam, Scene scene, int width, int height)
 }
 #endif
 
+bool hit_sphere( const Ray & r_, const point3 & c_, float radius_){
+    auto oc = r_.get_origin() - c_;
+    auto a = utility::dot(r_.get_direction(), r_.get_direction());
+    auto b = 2 * utility::dot(oc, r_.get_direction());
+    auto c = utility::dot(oc, oc) - (radius_* radius_);
+
+    return (b*b - 4*a*c) >=0;
+
+}
+
+
 
 rgb color( const Ray & r_ )
 {
-    rgb bottom (0.5, 0.7, 0 );
-    rgb top(1,1,1);
+    rgb top (0.5, 0.7, 1 );
+    rgb bottom(1,1,1);
+    
+    if(hit_sphere(r_, point3(0.5,0,-1), 0.2))
+        return rgb(1,0,0);
+
+    if(hit_sphere(r_, point3(0,0,-1), 0.2))
+        return rgb(0,1,0);
+
+    if(hit_sphere(r_, point3(-0.5,0,-1), 0.2))
+        return rgb(1,0,0);
+
+    auto unit_ray = utility::unit_vector(r_.get_direction());
+
+    auto unit_ray_y = unit_ray.y();
+
+    auto t = 0.5*(unit_ray_y+1);
+
+    rgb result = bottom*(1-t)+top*t;
 
     // TODO: determine the background color, which is an linear interpolation between bottom->top.
     // The interpolation is based on where the ray hits the background.
     // Imagine that the background is attached to the view-plane; in other words,
     // the virtual world we want to visualize is empty!
 
-    return top; // Stub, replace it accordingly
+    return result; // Stub, replace it accordingly
 }
 
 int main( void )
 {
+
+
     int n_cols{ 200 };
     int n_rows{ 100 };
 
