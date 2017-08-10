@@ -23,17 +23,50 @@ Image Raytrace (Camera cam, Scene scene, int width, int height)
 #endif
 
 
+bool hit_sphere ( const Ray & r_, const point3 & c_, float radius_ ){
+
+	auto oc = r_.get_origin() - c_; // o - c
+
+	auto a = utility::dot( r_.get_direction(), r_.get_direction() );
+
+	auto b = 2 * utility::dot( oc, r_.get_direction() );
+
+	auto c = utility::dot(oc, oc) - (radius_ * radius_);
+
+	return ( b * b - 4 * a * c) >= 0;
+}
+
+
 rgb color( const Ray & r_ )
 {
-    rgb bottom (0.5, 0.7, 0 );
-    rgb top(1,1,1);
+    rgb top (0.5, 0.7, 1 );
+    rgb bottom (1,1,1);
 
-    // TODO: determine the background color, which is an linear interpolation between bottom->top.
-    // The interpolation is based on where the ray hits the background.
-    // Imagine that the background is attached to the view-plane; in other words,
-    // the virtual world we want to visualize is empty!
+    if (hit_sphere (r_, point3(0.5,0,-1), 0.2)) {
+    	return rgb(1, 0, 0);
+    }
 
-    return top; // Stub, replace it accordingly
+    if (hit_sphere (r_, point3(0,0,-1), 0.2)) {
+    	return rgb(0, 1, 0);
+    }
+
+    if (hit_sphere (r_, point3(-0.5,0,-1), 0.2)) {
+    	return rgb(0, 0, 1);
+    }
+
+    // 1) we make the ray a unit vector in the same direction.
+    auto unit_ray = utility::unit_vector( r_.get_direction() );
+
+    // 2) we take only the vertical component, since the lerp has to interpolate colors verticaly
+    auto unit_ray_y = unit_ray.y(); // this component might assume values ranging from -1 to 1
+
+    // 3) normalize the ray's vertical component to the range [0;1]
+    auto t= 0.5*( unit_ray_y+1 );
+
+    // 4) use linear interpolation (lerp) between the colors that compose the background
+    rgb result = bottom*(1 - t) + top*(t);
+
+    return result; 
 }
 
 int main( void )
