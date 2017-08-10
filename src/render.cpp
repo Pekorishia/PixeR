@@ -1,4 +1,10 @@
 #include <iostream>
+#include <fstream>
+#include <limits>
+#include <string>
+#include <math.h> 
+#include <cmath>     
+
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
 
@@ -22,10 +28,22 @@ Image Raytrace (Camera cam, Scene scene, int width, int height)
 }
 #endif
 
+/*
+ * Returns de Z component, if the ray hits the sphere, or infinity otherwise
+ * 
+ * TODO: only works with a 2D sphere
+ */
+float hit_sphere ( const Ray & r_, const point3 & c_, float radius_ ){
 
-bool hit_sphere ( const Ray & r_, const point3 & c_, float radius_ ){
+	// First, manipulate the 1), 2) and 3) line to create the 4) equation
+	// 1) (point - center) * (point - center) - radius² = 0
+	// 2) point == ray
+	// 3) ray(t) = origin + direction*t
+	// 4) d*d*t² + 2(origin - center)*d*t + (origin - center)*(origin - center) - radius² = 0
 
-	auto oc = r_.get_origin() - c_; // o - c
+
+	// Second, calculate the a, b and c from the equation 4) (a*t² + b*t + c = 0) 
+	auto oc = r_.get_origin() - c_; // (origin - center)
 
 	auto a = utility::dot( r_.get_direction(), r_.get_direction() );
 
@@ -33,35 +51,65 @@ bool hit_sphere ( const Ray & r_, const point3 & c_, float radius_ ){
 
 	auto c = utility::dot(oc, oc) - (radius_ * radius_);
 
-	return ( b * b - 4 * a * c) >= 0;
+	// Third, calculate the delta (b² - 4ac) is >= 0
+	auto delta = b * b - 4 * a * c;
+
+	// Last, return the Z component
+	if (delta >= 0){
+		return std::abs (c_.z());
+	}
+
+	return std::numeric_limits<float>::infinity();
 }
 
+//float euclidian_distance (const Ray & r_, const point3 & c_){
+//    float distance = sqrt(pow (r_.x() - c_.x(), 2) + pow (r_.y() - c_.y(),2));
+//    return distance;
+//}
 
-rgb color( const Ray & r_ )
-{
-    rgb top (0.5, 0.7, 1 );
-    rgb bottom (1,1,1);
+//rgb radial_gradient (const Ray & r_, const point3 & c_, float radius_){
+//	float distance = euclidian_distance(r_, c_);
+//	int val = 255.0/radius_;
 
-    if (hit_sphere (r_, point3(0.5,0,-1), 0.2)) {
-    	return rgb(1, 0, 0);
-    }
+    //return the gradient
+//    return rgb (255 - (((int)val * (int)distance) % 255), 0, 0);
+//}
 
-    if (hit_sphere (r_, point3(0,0,-1), 0.2)) {
-    	return rgb(0, 1, 0);
-    }
+/*
+ * Find the resulting color of the horizontal interpolation
+ * 
+ * TODO: only work with the range [-2;2]
+ */
+rgb horizontal_interpolation ( const Ray & r_, const rgb & left, const rgb & right){
+	// 1) we make the ray a vector in the same direction.
+    auto ray = r_.get_direction();
 
-    if (hit_sphere (r_, point3(-0.5,0,-1), 0.2)) {
-    	return rgb(0, 0, 1);
-    }
+    // 2) we take only the horizontal component
+    auto ray_x = ray.x(); // this component might assume values ranging from -2 to 2
 
-    // 1) we make the ray a unit vector in the same direction.
-    auto unit_ray = utility::unit_vector( r_.get_direction() );
+    // 3) normalize the ray's horizontal component to the range [0;1]
+    auto t= 0.5+( ray_x*0.25 );
+
+    // 4) use linear interpolation (lerp) between the colors that compose the background
+    rgb result = left*(1 - t) + right*(t);
+
+    return result;
+}
+
+/*
+ * Find the resulting color of the vertical interpolation
+ *
+ * TODO: only work with the range [-1;1]
+ */
+rgb vertical_interpolation ( const Ray & r_, const rgb & bottom, const rgb & top){
+	// 1) we make the ray a vector in the same direction.
+    auto ray = r_.get_direction();
 
     // 2) we take only the vertical component, since the lerp has to interpolate colors verticaly
-    auto unit_ray_y = unit_ray.y(); // this component might assume values ranging from -1 to 1
+    auto ray_y = ray.y(); // this component might assume values ranging from -1 to 1
 
     // 3) normalize the ray's vertical component to the range [0;1]
-    auto t= 0.5*( unit_ray_y+1 );
+    auto t= 0.5+( ray_y*0.5 );
 
     // 4) use linear interpolation (lerp) between the colors that compose the background
     rgb result = bottom*(1 - t) + top*(t);
@@ -69,8 +117,76 @@ rgb color( const Ray & r_ )
     return result; 
 }
 
-int main( void )
-{
+
+rgb color( const Ray & r_ ){
+	rgb top_left     (0, 1, 0); // green
+	rgb top_right    (1, 1, 0); // yellow
+	rgb bottom_left  (0, 0, 0); // black
+	rgb bottom_right (1, 0, 0); // red
+
+    
+    //float hit1 = hit_sphere (r_, point3(0,0,-1), 0.2);
+	
+    //if ( hit1 < std::numeric_limits<float>::infinity()){
+    //	return radial_gradient (r_, point3(0,0,-1), 0.2);
+    //}
+    
+
+    rgb top = horizontal_interpolation(r_, top_left, top_right);
+    rgb bottom = horizontal_interpolation(r_, bottom_left, bottom_right);
+
+    rgb result = vertical_interpolation(r_, bottom, top);
+    
+    return result;
+}
+
+/*
+ * Opens the scene file and get all values
+ */
+//void file_handler( std::string & file_name, 
+//				   std::string & img_name, 
+//				   std::string & type,
+//				   std::string & codification,
+//				   int & width,
+//				   int & height,
+//				   rgb & top_left,
+//				   rgb & bottom_left,
+//				   rgb & top_right,
+//				   rgb & bottom_right){
+//
+//	std::string line;
+//  	std::ifstream ifs(file_name);
+//
+//  	getline (ifs,line);
+//
+//  	std::cout << line << ".\n";
+//
+//    // Remove comments
+//    if (line.find("#") < line.length()) {
+//        line = line.replace(line.find("#"), line.length() - 1, "");
+//    }
+//
+//    std::cout << line << std::endl;
+//    std::string n("    UPPER_LEFT: ");
+//    line = line.replace(0, n.length(), "");
+//    std::cout << line << std::endl;
+//    n = line.substr(0, line.find(" "));
+//    float r = atof(n.c_str());
+//    line = line.replace(1, line.find(" "), "");
+//    std::cout << line << std::endl;
+//    n = line.substr(0, line.find(" "));
+//    std::cout << n << std::endl;
+//    float g = atof(n.c_str());
+//    n = line.substr(line.find(" "));
+//    std::cout << n << std::endl;
+//    float b = atof(n.c_str());
+//    std::cout << r << " - " << g << " - " << b << std::endl;
+//}
+
+int main (int argc, char **argv){
+	
+	//file_handler(argv[1]);	
+
     int n_cols{ 200 };
     int n_rows{ 100 };
 
