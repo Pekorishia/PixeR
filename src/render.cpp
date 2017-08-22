@@ -17,6 +17,18 @@ float up_right[3];
 float down_right[3];
 float down_left[3];
 
+float max_depth = 4.f; 
+rgb foreground_color (0,0,0);
+rgb background_color (1,1,1);
+
+//==============================[ OBJECTS ]====================================// 
+
+typedef struct 
+{  
+    point3 c;  
+    float r;  
+} sphere; 
+
 //==============================[ FILE HANDLING ]==============================//
 
 const vector<string> split(const string& s, const char& c)
@@ -93,7 +105,7 @@ void file_handler (std::string & cena, std::string & line, std::string & name, i
 //==============================[ COLLISIONS ]=================================//
 
 /*  
- * Returns de Z component, if the ray hits the sphere, or infinity otherwise  
+ * Returns de t component if the ray hits the sphere, or infinity otherwise  
  *  
  * TODO: only works with a 2D sphere  
  */ 
@@ -126,25 +138,24 @@ float hit_sphere ( const Ray & r_, const point3 & c_, float radius_ )
 
 //==============================[ INTERPOLATIONS ]=============================//  
 
-
 /*  
  * Find the resulting color of the horizontal interpolation  
  *  
  * TODO: only work with the range [-2;2]  
  */ 
-rgb horizontal_interpolation ( const Ray & r_, const rgb & left, const rgb & right)
- {     
-    // 1) we make the ray a vector in the same direction.     
+rgb horizontal_interpolation ( const Ray & r_, const rgb & left_, const rgb & right_)
+{     
+    // Make the ray a vector in the same direction.     
     auto ray = r_.get_direction();     
 
-    // 2) we take only the horizontal component     
+    // Take only the horizontal component     
     auto ray_x = ray.x(); // this component might assume values ranging from -2 to 2     
 
-    // 3) normalize the ray's horizontal component to the range [0;1]     
+    // Normalize the ray's horizontal component to the range [0;1]     
     auto t= 0.5+( ray_x*0.25 );     
 
-    // 4) use linear interpolation (lerp) between the colors that compose the background     
-    rgb result = left*(1 - t) + right*(t);     
+    // Use linear interpolation (lerp) between the colors that compose the background     
+    rgb result = left_*(1 - t) + right_*(t);     
 
     return result; 
 } 
@@ -154,23 +165,60 @@ rgb horizontal_interpolation ( const Ray & r_, const rgb & left, const rgb & rig
  *  
  * TODO: only work with the range [-1;1]  
  */ 
-rgb vertical_interpolation ( const Ray & r_, const rgb & bottom, const rgb & top)
+rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_)
 {    
-    // 1) we make the ray a vector in the same direction.     
+    // Make the ray a vector in the same direction.     
     auto ray = r_.get_direction();     
 
-    // 2) we take only the vertical component, since the lerp has to interpolate colors verticaly     
+    // Take only the vertical component, since the lerp has to interpolate colors verticaly     
     auto ray_y = ray.y(); // this component might assume values ranging from -1 to 1     
 
-    // 3) normalize the ray's vertical component to the range [0;1]     
+    // Normalize the ray's vertical component to the range [0;1]     
     auto t= 0.5+( ray_y*0.5 );     
 
-    // 4) use linear interpolation (lerp) between the colors that compose the background     
-    rgb result = bottom*(1 - t) + top*(t);     
+    // Use linear interpolation (lerp) between the colors that compose the background     
+    rgb result = bottom_*(1 - t) + top_*(t);     
+    return result; 
+}
+
+/*  
+ * Find the resulting color of the depth interpolation 
+ */ 
+rgb depth_interpolation ( float t_, const rgb & foreground_, const rgb & background_)
+{    
+    float t_normalized;
+
+    if (t_ <= max_depth && t_ >= 0){
+        t_normalized = t_ / max_depth;     
+    }
+    else{
+        t_normalized = 1;
+    }
+
+    // Use linear interpolation (lerp) between the colors that compose the background     
+    rgb result = foreground_*(1 - t_normalized) + background_*(t_normalized);     
     return result; 
 }
 
 //==============================[ COLOR PICKING ]==============================//
+
+/*
+ * Returns the color based on the normal vector
+ */
+rgb normal_color (const Ray & r_, const point3 & c_, float t_)
+{   
+
+    point3 p = r_.point_at(t_);
+
+    vec3 normal = p - c_;
+
+    auto unit_normal = utility::unit_vector(normal);
+
+    // Nomalizing the unit normal to only positive values
+    auto color = 0.5 * (unit_normal + vec3(1,1,1));
+        
+    return color;
+}
 
 /*  
  * Returns de color of the specific pixel that is hit by the ray  
@@ -179,43 +227,90 @@ rgb vertical_interpolation ( const Ray & r_, const rgb & bottom, const rgb & top
  */ 
 rgb color( const Ray & r_ )
 {
+    // Receive the 4 border's colors
     rgb UPPER_LEFT (up_left[0], up_left[1], up_left[2]);
     rgb LOWER_LEFT (down_left[0], down_left[1], down_left[2]);
     rgb UPPER_RIGHT (up_right[0], up_right[1], up_right[2]);
     rgb LOWER_RIGHT (down_right[0], down_right[1], down_right[2]);
 
-    point3 c (0,0,-1);
+    // Spheres creation
+    sphere sphere_1;
+    sphere sphere_2;
+    sphere sphere_3;
+    sphere sphere_floor;
 
-    auto sphere_t = hit_sphere(r_, c, 0.5);
+    sphere_1.c = point3(0.3, 0, -1);
+    sphere_2.c = point3(0, 1, -2);
+    sphere_3.c = point3(-0.4, 0, -3);
+    sphere_floor.c = point3(0, -100.5, -3);
 
-    if(sphere_t != std::numeric_limits<float>::infinity()){
+    sphere_1.r = 0.4;
+    sphere_2.r = 0.6;
+    sphere_3.r = 0.7;
+    sphere_floor.r = 99.f;
 
-        point3 p = r_.point_at(sphere_t);
+    auto sphere_1_t = hit_sphere(r_, sphere_1.c, sphere_1.r);
+    auto sphere_2_t = hit_sphere(r_, sphere_2.c, sphere_2.r);
+    auto sphere_3_t = hit_sphere(r_, sphere_3.c, sphere_3.r);
+    auto sphere_floor_t = hit_sphere(r_, sphere_floor.c, sphere_floor.r);
 
-        vec3 normal = p - c;
+    if (sphere_floor_t < 0)
+        sphere_floor_t = std::numeric_limits<float>::infinity();
 
-        auto unit_normal = utility::unit_vector(normal);
-        auto color_sphere = 0.5* (unit_normal + vec3(1,1,1));
-        
-        return color_sphere;
+
+    if (sphere_1_t <= sphere_2_t &&
+        sphere_1_t <= sphere_3_t &&
+        sphere_1_t <= sphere_floor_t &&
+        sphere_1_t != std::numeric_limits<float>::infinity()){
+
+        //return normal_color (r_, sphere_1.c, sphere_1_t);  
+        return depth_interpolation ( sphere_1_t, foreground_color, background_color);
+    }
+    if (sphere_2_t <= sphere_1_t &&
+        sphere_2_t <= sphere_3_t &&
+        sphere_2_t <= sphere_floor_t &&
+        sphere_2_t != std::numeric_limits<float>::infinity()){
+
+        //return normal_color (r_, sphere_2.c, sphere_2_t);
+        return depth_interpolation ( sphere_2_t, foreground_color, background_color);  
+    }
+    if (sphere_3_t <= sphere_1_t &&
+        sphere_3_t <= sphere_2_t &&
+        sphere_3_t <= sphere_floor_t &&
+        sphere_3_t != std::numeric_limits<float>::infinity()){
+
+        //return normal_color (r_, sphere_3.c, sphere_3_t);    
+        return depth_interpolation ( sphere_3_t, foreground_color, background_color);   
+    }
+    if (sphere_floor_t <= sphere_1_t &&
+        sphere_floor_t <= sphere_2_t &&
+        sphere_floor_t <= sphere_3_t &&
+        sphere_floor_t != std::numeric_limits<float>::infinity()){        
+
+        //return normal_color (r_, sphere_floor.c, sphere_floor_t);  
+        return depth_interpolation ( sphere_floor_t, foreground_color, background_color);      
     }
 
+    return depth_interpolation ( std::numeric_limits<float>::infinity(), foreground_color, background_color);     
 
-    auto unit_ray = (r_.get_direction());
+    // Calculate de unit vector
+    // auto unit_ray = (r_.get_direction());
 
-    auto unit_ray_y = unit_ray.y();
-    auto unit_ray_x = unit_ray.x();
+    // auto unit_ray_y = unit_ray.y();
+    // auto unit_ray_x = unit_ray.x();
 
-    auto t = (0.5*unit_ray_y)+0.5;
-    auto u = (0.25*unit_ray_x)+0.5;
+    // // Normalize the unit vector to the range [0;1]
+    // auto t = (0.5*unit_ray_y)+0.5;
+    // auto u = (0.25*unit_ray_x)+0.5;
 
-    rgb result = (LOWER_LEFT*(1-t)*(1-u) +
-                    UPPER_LEFT*t*(1-u) +
-                    LOWER_RIGHT*(1-t)*(u) +
-                    UPPER_RIGHT*(t)*(u)
-                    );
+    // // Generate the pixel color
+    // rgb result = (LOWER_LEFT*(1-t)*(1-u) +
+    //                 UPPER_LEFT*t*(1-u) +
+    //                 LOWER_RIGHT*(1-t)*(u) +
+    //                 UPPER_RIGHT*(t)*(u)
+    //                 );
 
-    return result; 
+    // return result; 
 }
 
 //==============================[ MAIN ]=====================================//
@@ -293,3 +388,36 @@ int main( int argc, const char * argv[] )
 
     return 0;
 }
+
+
+// class Object
+//     + origin: vec3
+//     + material: Material
+//     + bool hit( Ray, t_min, t_max, HitRecord & ht)
+
+// class scene
+//     + std::list< Object>
+//     + background
+
+// class Camera
+//     + lower_left_corner
+//     + vertical axis
+//     + horizontal axis
+//     + origin (vp)
+
+// class Image (opcional)
+//     + width
+//     + height
+//     + byte * pixels
+
+// class RayTrace
+//     + Camera c
+//     + Scene s
+//     + ResourceManager materials
+//     + n_cols
+//     + n_rows
+//     ----------------
+//     + init()
+//     + hit_anything()
+//     + render() = ray_trace()
+//     + color()

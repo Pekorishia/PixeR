@@ -1,7 +1,7 @@
 #ifndef _RAY_H_
 #define _RAY_H_
 
-#include "vec3.h" // necessário para acessar vec3
+#include "vec3.h" // needed yo access vec3
 
 using namespace utility; 
 
