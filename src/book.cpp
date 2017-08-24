@@ -1,8 +1,16 @@
 #include <iostream>
-#include "../includes/sphere.h"
-#include "../includes/scene.h"
-#include "../includes/camera.h"
+#include <fstream>
 
+#include "../includes/scene.h"
+#include "../includes/sphere.h"
+#include "../includes/raytrace.h"
+  
+
+/*  
+ * Find the resulting color of the vertical interpolation  
+ *  
+ * TODO: only work with the range [-1;1]  
+ */ 
 rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_)
 {    
     // Make the ray a vector in the same direction.     
@@ -19,6 +27,66 @@ rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & to
     return result; 
 }
 
+/*  
+ * Find the resulting color of the horizontal interpolation  
+ *  
+ * TODO: only work with the range [-2;2]  
+ */ 
+rgb horizontal_interpolation ( const Ray & r_, const rgb & left_, const rgb & right_)
+{     
+    // Make the ray a vector in the same direction.     
+    auto ray = r_.get_direction();     
+
+    // Take only the horizontal component     
+    auto ray_x = ray.x(); // this component might assume values ranging from -2 to 2     
+
+    // Normalize the ray's horizontal component to the range [0;1]     
+    auto t= 0.5+( ray_x*0.25 );     
+
+    // Use linear interpolation (lerp) between the colors that compose the background     
+    rgb result = left_*(1 - t) + right_*(t);     
+
+    return result; 
+} 
+
+/*  
+ * Find the resulting color of the depth interpolation 
+ */ 
+rgb depth_interpolation ( float t_, float min_depth, float max_depth, const rgb & foreground_, const rgb & background_)
+{    
+    float t_normalized;
+
+    if (t_ <= max_depth && t_ >= min_depth){
+        t_normalized = t_ / max_depth;     
+    }
+    else{
+        t_normalized = 1;
+    }
+
+    // Use linear interpolation (lerp) between the colors that compose the background     
+    rgb result = foreground_*(1 - t_normalized) + background_*(t_normalized);     
+    return result; 
+}
+
+/*
+ * Returns the color based on the normal vector
+ */
+rgb normal_color (const Ray & r_, const point3 & c_, float t_)
+{   
+
+    point3 p = r_.point_at(t_);
+
+    vec3 normal = p - c_;
+
+    auto unit_normal = utility::unit_vector(normal);
+
+    // Nomalizing the unit normal to only positive values
+    auto color = 0.5 * (unit_normal + vec3(1,1,1));
+        
+    return color;
+}
+
+
 rgb color( const Ray & r_ , Scene *world)
 {
 	HitRecord ht;
@@ -34,49 +102,23 @@ int main (){
 
     int n_cols{ 200 };     
     int n_rows{ 100 };
-
     int n_samples{ 100 }; 
+    int ray_depth{ 10 };
 
-	std::cout << "P3\n" << n_cols << " " << n_rows << "\n255\n";
+    Object *list[2];
 
-    Object *list[3];
+    list[0] = new Sphere(point3 (0.3, 0, -1), 0.4);
+    list[1] = new Sphere(point3 (0, 1, -2), 0.6);
+    //list[2] = new Sphere(point3 (-0.4, 0, -3), 0.7);
+    //list[3] = new Sphere(point3 (0, -100.5, -3), 99.f);
 
-    list[0] = new Sphere(point3 (0,0,-1), 0.5);
-    list[1] = new Sphere(point3 (0,-100.5,-1), 100);
-    list[2] = new Sphere(point3 (0,-100.5,-1), 100);
+    Scene *world  = new Scene(list, 2);
 
-    Scene *world  = new Scene(list, 3);
+    Camera *cam;
 
-    Camera cam;
+    Raytrace raytrace = new Raytrace (*cam, *world, n_cols, n_rows,n_samples, ray_depth);
 
-     // NOTICE: We loop rows from bottom to top.
-    for ( auto row{n_rows-1} ; row >= 0 ; --row ) // Y
-    {
-        for( auto col{0} ; col < n_cols ; col++ ) // X
-        {
-            rgb hue(0,0,0);
-            for (int s = 0; s < n_samples; ++s)
-            {
-                // Determine how much we have 'walked' on the image: in [0,1]
-                auto u = float(col + drand48()) / float( n_cols ); // walked u% of the horizontal dimension of the view plane.
-                auto v = float(row + drand48()) / float( n_rows ); // walked v% of the vertical dimension of the view plane.
-              
-                Ray r = cam.get_ray(u,v);
-
-                // Determine the color of the ray, as it travels through the virtual space.
-                hue += color( r, world );
-
-            }
-            
-            hue /= float(n_samples);
-            int ir = int( 255.99f * hue[rgb::R] );
-            int ig = int( 255.99f * hue[rgb::G] );
-            int ib = int( 255.99f * hue[rgb::B] );
-
-            std::cout << ir << " " << ig << " " << ib << "\n";
-                     
-        }
-    }
+    raytrace.render();
 
 	return 0;
 }

@@ -20,12 +20,15 @@ public:
         origin = point3(0, 0, 0); 
     }
 
-    Ray get_ray(float u, float v)
-    {
-        point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
-        Ray r( origin, end_point - origin );
-        return r;
-    }
-    
+    Ray get_ray(float u, float v);
+       
 };
+
+Ray Camera::get_ray(float u, float v)
+{
+    point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
+    Ray r( origin, end_point - origin );
+    return r;
+}
+
 #endif
