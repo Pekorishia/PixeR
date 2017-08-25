@@ -7,7 +7,8 @@
 #include "scene.h"
 #include "material.h"
 
-#include "../utility/vec3.h"
+//#include "../utility/vec3.h"
+#include "../utility/ray.h"
 
 class Raytrace
 {
@@ -62,8 +63,8 @@ bool Raytrace::hit_anything( const Ray & r_, float t_min_, float t_max_, HitReco
     bool hit_anything = false;
     double closest_so_far = t_max_;
 
-    for( int i = 0; i < *world.list_size; i++){
-        if (list[i]->hit(r_, t_min_, closest_so_far, temp_ht)){
+    for( int i = 0; i < world->list_size; i++){
+        if (world->list[i]->hit(r_, t_min_, closest_so_far, temp_ht)){
             hit_anything = true;
             closest_so_far = temp_ht.t;
             ht_ = temp_ht;
@@ -90,7 +91,7 @@ void Raytrace::render ()
                 auto u = float(col + drand48()) / float( n_cols ); // walked u% of the horizontal dimension of the view plane.
                 auto v = float(row + drand48()) / float( n_rows ); // walked v% of the vertical dimension of the view plane.
               
-                Ray r = cam.get_ray(u,v);
+                Ray r = cam->get_ray(u,v);
 
                 hue += color( r, world );
             }
@@ -106,7 +107,7 @@ void Raytrace::render ()
     }
 }
 
-rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_)
+rgb Raytrace::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_)
 {    
     // Make the ray a vector in the same direction.     
     auto ray = r_.get_direction();     

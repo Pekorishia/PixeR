@@ -4,13 +4,14 @@
 #include "../includes/scene.h"
 #include "../includes/sphere.h"
 #include "../includes/raytrace.h"
-  
+
+
 
 /*  
  * Find the resulting color of the vertical interpolation  
  *  
  * TODO: only work with the range [-1;1]  
- */ 
+ 
 rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_)
 {    
     // Make the ray a vector in the same direction.     
@@ -86,7 +87,7 @@ rgb normal_color (const Ray & r_, const point3 & c_, float t_)
     return color;
 }
 
-
+/*
 rgb color( const Ray & r_ , Scene *world)
 {
 	HitRecord ht;
@@ -96,7 +97,7 @@ rgb color( const Ray & r_ , Scene *world)
 	}
 
 	return vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
-}
+}*/
 
 int main (){
 
@@ -114,11 +115,11 @@ int main (){
 
     Scene *world  = new Scene(list, 2);
 
-    Camera *cam;
+    Camera *cam = new Camera();
 
-    Raytrace raytrace = new Raytrace (*cam, *world, n_cols, n_rows,n_samples, ray_depth);
+    Raytrace *raytrace = new Raytrace (cam, world, n_cols, n_rows,n_samples, ray_depth);
 
-    raytrace.render();
+    raytrace->render();
 
 	return 0;
 }
