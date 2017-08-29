@@ -19,7 +19,7 @@ public:
 		albedo = albedo_;
 	}
 	//~Material();
-	virtual bool scartter (const ray &, hitRecord &, vec3 &, Ray &) = 1;
+	virtual bool scartter (const ray & r_, hitRecord & ht_, vec3 & v_, Ray &) = 1;
 	
 };
 

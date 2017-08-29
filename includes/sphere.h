@@ -6,8 +6,6 @@
 class Sphere : public Object {
 
     public:
-        //=== Special members
-        Sphere() {/* empty */}
 
         Sphere(point3 center_ = point3(), float rad_ = 0.0)
         {
