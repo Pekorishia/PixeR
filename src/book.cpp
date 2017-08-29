@@ -101,17 +101,17 @@ rgb color( const Ray & r_ , Scene *world)
 
 int main (){
 
-    int n_cols{ 200 };     
-    int n_rows{ 100 };
+    int n_cols{ 1000 };     
+    int n_rows{ 500 };
     int n_samples{ 100 }; 
     int ray_depth{ 10 };
 
     Object *list[2];
 
-    list[0] = new Sphere(point3 (0.3, 0, -1), 0.4);
-    list[1] = new Sphere(point3 (0, 1, -2), 0.6);
+    list[0] = new Sphere(point3 (0, 0, -1), 0.5);
+    //list[1] = new Sphere(point3 (0, 1, -2), 0.6);
     //list[2] = new Sphere(point3 (-0.4, 0, -3), 0.7);
-    //list[3] = new Sphere(point3 (0, -100.5, -3), 99.f);
+    list[1] = new Sphere(point3 (0, -100.5, -1), 100);
 
     Scene *world  = new Scene(list, 2);
 

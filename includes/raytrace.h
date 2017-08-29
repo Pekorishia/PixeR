@@ -32,9 +32,8 @@ class Raytrace
 			ray_depth = depth_;
 		}
 
-		// + render() = ray_trace()
-
-		rgb color(const Ray & r_ , Scene *world);
+		rgb color(const Ray & r_);
+        vec3 random_in_unit_sphere();
 	    bool hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ );
 	    void render();
 
@@ -44,15 +43,36 @@ class Raytrace
 	
 };
 
-rgb Raytrace::color( const Ray & r_ , Scene *world)
+vec3 Raytrace::random_in_unit_sphere()
+{
+    vec3 p;
+    do {
+        p = 2.0*vec3(drand48(),drand48(),drand48()) - vec3(1,1,1);
+    }while(dot(p,p) >= 1.0);
+    return p;
+}
+
+rgb Raytrace::color( const Ray & r_)
 {
 	HitRecord ht;
+    float t_min{0.001f};
+    float t_max{std::numeric_limits<float>::infinity()};
 
-	if ( hit_anything( r_, 0.0, 4.0, ht) ) {
-		return 0.5 * rgb(ht.normal.x() + 1, ht.normal.y() + 1, ht.normal.z() + 1);
+	if ( hit_anything( r_, 0.0, t_max, ht) ) 
+    {
+        //Ray scattered_ray;
+        vec3 target = ht.p + ht.normal + random_in_unit_sphere();
+       // if( depth_ < 1)
+        return 0.5 * color(Ray(ht.p, target - ht.p));
+        //else
+          //  return rgb(0,0,0);
+		//return 0.5 * rgb(ht.normal.x() + 1, ht.normal.y() + 1, ht.normal.z() + 1);
 	}
 
-	return vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
+	//return vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
+    vec3 unit_direction = unit_vector(r_.get_direction());
+    float t = 0.5 *(unit_direction.y() + 1.0);
+    return(1.0-t)*vec3(1.0,1.0,1.0) + t*vec3(0.5,0.7,1.0);
 }
 
 
@@ -93,10 +113,11 @@ void Raytrace::render ()
               
                 Ray r = cam->get_ray(u,v);
 
-                hue += color( r, world );
+                hue += color( r );
             }
             
             hue /= float(n_samples);
+            hue = vec3(sqrt(hue[rgb::R]), sqrt(hue[rgb::G]), sqrt(hue[rgb::B]) );
 
             int ir = int( 255.99f * hue[rgb::R] );
             int ig = int( 255.99f * hue[rgb::G] );
