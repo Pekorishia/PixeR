@@ -6,6 +6,7 @@
 #include "../includes/raytrace.h"
 #include "../includes/difuse_shader.h"
 #include "../includes/normal_shader.h"
+#include "../includes/depth_shader.h"
 
 int main (){
 
@@ -24,7 +25,8 @@ int main (){
 
     Scene *world  = new Scene(list, 2);
 
-    Shader *shade = new NormalShader(world);
+    //Shader *shade = new DifuseShader(world);
+    Shader *shade = new DepthShader(world, 0.0, 4.0, rgb(1,1,1),  rgb(0,0,0));
 
     Camera *cam = new Camera();
 

@@ -5,6 +5,7 @@
 
 #include "camera.h"
 #include "scene.h"
+#include "shader.h"
 
 //#include "../utility/vec3.h"
 #include "../utility/ray.h"

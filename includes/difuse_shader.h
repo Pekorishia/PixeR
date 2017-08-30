@@ -18,11 +18,11 @@ class DifuseShader : public Shader
 
     protected:
 
-        vec3 random_in_unit_sphere();
+        vec3 random_in_unit_sphere() const;
 };
 
 
-vec3 DifuseShader::random_in_unit_sphere()
+vec3 DifuseShader::random_in_unit_sphere() const
 {
     vec3 p;
     do {
@@ -37,7 +37,8 @@ rgb DifuseShader::color( const Ray & r_, float t_min, float t_max) const
 
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
-        vec3 target = ht.p + ht.normal + random_in_unit_sphere();
+        vec3 p_ = random_in_unit_sphere();
+        vec3 target = ht.p + ht.normal + p_;
         return 0.5 * this->color(Ray(ht.p, target - ht.p), t_min, t_max);
     }
 

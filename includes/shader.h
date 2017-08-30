@@ -10,7 +10,7 @@ class Shader
 public:
 
 	virtual rgb color(const Ray & r_, float t_min, float t_max) const = 0;
-	bool hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ );
+	bool hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const;
 
 
 protected:
@@ -23,7 +23,7 @@ protected:
 };
 
 
-bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ )
+bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const
 {
     HitRecord temp_ht;
 

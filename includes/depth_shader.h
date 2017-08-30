@@ -6,7 +6,7 @@
 class DepthShader : public Shader 
 {
 
-    private:
+    protected:
         float min_depth;
         float max_depth;
 
@@ -45,7 +45,7 @@ rgb DepthShader::color( const Ray & r_, float t_min, float t_max) const
             t_normalized = 1;
         }
 
-        rgb result = foreground_*(1 - t_normalized) + background_*(t_normalized);     
+        rgb result = foreground*(1 - t_normalized) + background*(t_normalized);     
         return result; 
     }
 
