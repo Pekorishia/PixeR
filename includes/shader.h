@@ -9,7 +9,7 @@ class Shader
 {
 public:
 
-	virtual rgb color(const Ray & r_, float t_min, float t_max) const = 0;
+	virtual rgb color(const Ray & r_, float t_min, float t_max, int depth_) const = 0;
 	bool hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const;
 
 
@@ -17,8 +17,8 @@ protected:
 
 	Scene *world;
 
-	rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_);
-	rgb horizontal_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_);
+	rgb vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_) const;
+	rgb horizontal_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_) const;
 
 };
 
@@ -41,7 +41,7 @@ bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord
     return hit_anything;
 }
 
-rgb Shader::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_)
+rgb Shader::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_) const
 {    
     // Make the ray a vector in the same direction.     
     auto ray = r_.get_direction();     
@@ -58,7 +58,7 @@ rgb Shader::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const 
 }
 
 
-rgb Shader::horizontal_interpolation ( const Ray & r_, const rgb & left_, const rgb & right_)
+rgb Shader::horizontal_interpolation ( const Ray & r_, const rgb & left_, const rgb & right_) const
 {     
     // Make the ray a vector in the same direction.     
     auto ray = r_.get_direction();     

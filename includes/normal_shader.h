@@ -34,10 +34,7 @@ rgb NormalShader::color( const Ray & r_, float t_min, float t_max) const
         return color;
     }
 
-    //return vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
-    vec3 unit_direction = unit_vector(r_.get_direction());
-    float t = 0.5 *(unit_direction.y() + 1.0);
-    return(1.0-t)*vec3(1.0,1.0,1.0) + t*vec3(0.5,0.7,1.0);
+    return Shader::vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
 }
 
 

@@ -13,13 +13,13 @@ public:
 	Depende da posição da camera, da luz e da normal.*/
 
 	rgb albedo; //Kd o difuso.
+	rgb ks;
+	rgb ka;
+	float alpha;
 
-	Material(rgb albedo_)
-	{
-		albedo = albedo_;
-	}
+	
 	//~Material();
-	virtual bool scartter (const ray & r_, hitRecord & ht_, vec3 & v_, Ray &) = 1;
+	virtual bool scartter (const ray & r_, hitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const = 0;
 	
 };
 

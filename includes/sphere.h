@@ -1,15 +1,17 @@
 #ifndef _SPHERE_H_
 #define _SPHERE_H_
 
-#include "object.h" 
+#include "object.h"
+#include "material.h" 
 
 class Sphere : public Object {
 
     public:
 
-        Sphere(point3 center_ = point3(), float rad_ = 0.0)
+        Sphere(Material *m_, point3 center_ = point3(), float rad_ = 0.0)
         {
             Object::origin = center_;
+            Object::material = m_;
             radius = rad_;
         }
 

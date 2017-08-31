@@ -4,18 +4,21 @@
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
 
+#include "material.h"
+
 typedef struct
 {
     float t;
     point3 p;
     vec3 normal;
+    Material mat;
 } HitRecord;
 
 class Object {
 
     protected:
         point3 origin; // the origin of the object.
-        //material: Material
+        Material *material;
 
     public:
         //=== Alias

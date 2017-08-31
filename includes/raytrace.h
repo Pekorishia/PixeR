@@ -62,7 +62,7 @@ void Raytrace::render ()
               
                 Ray r = cam->get_ray(u,v);
 
-                hue += shade->color( r, t_min, t_max );
+                hue += shade->color( r, t_min, t_max, 0 );
             }
             
             hue /= float(n_samples);
