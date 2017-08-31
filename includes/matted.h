@@ -5,14 +5,14 @@
 
 class Matted: public Material 
 {
-public:
-	Matted(rgb albedo_, rgb ks_, rgb ka_, float alpha_)
-	{
-		Material::albedo = albedo_;
-		Material::ks = ks_;
-		Material::ka = ka_;
-		Material::alpha = alpha_;
-	}
+	public:
+		Matted(rgb albedo_, rgb ks_, rgb ka_, float alpha_)
+		{
+			Material::albedo = albedo_;
+			Material::ks = ks_;
+			Material::ka = ka_;
+			Material::alpha = alpha_;
+		}
 
 	virtual bool scartter (const ray & r_, hitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
 
@@ -28,6 +28,7 @@ vec3 Matted::random_in_unit_sphere() const
     do {
         p = 2.0*vec3(drand48(),drand48(),drand48()) - vec3(1,1,1);
     }while(dot(p,p) >= 1.0);
+
     return p;
 }
 
@@ -35,7 +36,9 @@ bool Matted::scartter(const ray & r_, hitRecord & ht_, vec3 & attenuation_, Ray 
 {
 	vec3 p_ = random_in_unit_sphere();
     vec3 target = ht_.p + ht_.normal + p_;
-}
+    scattered_ray = new Ray(ht.p, target - ht.p);
 
+    return true;
+}
 
 #endif
