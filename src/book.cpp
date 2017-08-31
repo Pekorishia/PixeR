@@ -2,12 +2,12 @@
 #include <fstream>
 
 #include "../includes/scene.h"
+#include "../includes/matted.h"
 #include "../includes/sphere.h"
 #include "../includes/raytrace.h"
-#include "../includes/material.h"
+#include "../includes/depth_shader.h"
 #include "../includes/difuse_shader.h"
 #include "../includes/normal_shader.h"
-#include "../includes/depth_shader.h"
 
 int main (){
 
@@ -21,8 +21,8 @@ int main (){
 
     Object *list[2];
 
-    Material *mat1 = new Material(rgb(1,1,0));
-    Material *mat2 = new Material(rgb(1,0,0));
+    Material *mat1 = new Matted(rgb(1,1,0), rgb (1,1,1), rgb (1,1,1), 1);
+    Material *mat2 = new Matted(rgb(1,0,0), rgb (1,1,1), rgb (1,1,1), 1);
 
     list[0] = new Sphere(mat1, point3 (0, 0, -1), 0.5);
     list[1] = new Sphere(mat2, point3 (0, -100.5, -1), 100);
