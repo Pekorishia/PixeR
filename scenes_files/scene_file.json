@@ -1,0 +1,119 @@
+{
+	"image": { 
+		    	"name": "background.ppm",
+		    	"codification": "ascii",
+		    	"width": 1200,
+		    	"height": 600,
+		    	"samples": 100,
+		    	"ray_depth": 10,
+		    	"t_min": 0.001,
+		    	"t_max": "infinity"
+		  	},
+	
+	"shader": {
+					"type": "difuse"
+				},
+
+	"camera": {
+					"lower_left_corner":{
+											"x": -2,
+											"y": -1,
+											"z": -1
+										},
+					"horizontal":{
+									"x": 4,
+									"y": 0,
+									"z": 0
+								}, 
+					"vertical":{
+									"x": 0,
+									"y": 2,
+									"z": 0
+								}, 
+					"origin":{
+								"x": 0,
+								"y": 0,
+								"z": 0
+							}
+				},
+
+	"scene": {
+    			"background": {
+								"upper_left": {
+												"r": 127,
+												"g": 178,
+												"b": 255
+											},
+								"upper_right": {
+												"r": 127,
+												"g": 178,
+												"b": 255
+											},
+								"lower_left": {
+												"r": 255,
+												"g": 255,
+												"b": 255
+											},
+								"lower_right": {
+												"r": 255,
+												"g": 255,
+												"b": 255
+											}
+    						},
+
+    			"spheres": [
+    							{
+    								"material": {
+    												"albedo": {
+																"r": 1,
+																"g": 0,
+																"b": 0
+															},
+    												"specular": {
+																"r": 1,
+																"g": 1,
+																"b": 1
+															},
+    												"ambient": {
+																"r": 1,
+																"g": 1,
+																"b": 1
+															},
+    												"alpha": 1
+    											}, 
+    								"center": {
+    												"x": 0,
+    												"y": 0,
+    												"z": -1
+    											}, 
+    								"radius": 0.5
+    							},
+    							{
+    								"material": {
+    												"albedo": {
+																"r": 1,
+																"g": 1,
+																"b": 0
+															},
+    												"specular": {
+																"r": 1,
+																"g": 1,
+																"b": 1
+															},
+    												"ambient": {
+																"r": 1,
+																"g": 1,
+																"b": 1
+															},
+    												"alpha": 1
+    											}, 
+    								"center": {
+    												"x": 0,
+    												"y": -100.5,
+    												"z": -1
+    											}, 
+    								"radius": 100
+    							}
+    						]
+      		} 
+ }

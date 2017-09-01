@@ -38,15 +38,13 @@ class Raytrace
             t_max = t_max_;
 		}
 
-	    void render();
+	    void render( std::stringstream ss );
 
 };
 
 
-void Raytrace::render () 
+void Raytrace::render ( std::stringstream & ss) 
 { 	
-   	std::cout << "P3\n" << n_cols << " " << n_rows << "\n255\n";
-
      // NOTICE: We loop rows from bottom to top.
     for ( auto row{n_rows-1} ; row >= 0 ; --row ) // Y
     {
@@ -72,7 +70,7 @@ void Raytrace::render ()
             int ig = int( 255.99f * hue[rgb::G] );
             int ib = int( 255.99f * hue[rgb::B] );
 
-            std::cout << ir << " " << ig << " " << ib << "\n";                     
+            ss << ir << " " << ig << " " << ib << "\n";               
         }
     }
 }

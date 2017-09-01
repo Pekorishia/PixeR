@@ -1,6 +1,9 @@
 #ifndef _MATERIAL_H_
 #define _MATERIAL_H_
 
+#include "object.h"
+
+#include "../utility/ray.h"
 #include "../utility/vec3.h"
 
 class Material
@@ -19,7 +22,7 @@ public:
 
 	
 	//~Material();
-	virtual bool scartter (const ray & r_, hitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const = 0;
+	virtual bool scartter (const Ray & r_, HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const = 0;
 	
 };
 

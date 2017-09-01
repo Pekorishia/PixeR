@@ -12,12 +12,12 @@ public:
     vec3 vertical; // Vertical dimension of the view plane.
     point3 origin; // the camera's origin.
 
-    Camera()
+    Camera( point3 llc_, vec3 horizontal_, vec3 vertical_, point3 origin_)
     {
-        lower_left_corner = point3(-2, -1, -1);
-        horizontal = vec3(4, 0, 0); 
-        vertical = vec3(0, 2, 0); 
-        origin = point3(0, 0, 0); 
+        lower_left_corner = llc_;
+        horizontal = horizontal_; 
+        vertical = vertical_; 
+        origin = origin_; 
     }
 
     Ray get_ray(float u, float v);

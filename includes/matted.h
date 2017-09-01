@@ -1,6 +1,7 @@
 #ifndef _MATTED_H_
 #define _MATTED_H_
 
+#include "object.h"
 #include "material.h" 
 
 class Matted: public Material 
@@ -14,7 +15,7 @@ class Matted: public Material
 			Material::alpha = alpha_;
 		}
 
-	virtual bool scartter (const ray & r_, hitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
+	virtual bool scartter (const Ray & r_, HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
 
 	protected:
 
@@ -32,7 +33,7 @@ vec3 Matted::random_in_unit_sphere() const
     return p;
 }
 
-bool Matted::scartter(const ray & r_, hitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray)
+bool Matted::scartter (const Ray & r_, HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
 {
 	vec3 p_ = random_in_unit_sphere();
     vec3 target = ht_.p + ht_.normal + p_;
