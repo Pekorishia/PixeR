@@ -15,13 +15,17 @@ class NormalShader : public Shader
 
         //=== Access methods
         virtual rgb color(const Ray & r_, float t_min, float t_max) const;
+        virtual rgb color1() const;
 };
 
-
+rgb NormalShader::color1() const
+{
+    return rgb(1,0,0);
+}
 
 rgb NormalShader::color( const Ray & r_, float t_min, float t_max) const
 {
-    HitRecord ht;
+    /*HitRecord ht;
 
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
@@ -35,6 +39,8 @@ rgb NormalShader::color( const Ray & r_, float t_min, float t_max) const
     }
 
     return Shader::vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
+    */
+    return rgb(1,0,0);
 }
 
 

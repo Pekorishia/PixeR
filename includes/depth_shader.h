@@ -25,14 +25,18 @@ class DepthShader : public Shader
         }
 
         //=== Access methods
-        virtual rgb color(const Ray & r_, float t_min, float t_max) const;
+        virtual rgb color(const Ray & r_, float t_min, float t_max, int depth) const;
+        virtual rgb color1() const;
 };
 
-
-
-rgb DepthShader::color( const Ray & r_, float t_min, float t_max) const
+rgb DepthShader::color1() const
 {
-    HitRecord ht;
+    return rgb(1,0,0);
+}
+
+rgb DepthShader::color( const Ray & r_, float t_min, float t_max, int depth) const
+{
+    /*HitRecord ht;
 
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
@@ -47,7 +51,7 @@ rgb DepthShader::color( const Ray & r_, float t_min, float t_max) const
 
         rgb result = foreground*(1 - t_normalized) + background*(t_normalized);     
         return result; 
-    }
+    }*/
 
     return background;
 }

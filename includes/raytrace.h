@@ -25,7 +25,9 @@ class Raytrace
         float t_min;
         float t_max;
 
-		Raytrace(Camera *cam_, Scene *s_, Shader *shade_, int col_ = 1200, int row_ = 600, int samples_ = 100, int depth_ = 10, float t_min_ = 0.001f, float t_max_ = std::numeric_limits<float>::infinity())
+		Raytrace(Camera *cam_, Scene *s_, Shader *shade_, int col_ = 1200, int row_ = 600, 
+            int samples_ = 100, int depth_ = 10, float t_min_ = 0.001f, 
+            float t_max_ = std::numeric_limits<float>::infinity())
 		{
 			cam = cam_;
 			world = s_;
@@ -38,7 +40,7 @@ class Raytrace
             t_max = t_max_;
 		}
 
-	    void render( std::stringstream ss );
+	    void render( std::stringstream & ss );
 
 };
 
@@ -48,6 +50,7 @@ void Raytrace::render ( std::stringstream & ss)
      // NOTICE: We loop rows from bottom to top.
     for ( auto row{n_rows-1} ; row >= 0 ; --row ) // Y
     {
+        //std::cout << "oi";
         for( auto col{0} ; col < n_cols ; col++ ) // X
         {
             rgb hue(0,0,0);
@@ -60,6 +63,7 @@ void Raytrace::render ( std::stringstream & ss)
               
                 Ray r = cam->get_ray(u,v);
 
+               // hue += rgb(0,1,0);
                 hue += shade->color( r, t_min, t_max, 0 );
             }
             
@@ -70,7 +74,7 @@ void Raytrace::render ( std::stringstream & ss)
             int ig = int( 255.99f * hue[rgb::G] );
             int ib = int( 255.99f * hue[rgb::B] );
 
-            ss << ir << " " << ig << " " << ib << "\n";               
+            ss << ir << " " << ig << " " << ib << "\n";             
         }
     }
 }

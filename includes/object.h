@@ -3,15 +3,16 @@
 
 #include "../utility/vec3.h"
 #include "../utility/ray.h"
+//#include "material.h" 
 
-#include "material.h"
+class Material;
 
 typedef struct
 {
     float t;
     point3 p;
     vec3 normal;
-    Material mat;
+    Material *mat;
 } HitRecord;
 
 class Object {

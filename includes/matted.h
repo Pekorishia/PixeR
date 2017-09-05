@@ -37,7 +37,7 @@ bool Matted::scartter (const Ray & r_, HitRecord & ht_, vec3 & attenuation_, Ray
 {
 	vec3 p_ = random_in_unit_sphere();
     vec3 target = ht_.p + ht_.normal + p_;
-    scattered_ray = new Ray(ht.p, target - ht.p);
+    scattered_ray = Ray(ht_.p, target - ht_.p);
 
     return true;
 }

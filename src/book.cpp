@@ -24,14 +24,15 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
 
     n_cols = j["image"]["width"];
     n_rows = j["image"]["height"];
+    //n_rows = 1;
     n_samples = j["image"]["samples"];
     ray_depth = j["image"]["ray_depth"];
     t_min = j["image"]["t_min"];
 
     if (j["image"]["t_max"] == "infinity")
-        n_rows = std::numeric_limits<float>::infinity();
+        t_max = std::numeric_limits<float>::infinity();
     else
-        n_rows = j["image"]["t_max"];
+        t_max = j["image"]["t_max"];
 
 
     Object *list[j["scene"]["spheres"].size()];
@@ -64,7 +65,7 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
         list[1] = new Sphere(mat, center, radius);
     }
 
-    Scene *world  = new Scene(list, 2);
+    world  = new Scene(list, 2);
 
     //Shader creation
     if (j["shader"]["type"] == "depth"){
@@ -80,10 +81,10 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
                         j["shader"]["background"]["g"],
                         j["shader"]["background"]["b"]);
 
-        Shader *shade = new DepthShader(world, min_depth, max_depth, foreground, background);
+        shade = new DepthShader(world, min_depth, max_depth, foreground, background);
     }
     else{
-        Shader *shade = new DifuseShader(world);
+        shade = new DifuseShader(world);
     }
 
     // Camera creation
@@ -103,7 +104,7 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
                    j["camera"]["origin"]["y"],
                    j["camera"]["origin"]["z"]);
 
-    Camera *cam = new Camera(llc, horizontal, vertical, origin);
+    cam = new Camera(llc, horizontal, vertical, origin);
 
     codification = j["image"]["codification"];
 
@@ -141,11 +142,11 @@ int main( int argc, const char * argv[] )
     float t_min;
     float t_max;
 
-    // Camera *cam;
-    // Scene *world;
-    // Shader *shade;
-     std::string file;   
-     std::string codification; 
+    Camera *cam;
+    Scene *world;
+    Shader *shade;
+    std::string file;   
+    std::string codification; 
 
     if(argc >1)
         file = std::string(argv[1]);
