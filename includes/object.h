@@ -13,13 +13,13 @@ typedef struct
     point3 p;
     vec3 normal;
     Material *mat;
-} HitRecord;
+} HitRecord; // Records the data from the last point hited by the camera ray 
 
 class Object {
 
     protected:
         point3 origin; // the origin of the object.
-        Material *material;
+        Material *material; // the material of the object.
 
     public:
         //=== Alias
@@ -31,6 +31,9 @@ class Object {
         void print();
 };
 
+/*
+ * Prints the origin of the object. Used for debugs
+ */
 void Object::print(){
     std::cout << "( " << origin.x() << ", " << origin.y() << ", "<< origin.z() << " )" << std::endl; 
 }

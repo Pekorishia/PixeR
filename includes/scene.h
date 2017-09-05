@@ -10,9 +10,6 @@ class Scene {
         Object **list; 
         int list_size;
     	    	
-        //=== Special members
-        Scene() {/* empty */}
-
         Scene( Object **l_, int n_)
         { 
         	list = l_;

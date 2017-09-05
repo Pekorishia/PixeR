@@ -20,14 +20,15 @@ public:
         origin = origin_; 
     }
 	
-    Camera(){
 
-    }	
     Ray get_ray(float u, float v);
     void print();
        
 };
 
+/*
+ * Get the ray that hits the view plane on the coordinate (u,v)
+ */
 Ray Camera::get_ray(float u, float v)
 {
     point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
@@ -35,6 +36,9 @@ Ray Camera::get_ray(float u, float v)
     return r;
 }
 
+/*
+ * Prints the origin of the camera. Used for debugs
+ */
 void Camera::print(){
     std::cout << "( " << origin.x() << ", " << origin.y() << ", "<< origin.z() << " )" << std::endl; 
 }

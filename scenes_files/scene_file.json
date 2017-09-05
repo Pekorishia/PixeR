@@ -1,6 +1,6 @@
 {
 	"image": { 
-		    	"name": "background.ppm",
+		    	"name": "depth.ppm",
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
@@ -11,7 +11,7 @@
 		  	},
 	
 	"shader": {
-					"type": "normal"
+					"type": "difuse"
 				},
 
 	"camera": {

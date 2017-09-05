@@ -17,10 +17,14 @@ class NormalShader : public Shader
         virtual rgb color(const Ray & r_, float t_min, float t_max, int depth_) const;
 };
 
+/*
+ * Returns the color of the point hitted by the ray based on the normal vector.
+ */
 rgb NormalShader::color( const Ray & r_, float t_min, float t_max, int depth_) const
 {
     HitRecord ht;
 
+    // If the ray hitted anything
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
        
@@ -32,6 +36,7 @@ rgb NormalShader::color( const Ray & r_, float t_min, float t_max, int depth_) c
         return color;
     }
 
+    // Else, dye the pixel with the background color
     return Shader::vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
 }
 

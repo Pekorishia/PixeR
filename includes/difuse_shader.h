@@ -20,6 +20,9 @@ class DifuseShader : public Shader
         vec3 random_in_unit_sphere() const;
 };
 
+/*
+ * Generates a random ray
+ */
 vec3 DifuseShader::random_in_unit_sphere() const
 {
     vec3 p;
@@ -29,13 +32,19 @@ vec3 DifuseShader::random_in_unit_sphere() const
     return p;
 }
 
+/*
+ * Returns the color of the point hitted by the ray.
+ */
 rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) const
 {
     HitRecord ht;
 
+    // If the ray hitted anything
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
+        // generate a random ray
         vec3 p_ = random_in_unit_sphere();
+
         vec3 target = ht.p + ht.normal + p_;
         return 0.5 * this->color(Ray(ht.p, target - ht.p), t_min, t_max, 0);
 
@@ -48,9 +57,9 @@ rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) c
             return rgb(0,0,0);
         return rgb(1,0,0);
 
-
     }
 
+    // Else, dye the pixel with the background color
     return Shader::vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.7, 1 ));
 }
 

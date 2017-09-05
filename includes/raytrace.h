@@ -14,55 +14,17 @@ class Raytrace
 {
     public:
 
-        Camera *cam;
-        Scene *world;
-        Shader *shade;
-        int n_rows;
-        int n_cols;
-        int n_samples;
-        int ray_depth;
-
-        float t_min;
-        float t_max;
-
-        Raytrace(Camera *cam_, Scene* s_, Shader *shade_, int col_ = 1200, int row_ = 600, 
-            int samples_ = 100, int depth_ = 10, float t_min_ = 0.001f, 
-            float t_max_ = std::numeric_limits<float>::infinity())
-        {
-
-            cam = cam_;
-            world = s_;
-            shade = shade_;
-            n_rows = row_;
-            n_cols = col_;
-            n_samples = samples_;
-            ray_depth = depth_;
-            t_min = t_min_;
-            t_max = t_max_;
-
-
-            std::cout << "Raytrace: " << std::endl;
-            std::cout << "    s_ ";
-            s_->list[1]->print();
-            std::cout << "    cam_ ";
-            cam_->print();
-            std::cout << "    shade_ ";
-            shade_->print();
-
-            std::cout << "    cam ";
-            cam->print();
-            std::cout << "    world ";
-            world->list[1]->print();
-            std::cout << "    shade ";
-            shade->print();
-        }
-
-        void render( std::stringstream & ss );
+        static void render( std::stringstream& ss, Camera *cam, Scene *world, Shader *shade, 
+                              int n_cols, int n_rows, int n_samples, int ray_depth, float t_min,
+                              float t_max );
 
 };
 
 
-void Raytrace::render ( std::stringstream& ss) 
+void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader *shade, 
+                              int n_cols, int n_rows, int n_samples, int ray_depth, float t_min,
+                              float t_max 
+                            ) 
 {   
 
      // NOTICE: We loop rows from bottom to top.
@@ -80,17 +42,8 @@ void Raytrace::render ( std::stringstream& ss)
 
                 Ray r = cam->get_ray(u,v);
 
-                std::cout << "Render: " << std::endl;
-
-                std::cout << "    world ";
-                world->list[1]->print();
-                std::cout << "    cam ";
-                cam->print();
-
                // hue += rgb(0,1,0);
                 hue += shade->color( r, t_min, t_max, 0 );
-
-                std::cout << "FOI CARAMBA!!! " << std::endl;
             }
             
             hue /= float(n_samples);

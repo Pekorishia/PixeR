@@ -29,14 +29,19 @@ class DepthShader : public Shader
 };
 
 
+/*
+ * Returns the color of the point hitted by the ray based on the depth of the object.
+ */
 rgb DepthShader::color( const Ray & r_, float t_min, float t_max, int depth_) const
 {
     HitRecord ht;
 
+    // if hitted something
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
         float t_normalized;
 
+        // Normalize the depth of the point to the range [0;1]
         if (ht.t <= max_depth && ht.t >= min_depth){
             t_normalized = ht.t / max_depth;     
         }
@@ -44,10 +49,12 @@ rgb DepthShader::color( const Ray & r_, float t_min, float t_max, int depth_) co
             t_normalized = 1;
         }
 
+        // Make a DERP with the depth nomalized between the foreground and background color
         rgb result = foreground*(1 - t_normalized) + background*(t_normalized);     
         return result; 
     }
 
+    // else return the background color
     return background;
 }
 

@@ -23,24 +23,25 @@ protected:
 
 };
 
+/*
+ * Prints the origin of the first object. Used for debugs
+ */
 void Shader::print(){
-    world->list[1]->print(); 
+    world->list[0]->print(); 
 }
 
+/*
+ * Verifies if the ray hitted any object
+ */
 bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const
 {
 
-    world->list[1]->print();
-        
     HitRecord temp_ht;
 
     bool hit_anything = false;
     double closest_so_far = t_max_;
 
     for( int i = 0; i < world->list_size; i++){
-        std::cout << "  hit_anything: ";
-        world->list[i]->print();
-
         if (world->list[i]->hit(r_, t_min_, closest_so_far, temp_ht)){
             hit_anything = true;
             closest_so_far = temp_ht.t;
@@ -51,6 +52,10 @@ bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord
     return hit_anything;
 }
 
+/*
+ * Calculates the vertical interpolation between 2 colors
+ * Only works with the aspect ratio [2:1]
+ */
 rgb Shader::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_) const
 {    
     // Make the ray a vector in the same direction.     
@@ -67,7 +72,10 @@ rgb Shader::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const 
     return result; 
 }
 
-
+/*
+ * Calculates the horizontal interpolation between 2 colors
+ * Only works with the aspect ratio [2:1]
+ */
 rgb Shader::horizontal_interpolation ( const Ray & r_, const rgb & left_, const rgb & right_) const
 {     
     // Make the ray a vector in the same direction.     
