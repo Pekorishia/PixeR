@@ -10,9 +10,9 @@ class Shader
 public:
 
 	virtual rgb color(const Ray & r_, float t_min, float t_max, int depth_) const = 0;
-    virtual rgb color1() const = 0;
 	bool hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const;
 
+    void print();
 
 protected:
 
@@ -23,15 +23,24 @@ protected:
 
 };
 
+void Shader::print(){
+    world->list[1]->print(); 
+}
 
 bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const
 {
+
+    world->list[1]->print();
+        
     HitRecord temp_ht;
 
     bool hit_anything = false;
     double closest_so_far = t_max_;
 
     for( int i = 0; i < world->list_size; i++){
+        std::cout << "  hit_anything: ";
+        world->list[i]->print();
+
         if (world->list[i]->hit(r_, t_min_, closest_so_far, temp_ht)){
             hit_anything = true;
             closest_so_far = temp_ht.t;

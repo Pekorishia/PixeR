@@ -14,7 +14,7 @@
 
 using json = nlohmann::json;
 
-std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, int & ray_depth, float & t_min, float & t_max, std::string & codification, Camera *cam, Shader *shade, Scene *world)
+std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, int & ray_depth, float & t_min, float & t_max, std::string & codification, Camera* &cam, Shader* &shade, Scene* &world)
 {
 
     // read the json file
@@ -35,7 +35,7 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
         t_max = j["image"]["t_max"];
 
 
-    Object *list[j["scene"]["spheres"].size()];
+    Object *list[ j["scene"]["spheres"].size() ];
 
     //Spheres creation
     for(int i=0; i<j["scene"]["spheres"].size(); i++){
@@ -62,10 +62,10 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
 
         auto radius = j["scene"]["spheres"][i]["radius"];
 
-        list[1] = new Sphere(mat, center, radius);
+        list[i] = new Sphere(mat, center, radius);
     }
 
-    world  = new Scene(list, 2);
+    world  = new Scene(list, j["scene"]["spheres"].size());
 
     //Shader creation
     if (j["shader"]["type"] == "depth"){
@@ -83,8 +83,11 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
 
         shade = new DepthShader(world, min_depth, max_depth, foreground, background);
     }
-    else{
+    else if (j["shader"]["type"] == "difuse"){
         shade = new DifuseShader(world);
+    }
+    else if (j["shader"]["type"] == "normal"){
+        shade = new NormalShader(world);
     }
 
     // Camera creation
@@ -112,7 +115,7 @@ std::string fileReader(std::string file, int & n_cols, int & n_rows, int & n_sam
 }
 
 void fileWriter( Raytrace *raytrace, std::string name, int n_cols, int n_rows)
-{
+{    
 
     std::ofstream arq;
     
@@ -128,7 +131,6 @@ void fileWriter( Raytrace *raytrace, std::string name, int n_cols, int n_rows)
 
     arq << ss.str();
     arq.close();
-
 }
 
 
@@ -145,19 +147,29 @@ int main( int argc, const char * argv[] )
     Camera *cam;
     Scene *world;
     Shader *shade;
-    std::string file;   
+    std::string scene; 
     std::string codification; 
 
-    if(argc >1)
-        file = std::string(argv[1]);
+    if (argc > 2)
+        scene = std::string(argv[1]);
     else
-        file = "scene_file.json";
+        scene = "scene_file.json";
 
-    std::string name = fileReader(file, n_cols, n_rows, n_samples, ray_depth, t_min, t_max, codification, cam, shade, world);
+    std::string name = fileReader(scene, n_cols, n_rows, n_samples, ray_depth, t_min, t_max, codification, cam, shade, world);
+
+
+    std::cout << "main: " << std::endl;
+
+    std::cout << "    world ";
+    world->list[1]->print();
+    std::cout << "    cam ";
+    cam->print();
+    std::cout << "    shade ";
+    shade->print();
 
     Raytrace *raytrace = new Raytrace (cam, world, shade, n_cols, n_rows,n_samples, ray_depth, t_min, t_max);
 
     fileWriter(raytrace, name, n_cols, n_rows);
 
-	return 0;
+    return 0;
 }

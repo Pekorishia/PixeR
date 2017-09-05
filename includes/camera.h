@@ -19,8 +19,12 @@ public:
         vertical = vertical_; 
         origin = origin_; 
     }
+	
+    Camera(){
 
+    }	
     Ray get_ray(float u, float v);
+    void print();
        
 };
 
@@ -29,6 +33,10 @@ Ray Camera::get_ray(float u, float v)
     point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
     Ray r( origin, end_point - origin );
     return r;
+}
+
+void Camera::print(){
+    std::cout << "( " << origin.x() << ", " << origin.y() << ", "<< origin.z() << " )" << std::endl; 
 }
 
 #endif

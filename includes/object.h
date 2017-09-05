@@ -27,6 +27,12 @@ class Object {
 
         //=== Access methods
         virtual bool hit( const Ray & r_, real_type t_min_, real_type t_max_, HitRecord & ht_ ) const = 0;
+
+        void print();
 };
+
+void Object::print(){
+    std::cout << "( " << origin.x() << ", " << origin.y() << ", "<< origin.z() << " )" << std::endl; 
+}
 
 #endif

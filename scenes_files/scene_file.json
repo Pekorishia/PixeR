@@ -11,7 +11,7 @@
 		  	},
 	
 	"shader": {
-					"type": "difuse"
+					"type": "normal"
 				},
 
 	"camera": {

@@ -12,45 +12,62 @@
 
 class Raytrace
 {
-	public:
+    public:
 
-		Camera *cam;
-		Scene *world;
+        Camera *cam;
+        Scene *world;
         Shader *shade;
-		int n_rows;
-		int n_cols;
-		int n_samples;
-		int ray_depth;
+        int n_rows;
+        int n_cols;
+        int n_samples;
+        int ray_depth;
 
         float t_min;
         float t_max;
 
-		Raytrace(Camera *cam_, Scene *s_, Shader *shade_, int col_ = 1200, int row_ = 600, 
+        Raytrace(Camera *cam_, Scene* s_, Shader *shade_, int col_ = 1200, int row_ = 600, 
             int samples_ = 100, int depth_ = 10, float t_min_ = 0.001f, 
             float t_max_ = std::numeric_limits<float>::infinity())
-		{
-			cam = cam_;
-			world = s_;
+        {
+
+            cam = cam_;
+            world = s_;
             shade = shade_;
-			n_rows = row_;
-			n_cols = col_;
-			n_samples = samples_;
-			ray_depth = depth_;
+            n_rows = row_;
+            n_cols = col_;
+            n_samples = samples_;
+            ray_depth = depth_;
             t_min = t_min_;
             t_max = t_max_;
-		}
 
-	    void render( std::stringstream & ss );
+
+            std::cout << "Raytrace: " << std::endl;
+            std::cout << "    s_ ";
+            s_->list[1]->print();
+            std::cout << "    cam_ ";
+            cam_->print();
+            std::cout << "    shade_ ";
+            shade_->print();
+
+            std::cout << "    cam ";
+            cam->print();
+            std::cout << "    world ";
+            world->list[1]->print();
+            std::cout << "    shade ";
+            shade->print();
+        }
+
+        void render( std::stringstream & ss );
 
 };
 
 
-void Raytrace::render ( std::stringstream & ss) 
-{ 	
+void Raytrace::render ( std::stringstream& ss) 
+{   
+
      // NOTICE: We loop rows from bottom to top.
     for ( auto row{n_rows-1} ; row >= 0 ; --row ) // Y
     {
-        //std::cout << "oi";
         for( auto col{0} ; col < n_cols ; col++ ) // X
         {
             rgb hue(0,0,0);
@@ -60,11 +77,20 @@ void Raytrace::render ( std::stringstream & ss)
                 // Determine how much we have 'walked' on the image: in [0,1]
                 auto u = float(col + drand48()) / float( n_cols ); // walked u% of the horizontal dimension of the view plane.
                 auto v = float(row + drand48()) / float( n_rows ); // walked v% of the vertical dimension of the view plane.
-              
+
                 Ray r = cam->get_ray(u,v);
+
+                std::cout << "Render: " << std::endl;
+
+                std::cout << "    world ";
+                world->list[1]->print();
+                std::cout << "    cam ";
+                cam->print();
 
                // hue += rgb(0,1,0);
                 hue += shade->color( r, t_min, t_max, 0 );
+
+                std::cout << "FOI CARAMBA!!! " << std::endl;
             }
             
             hue /= float(n_samples);

@@ -18,7 +18,6 @@ class Scene {
         	list = l_;
         	list_size = n_;
         }
-
 };
 
 #endif
