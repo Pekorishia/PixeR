@@ -59,16 +59,17 @@ bool Shader::hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord
 rgb Shader::vertical_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_) const
 {    
     // Make the ray a vector in the same direction.     
-    auto ray = r_.get_direction();     
+    auto ray = unit_vector(r_.get_direction());     
 
     // Take only the vertical component, since the lerp has to interpolate colors verticaly     
     auto ray_y = ray.y(); // this component might assume values ranging from -1 to 1     
 
     // Normalize the ray's vertical component to the range [0;1]     
-    auto t= 0.5+( ray_y*0.5 );     
+    auto t= (1+ ray_y)*0.5 ;     
 
     // Use linear interpolation (lerp) between the colors that compose the background     
-    rgb result = bottom_*(1 - t) + top_*(t);     
+    rgb result = bottom_*(1 - t) + top_*(t); 
+
     return result; 
 }
 

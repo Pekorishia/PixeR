@@ -24,13 +24,15 @@ void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader 
         for( auto col{0} ; col < n_cols ; col++ ) // X
         {
             rgb hue(0,0,0);
+            //antialiasing
             for (int s = 0; s < n_samples; ++s)
             {
                 // Determine how much we have 'walked' on the image: in [0,1]
                 auto u = float(col + drand48()) / float( n_cols ); // walked u% of the horizontal dimension of the view plane.
                 auto v = float(row + drand48()) / float( n_rows ); // walked v% of the vertical dimension of the view plane.
+                
                 Ray r = cam->get_ray(u,v);
-               // hue += rgb(0,1,0);
+
                 hue += shade->color( r, t_min, t_max, 0 );
             }
             

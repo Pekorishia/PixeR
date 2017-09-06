@@ -13,14 +13,11 @@ class Material{
 	A posição do olho define a intessidade. 
 	Depende da posição da camera, da luz e da normal.*/
 
-		/*rgb albedo; //Kd o difuso.
+		rgb albedo; //Kd o difuso.
 		rgb ks;
 		rgb ka;
-		float alpha;*/
+		float alpha;
 		virtual bool scatter(const Ray &r, const struct HitRecord &ht, vec3 & attenuation, Ray &scatterd) const = 0;
-		void pudim(){
-			std::cout <<"esse caralho foi ";
-		}
 };
 
 #endif

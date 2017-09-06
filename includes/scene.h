@@ -2,6 +2,7 @@
 #define _SCENE_H_
 
 #include "object.h" 
+#include "light.h" 
 
 class Scene {
 
@@ -9,11 +10,13 @@ class Scene {
 
         Object **list; 
         int list_size;
+        Light *luz;
     	    	
-        Scene( Object **l_, int n_)
+        Scene( Object **l_, int n_, Light *luz_)
         { 
         	list = l_;
         	list_size = n_;
+        	luz = luz_;
         }
 };
 

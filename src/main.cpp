@@ -7,9 +7,9 @@
 #include "../includes/scene.h"
 #include "../includes/matted.h"
 #include "../includes/sphere.h"
+#include "../includes/light.h"
 #include "../includes/raytrace.h"
 #include "../includes/depth_shader.h"
-#include "../includes/lambertian.h"
 #include "../includes/difuse_shader.h"
 #include "../includes/normal_shader.h"
 
@@ -65,8 +65,8 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
 
                 auto a = j["scene"]["spheres"][i]["material"]["alpha"];
 
-                //Material *mat = new Matted(kd, ks, ka, a);
-                Material *mat = new Lambertian(kd);
+                Material *mat = new Matted(kd, ks, ka, a);
+                //Material *mat = new Lambertian(kd);
 
                 point3 center (j["scene"]["spheres"][i]["center"]["x"],
                 j["scene"]["spheres"][i]["center"]["y"],
@@ -77,7 +77,9 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
                 list[i] = new Sphere(mat, center, radius);
             }
 
-        world  = new Scene(list, j["scene"]["spheres"].size());
+        Light *luz = new Light(vec3(1,0,0), rgb(1,1,1));
+
+        world  = new Scene(list, j["scene"]["spheres"].size(), luz);
 
     // Shader creation
         if (j["shader"]["type"] == "depth"){
