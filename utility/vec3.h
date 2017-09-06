@@ -100,6 +100,18 @@ namespace utility {
                 return ( e[X]*e[X] + e[Y]*e[Y] + e[Z]*e[Z] );
             }
             inline void make_unit_vector( void );
+
+            inline void printRGB( void ) const {
+                std::cout << "( " << e[R] << ", " << e[G] << ", " << e[B] << " )" << std::endl;
+            }
+
+            inline void printPoint( void ) const {
+                std::cout << "( " << e[X] << ", " << e[Y] << ", " << e[Z] << " )" << std::endl;
+            }
+
+            inline void printVec3( void ) const {
+                std::cout << "( " << e[X] << ", " << e[Y] << ", " << e[Z] << " )" << std::endl;
+            }
     };
 
     typedef vec3 rgb;

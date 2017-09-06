@@ -12,8 +12,6 @@ public:
 	virtual rgb color(const Ray & r_, float t_min, float t_max, int depth_) const = 0;
 	bool hit_anything( const Ray & r_, float t_min_, float t_max_, HitRecord & ht_ ) const;
 
-    void print();
-
 protected:
 
 	Scene *world;
@@ -23,12 +21,6 @@ protected:
 
 };
 
-/*
- * Prints the origin of the first object. Used for debugs
- */
-void Shader::print(){
-    world->list[0]->print(); 
-}
 
 /*
  * Verifies if the ray hitted any object

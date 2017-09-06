@@ -3,6 +3,7 @@
 
 #include "object.h" 
 #include "light.h" 
+#include "background.h"
 
 class Scene {
 
@@ -10,13 +11,19 @@ class Scene {
 
         Object **list; 
         int list_size;
-        Light *luz;
+        Light **lum;
+        int lum_size;
+        Background *bg;
+        rgb ambientLight;
     	    	
-        Scene( Object **l_, int n_, Light *luz_)
+        Scene( Object **l_, int n_, Light **lum_, int m_, Background *bg_, rgb al_)
         { 
         	list = l_;
         	list_size = n_;
-        	luz = luz_;
+        	lum = lum_;
+            lum_size = m_;
+            bg = bg_;
+            ambientLight = al_;
         }
 };
 

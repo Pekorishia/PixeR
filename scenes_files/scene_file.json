@@ -1,17 +1,17 @@
 {
 	"image": { 
-		    	"name": "depth.ppm",
+		    	"name": "img_3.ppm",
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
-		    	"samples": 100,
-		    	"ray_depth": 10,
+		    	"samples": 1,
+		    	"ray_depth": 1,
 		    	"t_min": 0.001,
 		    	"t_max": "infinity"
 		  	},
 	
 	"shader": {
-					"type": "difuse"
+					"type": "blinnphong"
 				},
 	"camera": {
 					"lower_left_corner":{
@@ -36,61 +36,82 @@
 							}
 				},
 	"scene": {
+				"light" : [ 
+							{
+								"direction": {
+												"x": 20,
+												"y": 10,
+												"z": 5
+											},
+								"intensity": {
+												"r": 1,
+												"g": 1,
+												"b": 1
+											}
+						   }
+						 ],
+				"ambient_light": {
+									"r": 0.4,
+									"g": 0.4,
+									"b": 0.4
+								},
     			"background": {
 								"upper_left": {
-												"r": 127,
-												"g": 178,
-												"b": 255
+												"r": 0.5,
+												"g": 0.7,
+												"b": 0.9
 											},
 								"upper_right": {
-												"r": 127,
-												"g": 178,
-												"b": 255
+												"r": 0.5,
+												"g": 0.3,
+												"b": 0.9
 											},
 								"lower_left": {
-												"r": 255,
-												"g": 255,
-												"b": 255
+												"r": 1,
+												"g": 1,
+												"b": 1
 											},
 								"lower_right": {
-												"r": 255,
-												"g": 255,
-												"b": 255
+												"r": 1,
+												"g": 1,
+												"b": 1
 											}
     						},
     			"spheres": [
     							{
     								"material": {
+    												"type" : "blinnphong",
     												"albedo": {
-																"r": 1,
-																"g": 0,
-																"b": 0
+																"r": 0.0,
+																"g": 0.3,
+																"b": 0.8
 															},
     												"specular": {
-																"r": 1,
-																"g": 1,
-																"b": 1
+																"r": 0.9,
+																"g": 0.9,
+																"b": 0.9
 															},
     												"ambient": {
-																"r": 1,
-																"g": 1,
-																"b": 1
+																"r": 0.1,
+																"g": 0.1,
+																"b": 0.1
 															},
-    												"alpha": 1
+    												"alpha": 6
     											}, 
     								"center": {
     												"x": 0,
     												"y": 0,
     												"z": -1
     											}, 
-    								"radius": 0.5
+    								"radius": 0.4
     							},
     							{
     								"material": {
+    												"type" : "blinnphong",
     												"albedo": {
-																"r": 1,
-																"g": 1,
-																"b": 0
+																"r": 0.4,
+																"g": 0.4,
+																"b": 0.4
 															},
     												"specular": {
 																"r": 1,
@@ -98,11 +119,11 @@
 																"b": 1
 															},
     												"ambient": {
-																"r": 1,
-																"g": 1,
-																"b": 1
+																"r": 0.1,
+																"g": 0.1,
+																"b": 0.1
 															},
-    												"alpha": 1
+    												"alpha": 5
     											}, 
     								"center": {
     												"x": 0,

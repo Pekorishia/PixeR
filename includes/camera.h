@@ -18,11 +18,9 @@ public:
         horizontal = horizontal_; 
         vertical = vertical_; 
         origin = origin_; 
-    }
-	
+    }	
 
     Ray get_ray(float u, float v);
-    void print();
        
 };
 
@@ -34,13 +32,6 @@ Ray Camera::get_ray(float u, float v)
     point3 end_point = lower_left_corner + u*horizontal + v*vertical ;
     Ray r( origin, end_point - origin );
     return r;
-}
-
-/*
- * Prints the origin of the camera. Used for debugs
- */
-void Camera::print(){
-    std::cout << "( " << origin.x() << ", " << origin.y() << ", "<< origin.z() << " )" << std::endl; 
 }
 
 #endif

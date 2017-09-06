@@ -5,13 +5,18 @@
 
 #include "../utility/json.hpp"
 #include "../includes/scene.h"
-#include "../includes/matted.h"
 #include "../includes/sphere.h"
 #include "../includes/light.h"
 #include "../includes/raytrace.h"
+#include "../includes/background.h"
+
 #include "../includes/depth_shader.h"
 #include "../includes/difuse_shader.h"
 #include "../includes/normal_shader.h"
+#include "../includes/blinnphong_shader.h"
+
+#include "../includes/matted_material.h"
+#include "../includes/blinnphong_material.h"
 
 using json = nlohmann::json;
 
@@ -51,22 +56,29 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
         // Spheres creation
             for(int i=0; i<j["scene"]["spheres"].size(); i++){
 
-                rgb kd (j["scene"]["spheres"][i]["material"]["albedo"]["r"],
-                j["scene"]["spheres"][i]["material"]["albedo"]["g"],
-                j["scene"]["spheres"][i]["material"]["albedo"]["b"]);
+                // Material creation
+                    rgb kd (j["scene"]["spheres"][i]["material"]["albedo"]["r"],
+                    j["scene"]["spheres"][i]["material"]["albedo"]["g"],
+                    j["scene"]["spheres"][i]["material"]["albedo"]["b"]);
 
-                rgb ks (j["scene"]["spheres"][i]["material"]["specular"]["r"],
-                j["scene"]["spheres"][i]["material"]["specular"]["g"],
-                j["scene"]["spheres"][i]["material"]["specular"]["b"]);
+                    rgb ks (j["scene"]["spheres"][i]["material"]["specular"]["r"],
+                    j["scene"]["spheres"][i]["material"]["specular"]["g"],
+                    j["scene"]["spheres"][i]["material"]["specular"]["b"]);
 
-                rgb ka (j["scene"]["spheres"][i]["material"]["ambient"]["r"],
-                j["scene"]["spheres"][i]["material"]["ambient"]["g"],
-                j["scene"]["spheres"][i]["material"]["ambient"]["b"]);
+                    rgb ka (j["scene"]["spheres"][i]["material"]["ambient"]["r"],
+                    j["scene"]["spheres"][i]["material"]["ambient"]["g"],
+                    j["scene"]["spheres"][i]["material"]["ambient"]["b"]);
 
-                auto a = j["scene"]["spheres"][i]["material"]["alpha"];
+                    auto a = j["scene"]["spheres"][i]["material"]["alpha"];
 
-                Material *mat = new Matted(kd, ks, ka, a);
-                //Material *mat = new Lambertian(kd);
+                    Material *mat;
+
+                    if (j["scene"]["spheres"][i]["material"]["type"] == "matted"){
+                        mat = new Matted(kd, ks, ka, a);
+                    }
+                    else if (j["scene"]["spheres"][i]["material"]["type"] == "blinnphong"){
+                        mat = new BlinnPhong(kd, ks, ka, a);
+                    }
 
                 point3 center (j["scene"]["spheres"][i]["center"]["x"],
                 j["scene"]["spheres"][i]["center"]["y"],
@@ -77,9 +89,46 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
                 list[i] = new Sphere(mat, center, radius);
             }
 
-        Light *luz = new Light(vec3(1,0,0), rgb(1,1,1));
+        // Light creation
+            Light *lum[ j["scene"]["light"].size() ];
 
-        world  = new Scene(list, j["scene"]["spheres"].size(), luz);
+            for(int i=0; i<j["scene"]["light"].size(); i++){
+                vec3 direction (j["scene"]["light"][i]["direction"]["x"],
+                                j["scene"]["light"][i]["direction"]["y"],
+                                j["scene"]["light"][i]["direction"]["z"]);
+
+                rgb intensity (j["scene"]["light"][i]["intensity"]["r"],
+                               j["scene"]["light"][i]["intensity"]["g"],
+                               j["scene"]["light"][i]["intensity"]["b"]);
+
+                lum[i] = new Light( direction, intensity);
+            }
+
+        // Background creation
+            rgb tl (j["scene"]["background"]["upper_left"]["r"],
+                   j["scene"]["background"]["upper_left"]["g"],
+                   j["scene"]["background"]["upper_left"]["b"]);
+
+            rgb tr (j["scene"]["background"]["upper_right"]["r"],
+                   j["scene"]["background"]["upper_right"]["g"],
+                   j["scene"]["background"]["upper_right"]["b"]);
+
+            rgb ll (j["scene"]["background"]["lower_left"]["r"],
+                   j["scene"]["background"]["lower_left"]["g"],
+                   j["scene"]["background"]["lower_left"]["b"]);
+
+            rgb lr (j["scene"]["background"]["lower_right"]["r"],
+                   j["scene"]["background"]["lower_right"]["g"],
+                   j["scene"]["background"]["lower_right"]["b"]);
+
+            Background *bg = new Background(ll, lr, tl, tr);
+
+        // Ambient light creation
+            rgb al (j["scene"]["ambient_light"]["r"],
+                    j["scene"]["ambient_light"]["g"],
+                    j["scene"]["ambient_light"]["b"]);
+
+        world  = new Scene(list, j["scene"]["spheres"].size(), lum, j["scene"]["light"].size(), bg, al);
 
     // Shader creation
         if (j["shader"]["type"] == "depth"){
@@ -103,7 +152,9 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
         else if (j["shader"]["type"] == "normal"){
             shade = new NormalShader(world);
         }
-
+        else if (j["shader"]["type"] == "blinnphong"){
+            shade = new BlinnphongShader(world);
+        }
     // Camera creation
         point3 llc (j["camera"]["lower_left_corner"]["x"],
                     j["camera"]["lower_left_corner"]["y"],

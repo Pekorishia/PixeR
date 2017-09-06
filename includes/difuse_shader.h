@@ -3,7 +3,7 @@
 
 #include "shader.h"
 #include "material.h" 
-#include "matted.h"
+#include "matted_material.h"
 
 class DifuseShader : public Shader 
 {
@@ -55,7 +55,7 @@ rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) c
     }
 
     // Else, dye the pixel with the background color
-    return Shader::vertical_interpolation(r_, rgb( 1,1,1 ), rgb( 0.5, 0.3, 0.9 ));
+    return Shader::vertical_interpolation(r_, Shader::world->bg->lower_left, Shader::world->bg->top_left);
 }
 
 #endif
