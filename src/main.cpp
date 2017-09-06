@@ -9,6 +9,7 @@
 #include "../includes/sphere.h"
 #include "../includes/raytrace.h"
 #include "../includes/depth_shader.h"
+#include "../includes/lambertian.h"
 #include "../includes/difuse_shader.h"
 #include "../includes/normal_shader.h"
 
@@ -64,7 +65,8 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
 
                 auto a = j["scene"]["spheres"][i]["material"]["alpha"];
 
-                Material *mat = new Matted(kd, ks, ka, a);
+                //Material *mat = new Matted(kd, ks, ka, a);
+                Material *mat = new Lambertian(kd);
 
                 point3 center (j["scene"]["spheres"][i]["center"]["x"],
                 j["scene"]["spheres"][i]["center"]["y"],
@@ -139,10 +141,7 @@ void fileReader(std::string file, int & n_cols, int & n_rows, int & n_samples, i
 
     // Put all the buffer inside of the image and closes it
     arq << ss.str();
-    arq.close();
-
-
-    std::cout << "FOI CARAMBA!!! " << std::endl;    
+    arq.close();   
 
 }
 

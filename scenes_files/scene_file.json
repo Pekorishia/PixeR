@@ -13,7 +13,6 @@
 	"shader": {
 					"type": "difuse"
 				},
-
 	"camera": {
 					"lower_left_corner":{
 											"x": -2,
@@ -36,7 +35,6 @@
 								"z": 0
 							}
 				},
-
 	"scene": {
     			"background": {
 								"upper_left": {
@@ -60,7 +58,6 @@
 												"b": 255
 											}
     						},
-
     			"spheres": [
     							{
     								"material": {

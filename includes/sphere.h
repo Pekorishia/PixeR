@@ -19,7 +19,7 @@ class Sphere : public Object {
         float radius; // the radius of the of the sphere
 
         //=== Access methods
-        virtual bool hit( const Ray & r_, real_type t_min_, real_type t_max_, HitRecord & ht_ ) const;
+        virtual bool hit( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const;
 };
 
 /*  
@@ -27,7 +27,7 @@ class Sphere : public Object {
  *  
  * TODO: only works with a 2D sphere  
  */ 
-bool Sphere::hit ( const Ray & r_, real_type t_min_, real_type t_max_, HitRecord & ht_ ) const
+bool Sphere::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const
 {
      // First, manipulate the 1), 2) and 3) line to create the 4) equation   
     // 1) (point - center) * (point - center) - radius² = 0     
@@ -52,6 +52,7 @@ bool Sphere::hit ( const Ray & r_, real_type t_min_, real_type t_max_, HitRecord
             ht_.t = t;
             ht_.p =  r_.point_at(t);
             ht_.normal = (ht_.p - Object::origin) / radius;
+            ht_.mat = Object::material;
 
             return true;
         }   
