@@ -274,27 +274,6 @@ or
 			}
 		   ]
 ```
-or
-```txt
-"spheres": [
-			{
-				"material": {
-								"type" : "matted",
-								"albedo": {
-											"r": 0.0,
-											"g": 0.3,
-											"b": 0.8
-										}
-							}, 
-				"center": {
-								"x": 0,
-								"y": 0,
-								"z": -1
-							}, 
-				"radius": 0.4
-			}
-		   ]
-```
 
 ### Full scene file example:
 
