@@ -1,5 +1,5 @@
 #ifndef _CAMERA_H_
-#define _SCENE_H_
+#define _CAMERA_H_
 
 #include "../utility/ray.h"
 

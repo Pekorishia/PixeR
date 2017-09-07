@@ -30,38 +30,38 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         vec3 r_unit = unit_vector(r_.get_direction());
 
         // The ray that goes back to the camera
-        auto v = vec3( r_unit.x(),  r_unit.y(), r_unit.z()) * vec3(-1,-1,-1);
+        auto v = unit_vector(vec3( r_unit.x(),  r_unit.y(), r_unit.z()) * vec3(-1,-1,-1));
 
         // Ambient light
-        ip += ht.mat->ka  * world->ambientLight;
+        auto ambient = ht.mat->ka  * world->ambientLight;
+
+        ip += ambient;
 
         for( int i = 0; i < Shader::world->lum_size; i++){
+
             // Light direction normalized
-            auto l = unit_vector(world->lum[i]->direction );
+            auto l = unit_vector(world->lum[i]->direction - r_.get_direction());
 
             // Difuse component
-            ip += ht.mat->albedo * dot(l, ht.normal) * world->lum[i]->intensity;
-            
-            // Unit vector in the direction of ideal specular reflection: (2N * L)N - L
-            auto r = dot (2 * ht.normal, l) * ht.normal - l;
+            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->intensity;
 
             auto h = unit_vector(l + v); 
 
             // Specular component
-            ip += ht.mat->ks * pow ( dot( ht.normal, h ) , ht.mat->alpha ) * world->lum[i]->intensity;
+            auto specular = ht.mat->ks * pow ( std::max(0.f, dot(ht.normal, h)) , ht.mat->alpha ) * world->lum[i]->intensity;
 
+            ip += difuse + specular;
         }
-
 
         // Remove any misscalculation to the [0;1] range
-        if (ip.r() < 0){
-            ip = rgb (0, ip.g(), ip.b());
+        if (ip.r() > 1){
+            ip[0] = 1;
         }
-        if (ip.g() < 0){
-            ip = rgb (ip.r(), 0, ip.b());
+        if (ip.g() > 1){
+            ip[1] = 1;
         }
-        if (ip.b() < 0){
-            ip = rgb (ip.r(), ip.g(), 0);
+        if (ip.b() > 1){
+            ip[2] = 1;
         }
 
         return ip;
