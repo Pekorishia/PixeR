@@ -217,7 +217,7 @@ specular* | the specular component of the material (rgb).
 ambient* | the ambient component of the material (rgb).
 alpha* | the specular exponent (float).
 
-* Only matters for the blinnphong material
+*Only matters for the blinnphong material
 
 **Example**: 
 
