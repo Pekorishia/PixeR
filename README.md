@@ -225,6 +225,28 @@ alpha* | the specular exponent (float).
 "spheres": [
 			{
 				"material": {
+								"type" : "matted",
+								"albedo": {
+											"r": 0.0,
+											"g": 0.3,
+											"b": 0.8
+										}
+							}, 
+				"center": {
+								"x": 0,
+								"y": 0,
+								"z": -1
+							}, 
+				"radius": 0.4
+			},
+```
+
+or
+
+```txt
+"spheres": [
+			{
+				"material": {
 								"type" : "blinnphong",
 								"albedo": {
 											"r": 0.0,
@@ -252,11 +274,31 @@ alpha* | the specular exponent (float).
 			}
 		   ]
 ```
+or
+```txt
+"spheres": [
+			{
+				"material": {
+								"type" : "matted",
+								"albedo": {
+											"r": 0.0,
+											"g": 0.3,
+											"b": 0.8
+										}
+							}, 
+				"center": {
+								"x": 0,
+								"y": 0,
+								"z": -1
+							}, 
+				"radius": 0.4
+			}
+		   ]
+```
 
 ### Full scene file example:
 
-```txt
-{
+```txt{
 	"image": { 
 		    	"name": "newScene.ppm",
 		    	"codification": "ascii",
@@ -335,62 +377,64 @@ alpha* | the specular exponent (float).
 											"b": 1
 										}
 						},
-			"spheres": [
-							{
-								"material": {
-												"type" : "blinnphong",
-												"albedo": {
-															"r": 0.0,
-															"g": 0.3,
-															"b": 0.8
-														},
-												"specular": {
-															"r": 0.9,
-															"g": 0.9,
-															"b": 0.9
-														},
-												"ambient": {
-															"r": 0.1,
-															"g": 0.1,
-															"b": 0.1
-														},
-												"alpha": 64
-											}, 
-								"center": {
-												"x": 0,
-												"y": 0,
-												"z": -1
-											}, 
-								"radius": 0.4
-							},
-							{
-								"material": {
-												"type" : "blinnphong",
-												"albedo": {
-															"r": 0.4,
-															"g": 0.4,
-															"b": 0.4
-														},
-												"specular": {
-															"r": 1,
-															"g": 1,
-															"b": 1
-														},
-												"ambient": {
-															"r": 0.1,
-															"g": 0.1,
-															"b": 0.1
-														},
-												"alpha": 5
-											}, 
-								"center": {
-												"x": 0,
-												"y": -100.5,
-												"z": -1
-											}, 
-								"radius": 100
-							}
-						]
+			"objects": {
+						"spheres": [
+									{
+										"material": {
+														"type" : "blinnphong",
+														"albedo": {
+																	"r": 0.0,
+																	"g": 0.3,
+																	"b": 0.8
+																},
+														"specular": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 64
+													}, 
+										"center": {
+														"x": 0,
+														"y": 0,
+														"z": -1
+													}, 
+										"radius": 0.4
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"albedo": {
+																	"r": 0.4,
+																	"g": 0.4,
+																	"b": 0.4
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 5
+													}, 
+										"center": {
+														"x": 0,
+														"y": -100.5,
+														"z": -1
+													}, 
+										"radius": 100
+									}
+								]
+						}
       		} 
  }
 ```

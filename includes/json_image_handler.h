@@ -63,40 +63,40 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
 
     // Scene Creation
-        Object *list[ j["scene"]["spheres"].size() ];
+        Object *list[ j["scene"]["objects"]["spheres"].size() ];
 
         // Spheres creation
-            for(int i=0; i<j["scene"]["spheres"].size(); i++){
+            for(int i=0; i<j["scene"]["objects"]["spheres"].size(); i++){
 
                 // Material creation
-                    rgb kd (j["scene"]["spheres"][i]["material"]["albedo"]["r"],
-                    j["scene"]["spheres"][i]["material"]["albedo"]["g"],
-                    j["scene"]["spheres"][i]["material"]["albedo"]["b"]);
-
-                    rgb ks (j["scene"]["spheres"][i]["material"]["specular"]["r"],
-                    j["scene"]["spheres"][i]["material"]["specular"]["g"],
-                    j["scene"]["spheres"][i]["material"]["specular"]["b"]);
-
-                    rgb ka (j["scene"]["spheres"][i]["material"]["ambient"]["r"],
-                    j["scene"]["spheres"][i]["material"]["ambient"]["g"],
-                    j["scene"]["spheres"][i]["material"]["ambient"]["b"]);
-
-                    auto a = j["scene"]["spheres"][i]["material"]["alpha"];
+                    rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                    j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                    j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
 
                     Material *mat;
 
-                    if (j["scene"]["spheres"][i]["material"]["type"] == "matted"){
-                        mat = new Matted(kd, ks, ka, a);
+                    if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "matted"){
+                        mat = new Matted(kd);
                     }
-                    else if (j["scene"]["spheres"][i]["material"]["type"] == "blinnphong"){
+                    else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "blinnphong"){
+                        rgb ks (j["scene"]["objects"]["spheres"][i]["material"]["specular"]["r"],
+	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["g"],
+	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["b"]);
+
+	                    rgb ka (j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["r"],
+	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["g"],
+	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["b"]);
+
+	                    auto a = j["scene"]["objects"]["spheres"][i]["material"]["alpha"];
+
                         mat = new BlinnPhong(kd, ks, ka, a);
                     }
 
-                point3 center (j["scene"]["spheres"][i]["center"]["x"],
-                j["scene"]["spheres"][i]["center"]["y"],
-                j["scene"]["spheres"][i]["center"]["z"]);
+                point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
+                j["scene"]["objects"]["spheres"][i]["center"]["y"],
+                j["scene"]["objects"]["spheres"][i]["center"]["z"]);
 
-                auto radius = j["scene"]["spheres"][i]["radius"];
+                auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
 
                 list[i] = new Sphere(mat, center, radius);
             }
@@ -140,7 +140,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     j["scene"]["ambient_light"]["g"],
                     j["scene"]["ambient_light"]["b"]);
 
-        world  = new Scene(list, j["scene"]["spheres"].size(), lum, j["scene"]["light"].size(), bg, al);
+        world  = new Scene(list, j["scene"]["objects"]["spheres"].size(), lum, j["scene"]["light"].size(), bg, al);
 
     // Shader creation
         if (j["shader"]["type"] == "depth"){

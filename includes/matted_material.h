@@ -8,12 +8,12 @@ class Matted: public Material
 {
 	public:
 
-		Matted(const rgb albedo_, const rgb ks_, const rgb ka_, float alpha_)
+		Matted(const rgb albedo_)
 		{
 			Material::albedo = albedo_;
-			Material::ks = ks_;
-			Material::ka = ka_;
-			Material::alpha = alpha_;
+			Material::ks = rgb(0,0,0);
+			Material::ka = rgb(0,0,0);
+			Material::alpha = 0;
 		}
 
 	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
