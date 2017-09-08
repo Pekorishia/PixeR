@@ -47,7 +47,7 @@ rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) c
         Ray scattered_ray;
         rgb attenuation;
 
-        if (depth_ < 2 and ht.mat->scatter(r_, ht, attenuation, scattered_ray)
+        if (depth_ < 50 and ht.mat->scatter(r_, ht, attenuation, scattered_ray)
         )
             return attenuation * color(scattered_ray, t_min, t_max, depth_+1);
         else

@@ -17,6 +17,7 @@
 #include "normal_shader.h"
 #include "blinnphong_shader.h"
 
+#include "metal_material.h"
 #include "matted_material.h"
 #include "blinnphong_material.h"
 
@@ -90,6 +91,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 	                    auto a = j["scene"]["objects"]["spheres"][i]["material"]["alpha"];
 
                         mat = new BlinnPhong(kd, ks, ka, a);
+                    }
+                    else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
+                        mat = new Metal(kd);
                     }
 
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],

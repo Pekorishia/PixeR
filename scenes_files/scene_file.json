@@ -2,16 +2,16 @@
 	"image": { 
 		    	"name": "newScene.ppm",
 		    	"codification": "ascii",
-		    	"width": 1200,
-		    	"height": 600,
-		    	"samples": 1,
-		    	"ray_depth": 1,
+		    	"width": 600,
+		    	"height": 300,
+		    	"samples": 100,
+		    	"ray_depth": 100,
 		    	"t_min": 0.001,
 		    	"t_max": "infinity"
 		  	},
 	
 	"shader": {
-				"type": "blinnphong"
+				"type": "difuse"
 			},
 	"camera": {
 				"lower_left_corner":{
@@ -81,11 +81,11 @@
 						"spheres": [
 									{
 										"material": {
-														"type" : "blinnphong",
+														"type" : "matted",
 														"albedo": {
-																	"r": 0.0,
+																	"r": 0.8,
 																	"g": 0.3,
-																	"b": 0.8
+																	"b": 0.3
 																},
 														"specular": {
 																	"r": 0.9,
@@ -104,11 +104,65 @@
 														"y": 0,
 														"z": -1
 													}, 
-										"radius": 0.4
+										"radius": 0.5
 									},
 									{
 										"material": {
-														"type" : "blinnphong",
+														"type" : "metal",
+														"albedo": {
+																	"r": 0.8,
+																	"g": 0.6,
+																	"b": 0.2
+																},
+														"specular": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 64
+													}, 
+										"center": {
+														"x": 1,
+														"y": 0,
+														"z": -1
+													}, 
+										"radius": 0.5
+									},
+									{
+										"material": {
+														"type" : "metal",
+														"albedo": {
+																	"r": 0.8,
+																	"g": 0.8,
+																	"b": 0.8
+																},
+														"specular": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 64
+													}, 
+										"center": {
+														"x": -1,
+														"y": 0,
+														"z": -1
+													}, 
+										"radius": 0.5
+									},
+									{
+										"material": {
+														"type" : "matted",
 														"albedo": {
 																	"r": 0.4,
 																	"g": 0.4,
