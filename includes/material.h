@@ -2,6 +2,7 @@
 #define _MATERIAL_H_
 
 #include "object.h"
+#include "scene.h"
 #include "../utility/ray.h"
 #include "../utility/vec3.h"
 
@@ -17,6 +18,7 @@ class Material{
 		rgb ks;
 		rgb ka;
 		float alpha;
+
 		virtual bool scatter(const Ray &r, const struct HitRecord &ht, vec3 & attenuation, Ray &scatterd) const = 0;
 };
 

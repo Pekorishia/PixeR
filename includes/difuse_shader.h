@@ -44,8 +44,8 @@ rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) c
     // If the ray hitted anything
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
-        Ray scattered_ray;
-        rgb attenuation;
+        Ray scattered_ray = r_;
+        rgb attenuation = rgb(1,1,1);
 
         if (depth_ < 50 and ht.mat->scatter(r_, ht, attenuation, scattered_ray)
         )

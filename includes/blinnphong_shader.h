@@ -35,7 +35,7 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         // Ambient light
         auto ambient = ht.mat->ka  * world->ambientLight;
 
-        ip += ambient;
+        //ip += ambient;
 
         for( int i = 0; i < Shader::world->lum_size; i++){
 
@@ -44,7 +44,7 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
 
             // Difuse component
             auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->intensity;
-
+            
             auto h = unit_vector(l + v); 
 
             // Specular component
@@ -63,7 +63,6 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         if (ip.b() > 1){
             ip[2] = 1;
         }
-
         return ip;
     }
 

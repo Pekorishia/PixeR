@@ -93,7 +93,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         mat = new BlinnPhong(kd, ks, ka, a);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
-                        mat = new Metal(kd);
+                        mat = new Metal(kd, 1);
                     }
 
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
