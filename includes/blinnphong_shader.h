@@ -21,11 +21,14 @@ class BlinnphongShader : public Shader
 rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth_) const
 {
     HitRecord ht;
+    HitRecord ht_s;
 
     // If the ray hitted anything
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     { 
         rgb ip(0,0,0);
+
+        auto p = r_.get_origin() + ht.t * r_.get_direction();
 
         vec3 r_unit = unit_vector(r_.get_direction());
 
@@ -35,22 +38,25 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         // Ambient light
         auto ambient = ht.mat->ka  * world->ambientLight;
 
-        //ip += ambient;
+        ip += ambient;
 
         for( int i = 0; i < Shader::world->lum_size; i++){
 
-            // Light direction normalized
-            auto l = unit_vector(world->lum[i]->direction - r_.get_direction());
+        	if (! Shader::hit_anything( Ray(p, world->lum[i]->direction), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
+        	{
+	            // Light direction normalized
+	            auto l = unit_vector(world->lum[i]->direction - r_.get_direction());
 
-            // Difuse component
-            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->intensity;
-            
-            auto h = unit_vector(l + v); 
+	            // Difuse component
+	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->intensity;
+	            
+	            auto h = unit_vector(l + v); 
 
-            // Specular component
-            auto specular = ht.mat->ks * pow ( std::max(0.f, dot(ht.normal, h)) , ht.mat->alpha ) * world->lum[i]->intensity;
+	            // Specular component
+	            auto specular = ht.mat->ks * pow ( std::max(0.f, dot(ht.normal, h)) , ht.mat->alpha ) * world->lum[i]->intensity;
 
-            ip += difuse + specular;
+	            ip += difuse + specular;
+	        }
         }
 
         // Remove any misscalculation to the [0;1] range
