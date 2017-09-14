@@ -30,7 +30,7 @@ samples | the number of color samples retrieved from one pixel (integer).
 ray_depth* | the number of times that the rays will bounce (integer). 
 t_min & t_max | the minimum and maximum distance that the image will show objects (float and "infinity"). 
 
-*Only matters when using difuse shader
+*Only matters when using difuse and blinn-phong shader
 
 **Example**: 
 
@@ -211,13 +211,16 @@ radius | the radius of the sphere (float).
 
 Material Tags | Contents
 ------------ | -------------
-type | the type of the material ("matted", "blinnphong").
+type | the type of the material ("matted", "blinnphong", "metal").
 albedo | the color and difuse component of the material (rgb).
+mirrow* | the specular reflexion component of the material (rgb).
 specular* | the specular component of the material (rgb).
 ambient* | the ambient component of the material (rgb).
 alpha* | the specular exponent (float).
+fuzz** | the fuzziness of the material (float).
 
 *Only matters for the blinnphong material
+**Only matters for the metal material
 
 **Example**: 
 
@@ -247,11 +250,39 @@ or
 "spheres": [
 			{
 				"material": {
+								"type" : "metal",
+								"albedo": {
+											"r": 0.0,
+											"g": 0.3,
+											"b": 0.8
+										},
+								"fuzz": 0.3
+							}, 
+				"center": {
+								"x": 0,
+								"y": 0,
+								"z": -1
+							}, 
+				"radius": 0.4
+			},
+```
+
+or
+
+```txt
+"spheres": [
+			{
+				"material": {
 								"type" : "blinnphong",
 								"albedo": {
 											"r": 0.0,
 											"g": 0.3,
 											"b": 0.8
+										},
+								"mirrow": {
+											"r": 0.1,
+											"g": 0.1,
+											"b": 0.1
 										},
 								"specular": {
 											"r": 0.9,

@@ -97,7 +97,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         mat = new BlinnPhong(kd, ks, km, ka, a);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
-                        mat = new Metal(kd, 1);
+                        
+                        auto fuzz = j["scene"]["objects"]["spheres"][i]["material"]["fuzz"];
+                        mat = new Metal(kd, fuzz);
                     }
 
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
