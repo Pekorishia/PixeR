@@ -9,10 +9,11 @@ class BlinnPhong: public Material
 {
 	public:
 
-		BlinnPhong(const rgb albedo_, const rgb ks_, const rgb ka_, float alpha_)
+		BlinnPhong(const rgb albedo_, const rgb ks_,  const rgb km_, const rgb ka_, float alpha_)
 		{
 			Material::albedo = albedo_;
 			Material::ks = ks_;
+			Material::km = km_;
 			Material::ka = ka_;
 			Material::alpha = alpha_;
 		}

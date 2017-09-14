@@ -33,7 +33,7 @@ void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader 
                 
                 Ray r = cam->get_ray(u,v);
 
-                hue += shade->color( r, t_min, t_max, 0 );
+                hue += shade->color( r, t_min, t_max, ray_depth );
             }
             
             hue /= float(n_samples);

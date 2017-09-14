@@ -88,9 +88,13 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["g"],
 	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["b"]);
 
+                        rgb km (j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["r"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["g"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["b"]);
+
 	                    auto a = j["scene"]["objects"]["spheres"][i]["material"]["alpha"];
 
-                        mat = new BlinnPhong(kd, ks, ka, a);
+                        mat = new BlinnPhong(kd, ks, km, ka, a);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
                         mat = new Metal(kd, 1);

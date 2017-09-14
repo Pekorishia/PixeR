@@ -17,6 +17,7 @@ class Material{
 		rgb albedo; //Kd o difuso.
 		rgb ks;
 		rgb ka;
+		rgb km;
 		float alpha;
 
 		virtual bool scatter(const Ray &r, const struct HitRecord &ht, vec3 & attenuation, Ray &scatterd) const = 0;
