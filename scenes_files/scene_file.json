@@ -1,6 +1,6 @@
 {
 	"image": { 
-		    	"name": "atividade.ppm",
+		    	"name": "concurso.ppm",
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
@@ -38,54 +38,53 @@
 			"light" : [ 
 						{
 							"direction": {
-											"x": -8,
-											"y": 7,
-											"z": 0
+											"x": 0,
+											"y": 5,
+											"z": 10
 										},
 							"intensity": {
-											"r": 0.8,
-											"g": 0.8,
-											"b": 0.8
+											"r": 1,
+											"g": 1,
+											"b": 0.5
 										}
 					   },
 					   {
 							"direction": {
-											"x": 20,
-											"y": 10,
-											"z": 15
+											"x": 0,
+											"y": 5.5,
+											"z": -10
 										},
 							"intensity": {
-											"r": 0.5,
-											"g": 0.5,
-											"b": 0.5
+											"r": 1,
+											"g": 1,
+											"b": 0
 										}
 					   }
 					 ],
 			"ambient_light": {
-								"r": 0.4,
-								"g": 0.4,
-								"b": 0.4
+								"r": 0,
+								"g": 0,
+								"b": 0
 							},
 			"background": {
 							"upper_left": {
-											"r": 0.5,
-											"g": 0.7,
-											"b": 0.9
+											"r": 0,
+											"g": 0,
+											"b": 0.3
 										},
 							"upper_right": {
-											"r": 0.5,
-											"g": 0.3,
-											"b": 0.9
-										},
+											"r": 0,
+											"g": 0,
+											"b": 0.3										},
 							"lower_left": {
-											"r": 1,
-											"g": 1,
-											"b": 1
+											"r": 0.6,
+											"g": 0.5,
+											"b": 0
 										},
 							"lower_right": {
-											"r": 1,
-											"g": 1,
-											"b": 1
+											"r": 0.5,
+											"g": 0.4,
+											"b": 0
 										}
 						},
 			"objects": {
@@ -95,7 +94,7 @@
 														"type" : "blinnphong",
 														"albedo": {
 																	"r": 1,
-																	"g": 1,
+																	"g": 0.9,
 																	"b": 0
 																},
 														"mirrow": {
@@ -113,22 +112,22 @@
 																	"g": 0.1,
 																	"b": 0.1
 																},
-														"alpha": 64
+														"alpha": 5
 													}, 
 										"center": {
 														"x": 0,
 														"y": 0,
-														"z": -1
+														"z": -40
 													}, 
-										"radius": 0.5
+										"radius": 4		
 									},
 									{
 										"material": {
 														"type" : "blinnphong",
 														"albedo": {
-																	"r": 0.4,
-																	"g": 0.4,
-																	"b": 0.4
+																	"r": 0.0,
+																	"g": 0,
+																	"b": 0.5
 																},
 														"mirrow": {
 																	"r": 0.1,
@@ -145,14 +144,46 @@
 																	"g": 0.1,
 																	"b": 0.1
 																},
-														"alpha": 64
+														"alpha": 5
 													}, 
 										"center": {
 														"x": 0,
 														"y": -100,
 														"z": -1
 													}, 
-										"radius": 99.5
+										"radius": 100
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"albedo": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 5
+													}, 
+										"center": {
+														"x": 30,
+														"y": 20,
+														"z": -50
+													}, 
+										"radius": 4		
 									}
 								]
 						}
