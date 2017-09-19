@@ -4,8 +4,8 @@
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
-		    	"samples": 10,
-		    	"ray_depth": 10,
+		    	"samples": 1,
+		    	"ray_depth": 1,
 		    	"t_min": 0.001,
 		    	"t_max": "infinity"
 		  	},
@@ -93,6 +93,7 @@
 									{
 										"material": {
 														"type" : "blinnphong",
+														"label" : "sun",
 														"albedo": {
 																	"r": 1,
 																	"g": 0.9,
@@ -120,11 +121,12 @@
 														"y": 0,
 														"z": -40
 													}, 
-										"radius": 4		
+										"radius": 8		
 									},
 									{
 										"material": {
 														"type" : "blinnphong",
+														"label" : "ocean",
 														"albedo": {
 																	"r": 0.0,
 																	"g": 0,
@@ -157,10 +159,11 @@
 									{
 										"material": {
 														"type" : "blinnphong",
+														"label" : "star1",
 														"albedo": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
 																},
 														"mirrow": {
 																	"r": 0,
@@ -177,14 +180,311 @@
 																	"g": 0.1,
 																	"b": 0.1
 																},
-														"alpha": 5
+														"alpha": 0
 													}, 
 										"center": {
-														"x": 30,
-														"y": 20,
-														"z": -50
+														"x": 20,
+														"y": 26,
+														"z": -30
 													}, 
-										"radius": 4		
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star2",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": -20,
+														"y": 26,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star3",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": 0,
+														"y": 23,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star4",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": -10,
+														"y": 20,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star5",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": 10,
+														"y": 20,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star6",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": 14,
+														"y": 28,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star7",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": -14,
+														"y": 28,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star8",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": -5,
+														"y": 26,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star9",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": 5,
+														"y": 26,
+														"z": -30
+													}, 
+										"radius": 0.2		
+									},
+									{
+										"material": {
+														"type" : "blinnphong",
+														"label" : "star10",
+														"albedo": {
+																	"r": 0.9,
+																	"g": 0.9,
+																	"b": 0.9
+																},
+														"mirrow": {
+																	"r": 0,
+																	"g": 0,
+																	"b": 0
+																},
+														"specular": {
+																	"r": 1,
+																	"g": 1,
+																	"b": 1
+																},
+														"ambient": {
+																	"r": 0.1,
+																	"g": 0.1,
+																	"b": 0.1
+																},
+														"alpha": 0
+													}, 
+										"center": {
+														"x": 20,
+														"y": 26,
+														"z": -30
+													}, 
+										"radius": 0.2		
 									}
 								]
 						}
