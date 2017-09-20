@@ -83,9 +83,9 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
 
     // Else, dye the pixel with the background color
 
-     rgb top = Shader::horizontal_interpolation3(r_, Shader::world->bg->top_left, rgb(0,0,0.3), Shader::world->bg->top_right);     
-     rgb bottom = Shader::horizontal_interpolation3(r_, Shader::world->bg->lower_left, rgb(0,0,0.3), Shader::world->bg->lower_right);     
-     rgb result = Shader::vertical_interpolation3(r_, bottom, rgb(0,0,0.3), top);
+     rgb top = Shader::horizontal_interpolation3(r_, Shader::world->bg->top_left, rgb(0.0,0.05,0.6), Shader::world->bg->top_right);     
+     rgb bottom = Shader::horizontal_interpolation3(r_, Shader::world->bg->lower_left, rgb(0.0,0.05,0.6), Shader::world->bg->lower_right);     
+     rgb result = Shader::vertical_interpolation3(r_, bottom, rgb(0.0,0.05,0.6), top);
     return result;
 }
 
