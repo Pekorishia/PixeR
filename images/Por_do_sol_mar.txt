@@ -2,8 +2,8 @@ O pôr do sol no mar
 
 A imagem foi gerada pelo algoritmo de raytrace usando uma técnica de tonalização chamada Blinn-Phong, com reflexão dos objetos. O único tipo de objeto usado foi esfera, além de três luzes direcionais, ambas alaranjadas porém com tons diferentes.
 
-A imagem possui uma esfera maior azul esverdeada, que a chamamos de 'Mar'. Com um grande especular branco, quando sofre incidência das luzes, aparenta receber a luz solar. O mar é a única esfera a refletir as demais.
+A imagem possui uma esfera maior azul esverdeada, que a chamamos de 'Mar'. Com um grande especular branco, quando sofre incidência das luzes, aparenta receber a luz do sol. O mar é a única esfera a refletir as demais.
 
-A esfera centralizada laranja tem o nome de 'Sol', onde recebe 2 luzes diretas. As esferas bem pequenas a cima, chamadas de 'Estrelas', são brancas com o especular no máximo, para parecer que estão brilhando. E as 6 esferas na frente do sol, foram posicionadas de tal maneira para aparecerem nuvens.
+A esfera centralizada laranja que representa o  'Sol', onde recebe 2 luzes diretas. As esferas bem pequenas a cima, chamadas de 'Estrelas', são brancas com o especular no máximo, para parecer que estão brilhando. E as 6 esferas na frente do sol, foram posicionadas de tal maneira para aparecerem nuvens.
 
-Formando assim um belo pôr do sol.
+Formando assim um belo pôr do sol ;).

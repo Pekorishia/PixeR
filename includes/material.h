@@ -18,7 +18,9 @@ class Material{
 		rgb ks;
 		rgb ka;
 		rgb km;
+		rgb **gradient; 
 		float alpha;
+		float **angles;
 
 		virtual bool scatter(const Ray &r, const struct HitRecord &ht, vec3 & attenuation, Ray &scatterd) const = 0;
 };

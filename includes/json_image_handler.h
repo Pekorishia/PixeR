@@ -12,11 +12,13 @@
 #include "raytrace.h"
 #include "background.h"
 
+#include "toon_shader.h"
 #include "depth_shader.h"
 #include "difuse_shader.h"
 #include "normal_shader.h"
 #include "blinnphong_shader.h"
 
+#include "toon_material.h"
 #include "metal_material.h"
 #include "matted_material.h"
 #include "blinnphong_material.h"
@@ -101,6 +103,17 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         auto fuzz = j["scene"]["objects"]["spheres"][i]["material"]["fuzz"];
                         mat = new Metal(kd, fuzz);
                     }
+                    else if(j["scene"]["objects"]["spheres"][i]["material"]["type"] == "toon"){
+                        rgb gradient[ j["scene"]["objects"]["spheres"][i]["material"]["gradient"].size() ];
+
+                        for(int k=0; k<j["scene"]["objects"]["spheres"][i]["material"]["gradient"].size(); k++){
+                            gradient[k]=rgb(j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["r"],
+                                        j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["g"],
+                                        j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["b"]);
+//
+                        }
+                        mat = new Toon(gradient);
+                    }
 
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
                 j["scene"]["objects"]["spheres"][i]["center"]["y"],
@@ -176,6 +189,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
         }
         else if (j["shader"]["type"] == "blinnphong"){
             shade = new BlinnphongShader(world);
+        }
+        else if (j["shader"]["type"] == "toon"){
+            shade = new ToonShader(world);
         }
     // Camera creation
         point3 llc (j["camera"]["lower_left_corner"]["x"],

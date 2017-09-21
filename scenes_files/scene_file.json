@@ -1,11 +1,11 @@
 {
 	"image": { 
-		    	"name": "concurso1.ppm",
+		    	"name": "atividade.ppm",
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
-		    	"samples": 100,
-		    	"ray_depth": 1,
+		    	"samples": 10,
+		    	"ray_depth": 10,
 		    	"t_min": 0.001,
 		    	"t_max": "infinity"
 		  	},
@@ -32,82 +32,70 @@
 						}
 			},	
 	"shader": {
-				"type": "blinnphong"
+				"type": "toon"
 			},
 	"scene": {
 			"light" : [ 
 						{
 							"direction": {
-											"x": 0,
-											"y": 5,
-											"z": 10
+											"x": -8,
+											"y": 7,
+											"z": 0
 										},
 							"intensity": {
-											"r": 1,
-											"g": 0.5,
-											"b": 0.3
+											"r": 0.8,
+											"g": 0.8,
+											"b": 0.8
 										}
 					   },
 					   {
 							"direction": {
-											"x": 0,
-											"y": 5.5,
-											"z": 10
+											"x": 20,
+											"y": 10,
+											"z": 15
 										},
 							"intensity": {
-											"r": 1,
-											"g": 0.4,
-											"b": 0
-										}
-					   },{
-							"direction": {
-											"x": 0,
-											"y": 5.5,
-											"z": -10
-										},
-							"intensity": {
-											"r": 1,
-											"g": 0.4,
-											"b": 0
+											"r": 0.5,
+											"g": 0.5,
+											"b": 0.5
 										}
 					   }
 					 ],
 			"ambient_light": {
-								"r": 0,
-								"g": 0,
-								"b": 0
+								"r": 0.4,
+								"g": 0.4,
+								"b": 0.4
 							},
 			"background": {
 							"upper_left": {
-											"r": 0.7,
-											"g": 0.5,
-											"b": 0
+											"r": 0.5,
+											"g": 0.7,
+											"b": 0.9
 										},
 							"upper_right": {
-											"r": 0.7,
-											"g": 0.5,
-											"b": 0	
+											"r": 0.5,
+											"g": 0.3,
+											"b": 0.9
 										},
 							"lower_left": {
-											"r": 0.7,
-											"g": 0.5,
-											"b": 0
+											"r": 1,
+											"g": 1,
+											"b": 1
 										},
 							"lower_right": {
-											"r": 0.7,
-											"g": 0.5,
-											"b": 0
+											"r": 1,
+											"g": 1,
+											"b": 1
 										}
 						},
 			"objects": {
 						"spheres": [
 									{
 										"material": {
-														"type" : "blinnphong",
-														"label" : "sun",
+														"type" : "toon",
 														"albedo": {
 																	"r": 1,
-																	"g": 0.4,
+																	"g": 1,
 																	"b": 0
 																},
 														"mirrow": {
@@ -117,31 +105,38 @@
 																},
 														"specular": {
 																	"r": 1,
-																	"g": 0.8,
-																	"b": 0
+																	"g": 1,
+																	"b": 1
 																},
 														"ambient": {
 																	"r": 0.1,
 																	"g": 0.1,
 																	"b": 0.1
 																},
-														"alpha": 5
+														"alpha": 64,
+
+														"gradient" : [ 
+																		{
+																			"r": 0.8,
+																			"g": 0.8,
+																			"b": 0.8
+																	   }
+																	]
 													}, 
 										"center": {
 														"x": 0,
-														"y": 1,
-														"z": -40
+														"y": 0,
+														"z": -1
 													}, 
-										"radius": 8		
+										"radius": 0.5
 									},
 									{
 										"material": {
-														"type" : "blinnphong",
-														"label" : "ocean",
+														"type" : "toon",
 														"albedo": {
-																	"r": 0.0,
-																	"g": 0.25,
-																	"b": 1
+																	"r": 0.4,
+																	"g": 0.4,
+																	"b": 0.4
 																},
 														"mirrow": {
 																	"r": 0.1,
@@ -158,971 +153,14 @@
 																	"g": 0.1,
 																	"b": 0.1
 																},
-														"alpha": 5
+														"alpha": 64
 													}, 
 										"center": {
 														"x": 0,
 														"y": -100,
 														"z": -1
 													}, 
-										"radius": 100
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star1",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 20,
-														"y": 26,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star2",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -20,
-														"y": 26,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star3",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 0,
-														"y": 23,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star4",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -10,
-														"y": 20,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star5",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 10,
-														"y": 20,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star6",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 14,
-														"y": 28,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star7",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -14,
-														"y": 28,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star8",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -5,
-														"y": 26,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star9",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 5,
-														"y": 26,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star10",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 26,
-														"y": 20,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star11",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 28,
-														"y": 25,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star12",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -28,
-														"y": 25,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star13",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -26,
-														"y": 20,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star14",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 30,
-														"y": 22,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star15",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -30,
-														"y": 22,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star16",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 32,
-														"y": 27,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star17",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -32,
-														"y": 27,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star18",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 37,
-														"y": 25,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star19",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -37,
-														"y": 25,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star20",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 43,
-														"y": 18,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star21",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -43,
-														"y": 18,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star22",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": 48,
-														"y": 25,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "star23",
-														"albedo": {
-																	"r": 0.9,
-																	"g": 0.9,
-																	"b": 0.9
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 0
-													}, 
-										"center": {
-														"x": -48,
-														"y": 25,
-														"z": -30
-													}, 
-										"radius": 0.2		
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "cloud.1",
-														"albedo": {
-																	"r": 0.8,
-																	"g": 0.8,
-																	"b": 0.8
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 16
-													}, 
-										"center": {
-														"x": -3.3,
-														"y": 3,
-														"z": -20
-													}, 
-										"radius": 0.8	
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "cloud.2",
-														"albedo": {
-																	"r": 0.8,
-																	"g": 0.8,
-																	"b": 0.8
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 16
-													}, 
-										"center": {
-														"x": -4.2,
-														"y": 3,
-														"z": -20
-													}, 
-										"radius": 1
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "cloud.3",
-														"albedo": {
-																	"r": 0.8,
-																	"g": 0.8,
-																	"b": 0.8
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 16
-													}, 
-										"center": {
-														"x": -5.0,
-														"y": 3,
-														"z": -20
-													}, 
-										"radius": 0.8
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "cloud.4",
-														"albedo": {
-																	"r": 0.8,
-																	"g": 0.8,
-																	"b": 0.8
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 16
-													}, 
-										"center": {
-														"x": 4.8,
-														"y": 2,
-														"z": -19.8
-													}, 
-										"radius": 0.6
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "cloud.5",
-														"albedo": {
-																	"r": 0.8,
-																	"g": 0.8,
-																	"b": 0.8
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 16
-													}, 
-										"center": {
-														"x": 3.5,
-														"y": 2,
-														"z": -19.8
-													}, 
-										"radius": 0.6
-									},
-									{
-										"material": {
-														"type" : "blinnphong",
-														"label" : "cloud.6",
-														"albedo": {
-																	"r": 0.8,
-																	"g": 0.8,
-																	"b": 0.8
-																},
-														"mirrow": {
-																	"r": 0,
-																	"g": 0,
-																	"b": 0
-																},
-														"specular": {
-																	"r": 1,
-																	"g": 1,
-																	"b": 1
-																},
-														"ambient": {
-																	"r": 0.1,
-																	"g": 0.1,
-																	"b": 0.1
-																},
-														"alpha": 16
-													}, 
-										"center": {
-														"x": 4.2,
-														"y": 2,
-														"z": -19.8
-													}, 
-										"radius": 0.8
+										"radius": 99.5
 									}
 								]
 						}
