@@ -1,6 +1,6 @@
 {
 	"image": { 
-		    	"name": "concurso.ppm",
+		    	"name": "concurso1.ppm",
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
@@ -49,6 +49,17 @@
 										}
 					   },
 					   {
+							"direction": {
+											"x": 0,
+											"y": 5.5,
+											"z": 10
+										},
+							"intensity": {
+											"r": 1,
+											"g": 0.4,
+											"b": 0
+										}
+					   },{
 							"direction": {
 											"x": 0,
 											"y": 5.5,
