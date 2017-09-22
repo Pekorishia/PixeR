@@ -10,10 +10,10 @@ class Toon : public Material
 {
 	public:
 
-		Toon(std::vector<rgb> gradient_){
+		Toon(std::vector<rgb> gradient_, std::vector<float> angles_){
 			Material::gradient = gradient_;
 			//std::cout << *Material::gradient[0];
-			//Material::angles = angles_;
+			Material::angles = angles_;
 
 		}
 		virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;

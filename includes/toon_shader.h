@@ -1,7 +1,10 @@
 #ifndef _ToonSHADER_H_
 #define _ToonSHADER_H_
 
-#include "shader.h" 
+#include "shader.h"
+#include <math.h>
+
+#define PI 3.14159265
 
 class ToonShader : public Shader
 {
@@ -23,13 +26,16 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
     {
     	float cosseno1 = dot( ht.normal, r_.get_direction() );
     	float cosseno2 = ht.normal.length() * r_.get_direction().length();
-    	if(fabs(cosseno1/cosseno2) > 0.1f){
-    		//std::cout << dot(ht.normal, r_.get_direction()) << " ";
-      		return ht.mat->gradient[0];
+    	for (int i = 0; i < ht.mat->angles.size(); ++i)
+    	{
+    		if(fabs(cosseno1/cosseno2) <= cos(ht.mat->angles[i]* PI / 180.0) ){
+	      		return rgb(0,0,0);
+	    	}
+	    	else{
+	    		return ht.mat->gradient[i];    		
+	    	}
     	}
-    	else{
-    		return rgb(0,0,0);
-    	}
+    	
     }
 
     // Else, dye the pixel with the background color

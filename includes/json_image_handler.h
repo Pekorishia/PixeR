@@ -108,14 +108,19 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         std::vector<rgb> gradient;
                         rgb gradient_;
 
+                        std::vector<float> angles;
+                        float angles_;
+
                         for(int k=0; k<j["scene"]["objects"]["spheres"][i]["material"]["gradient"].size(); k++){
                             gradient_=rgb(j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["r"],
                                             j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["g"],
                                             j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["b"]);
                             gradient.push_back(gradient_);
+
+                            angles_=j["scene"]["objects"]["spheres"][i]["material"]["angles"][k]["a"];
+                            angles.push_back(angles_);
                         }
-                        //std::cout << gradient_;
-                        mat = new Toon(gradient);
+                        mat = new Toon(gradient, angles);
                     }
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
                 j["scene"]["objects"]["spheres"][i]["center"]["y"],
