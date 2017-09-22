@@ -5,6 +5,7 @@
 #include "scene.h"
 #include "../utility/ray.h"
 #include "../utility/vec3.h"
+#include <vector>
 
 class Material{
 	public:
@@ -18,7 +19,7 @@ class Material{
 		rgb ks;
 		rgb ka;
 		rgb km;
-		rgb **gradient; 
+		std::vector<rgb> gradient; 
 		float alpha;
 		float **angles;
 

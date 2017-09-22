@@ -3,14 +3,16 @@
 
 #include "object.h"
 #include "material.h"
-#include "shader.h" 
+#include "shader.h"
+#include <vector>
 
 class Toon : public Material
 {
 	public:
 
-		Toon(rgb **gradient_){
+		Toon(std::vector<rgb> gradient_){
 			Material::gradient = gradient_;
+			//std::cout << *Material::gradient[0];
 			//Material::angles = angles_;
 
 		}

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string> 
+#include <vector>
 
 #include "scene.h"
 #include "sphere.h"
@@ -104,23 +105,24 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         mat = new Metal(kd, fuzz);
                     }
                     else if(j["scene"]["objects"]["spheres"][i]["material"]["type"] == "toon"){
-                        rgb gradient[ j["scene"]["objects"]["spheres"][i]["material"]["gradient"].size() ];
+                        std::vector<rgb> gradient;
+                        rgb gradient_;
 
                         for(int k=0; k<j["scene"]["objects"]["spheres"][i]["material"]["gradient"].size(); k++){
-                            gradient[k]=rgb(j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["r"],
-                                        j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["g"],
-                                        j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["b"]);
-//
+                            gradient_=rgb(j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["r"],
+                                            j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["g"],
+                                            j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["b"]);
+                            gradient.push_back(gradient_);
                         }
+                        //std::cout << gradient_;
                         mat = new Toon(gradient);
                     }
-
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
                 j["scene"]["objects"]["spheres"][i]["center"]["y"],
                 j["scene"]["objects"]["spheres"][i]["center"]["z"]);
 
                 auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
-
+                
                 list[i] = new Sphere(mat, center, radius);
             }
 

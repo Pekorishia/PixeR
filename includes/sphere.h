@@ -54,6 +54,8 @@ bool Sphere::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_
             ht_.normal = (ht_.p - Object::origin) / radius;
             ht_.mat = Object::material;
 
+            //std::cout << *ht_.mat->gradient[0];
+
             return true;
         }   
     }

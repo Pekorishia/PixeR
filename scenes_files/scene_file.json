@@ -4,8 +4,8 @@
 		    	"codification": "ascii",
 		    	"width": 1200,
 		    	"height": 600,
-		    	"samples": 10,
-		    	"ray_depth": 10,
+		    	"samples": 1,
+		    	"ray_depth": 1,
 		    	"t_min": 0.001,
 		    	"t_max": "infinity"
 		  	},
@@ -68,14 +68,14 @@
 							},
 			"background": {
 							"upper_left": {
-											"r": 0.5,
-											"g": 0.7,
-											"b": 0.9
+											"r": 0,
+											"g": 0,
+											"b": 0
 										},
 							"upper_right": {
-											"r": 0.5,
-											"g": 0.3,
-											"b": 0.9
+											"r": 0,
+											"g": 0,
+											"b": 1
 										},
 							"lower_left": {
 											"r": 1,
@@ -153,7 +153,14 @@
 																	"g": 0.1,
 																	"b": 0.1
 																},
-														"alpha": 64
+														"alpha": 64,
+														"gradient" : [ 
+																		{
+																			"r": 0.8,
+																			"g": 0.8,
+																			"b": 0.8
+																	   }
+																	]
 													}, 
 										"center": {
 														"x": 0,

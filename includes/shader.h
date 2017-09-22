@@ -2,6 +2,7 @@
 #define _SHADER_H_
 
 #include "scene.h"
+#include <math.h> 
 
 #include "../utility/ray.h"
 
@@ -20,6 +21,8 @@ protected:
 	rgb horizontal_interpolation ( const Ray & r_, const rgb & bottom_, const rgb & top_) const;
     rgb vertical_interpolation3 ( const Ray & r_, const rgb & bottom_, const rgb & center_, const rgb & top_) const;
     rgb horizontal_interpolation3 ( const Ray & r_, const rgb & left_,const rgb & center_, const rgb & right_) const;
+    rgb interpolation_biline( const Ray & r_ ) const;
+
 
 };
 
@@ -139,6 +142,28 @@ rgb Shader::horizontal_interpolation3 ( const Ray & r_, const rgb & left_,const 
 
     return result; 
 } 
+
+rgb Shader::interpolation_biline( const Ray & r_ ) const
+{  
+    
+    auto unit_ray = r_.get_direction();
+
+    float unit_ray_y = unit_ray.y();
+    float unit_ray_x = unit_ray.x();
+
+    float a = (0.5*unit_ray_y)+0.5;
+    float t =  std::max(0.f,a);
+    float b = (0.25*unit_ray_x)+0.5;
+    float u =  std::max(0.f,(b));
+
+    rgb result =(world->bg->lower_left*(1-t)*(1-u) +
+                    world->bg->top_left*t*(1-u) +
+                    world->bg->lower_right*(1-t)*(u) +
+                    world->bg->top_right*(t)*(u)
+                );
+
+    return result; 
+}
 
 
 #endif
