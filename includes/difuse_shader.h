@@ -55,7 +55,7 @@ rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) c
     }
 
     // Else, dye the pixel with the background color
-    return Shader::vertical_interpolation(r_, Shader::world->bg->lower_left, Shader::world->bg->top_left);
+    return Shader::interpolation_biline(r_);
 }
 
 #endif
