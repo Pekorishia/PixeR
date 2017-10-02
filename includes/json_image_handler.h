@@ -73,16 +73,20 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
             for(int i=0; i<j["scene"]["objects"]["spheres"].size(); i++){
 
                 // Material creation
-                    rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
-                    j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
-                    j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
-
                     Material *mat;
 
                     if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "matted"){
+                        rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
+                        
                         mat = new Matted(kd);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "blinnphong"){
+                        rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
+                        
                         rgb ks (j["scene"]["objects"]["spheres"][i]["material"]["specular"]["r"],
 	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["g"],
 	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["b"]);
@@ -100,6 +104,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         mat = new BlinnPhong(kd, ks, km, ka, a);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
+                        rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
                         
                         auto fuzz = j["scene"]["objects"]["spheres"][i]["material"]["fuzz"];
                         mat = new Metal(kd, fuzz);
@@ -122,6 +129,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         }
                         mat = new Toon(gradient, angles);
                     }
+                    
                 point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
                 j["scene"]["objects"]["spheres"][i]["center"]["y"],
                 j["scene"]["objects"]["spheres"][i]["center"]["z"]);
