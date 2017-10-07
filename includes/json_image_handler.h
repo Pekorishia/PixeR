@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string> 
 #include <vector>
+#include <math.h> 
 
 #include "scene.h"
 #include "sphere.h"
@@ -125,6 +126,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                             gradient.push_back(gradient_);
 
                             angles_=j["scene"]["objects"]["spheres"][i]["material"]["angles"][k]["a"];
+                            
+                            angles_ = cos(angles_* PI / 180.0);
                             angles.push_back(angles_);
                         }
                         mat = new Toon(gradient, angles);

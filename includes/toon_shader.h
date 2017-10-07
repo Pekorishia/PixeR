@@ -2,9 +2,9 @@
 #define _ToonSHADER_H_
 
 #include "shader.h"
-#include <math.h> 
 
 #define PI 3.14159265
+#define border_angle fabs(cos(80 * PI / 180.0))
 
 class ToonShader : public Shader
 {
@@ -34,7 +34,7 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
         cosine_N_ray = dot( ht.normal, r_.get_direction() )/( ht.normal.length() * r_.get_direction().length());
 
         // make the border
-        if (fabs(cosine_N_ray) <= fabs(cos(80 * PI / 180.0)))
+        if (fabs(cosine_N_ray) <= border_angle)
         {               
             return rgb (0,0,0);             
         }
@@ -51,8 +51,11 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
         // actual intensity of the picked light
         auto light_picked_intensity = 0;
 
-        // verify if tihs pixel is a shadow
+        // verify if this pixel is a shadow
         auto shadow = false;
+
+        // count the number of shadows that this pixel has
+        auto shadow_count = 1;
 
         // Generate the shades based on the lights
         for( int i = 0; i < Shader::world->lum_size; i++)
@@ -72,9 +75,9 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
             	{
 
                     // if the angle is between the first interval, than color the pixel with the first color
-                    if (j==0 && (cosine_N_light) >= (cos(ht.mat->angles[0]* PI / 180.0)))
+                    if (j==0 && (cosine_N_light) >= ht.mat->angles[0])
                     {
-                        // if the actual 
+                        // if the actual light is stronger and the angle is the lower one
                         if (angle_picked_position > j &&
                             light_picked_intensity < light_intensity)
                         { 
@@ -86,10 +89,10 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
                     }
                     // if the angle that the light hits the object is smaller than
                     // the angle of the desired angle
-                    else if( cosine_N_light >= (cos(ht.mat->angles[j]* PI / 180.0)) &&
-                        cosine_N_light <= (cos(ht.mat->angles[j-1]* PI / 180.0)) )
+                    else if( cosine_N_light >= ht.mat->angles[j] &&
+                             cosine_N_light <= ht.mat->angles[j-1] )
                     {
-                        // if the actual 
+                        // if the actual light is stronger and the angle is the lower one
                         if (angle_picked_position > j &&
                             light_picked_intensity < light_intensity)
                         { 
@@ -101,9 +104,12 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
         	    	}
             	}
             }
-            else { shadow = true; }
+            else { 
+                shadow = true;
+                shadow_count++;
+            }
         }
-        if (shadow) {return hue/(Shader::world->lum_size * 2);}
+        if (shadow) {return hue/(Shader::world->lum_size * shadow_count);}
         else { return hue/(Shader::world->lum_size);}    	
     }
 
