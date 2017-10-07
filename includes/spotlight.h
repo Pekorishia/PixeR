@@ -2,8 +2,9 @@
 #define _SPOTLIGTH_H_
 
 #include "../utility/vec3.h"
+#include "Light.h"
 
-class SpotLight
+class SpotLight : public Light
 {
 public:
 	vec3 direction;

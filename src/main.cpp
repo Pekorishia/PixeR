@@ -5,12 +5,8 @@
 
 #include "../includes/scene.h"
 #include "../includes/camera.h"
+#include "../includes/shader.h"
 #include "../includes/json_image_handler.h"
-
-#include "../includes/depth_shader.h"
-#include "../includes/difuse_shader.h"
-#include "../includes/normal_shader.h"
-#include "../includes/blinnphong_shader.h"
 
 
 int main( int argc, const char * argv[] )

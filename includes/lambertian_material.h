@@ -1,14 +1,14 @@
-#ifndef _MATTED_H_
-#define _MATTED_H_
+#ifndef _Lambertian_H_
+#define _Lambertian_H_
 
 #include "object.h"
 #include "material.h" 
 
-class Matted: public Material 
+class Lambertian: public Material 
 {
 	public:
 
-		Matted(const rgb albedo_)
+		Lambertian(const rgb albedo_)
 		{
 			Material::albedo = albedo_;
 			Material::ks = rgb(0,0,0);
@@ -24,7 +24,7 @@ class Matted: public Material
 	
 };
 
-vec3 Matted::random_in_unit_sphere() const
+vec3 Lambertian::random_in_unit_sphere() const
 {
     vec3 p;
     do {
@@ -34,7 +34,7 @@ vec3 Matted::random_in_unit_sphere() const
     return p;
 }
 
-bool Matted::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
+bool Lambertian::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
 {
 	vec3 p_ = random_in_unit_sphere();
     vec3 target = ht_.p + ht_.normal + p_;

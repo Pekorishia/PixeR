@@ -1,206 +1,150 @@
 {
+
 	"image": { 
-		    	"name": "atividade.ppm",
-		    	"codification": "ascii",
-		    	"width": 1200,
-		    	"height": 600,
-		    	"samples": 10,
-		    	"ray_depth": 1,
-		    	"t_min": 0.001,
-		    	"t_max": "infinity"
-		  	},
-	"camera": {
-				"lower_left_corner":{
-										"x": -2,
-										"y": -1,
-										"z": -1
-									},
-				"horizontal":{
-								"x": 4,
-								"y": 0,
-								"z": 0
-							}, 
-				"vertical":{
-								"x": 0,
-								"y": 2,
-								"z": 0
-							}, 
-				"origin":{
-							"x": 0,
-							"y": 0,
-							"z": 0
-						}
-			},	
-	"shader": {
-				"type": "toon"
-			},
-	"scene": {
-			"light" : [ 
-						{
-							"direction": {
-											"x": -2,
-											"y": 2,
-											"z": 0
-										},
-							"intensity": {
-											"r": 1,
-											"g": 1,
-											"b": 1
-										}
-					   },
-					   {
-							"direction": {
-											"x": 2,
-											"y": 2,
-											"z": 0
-										},
-							"intensity": {
-											"r": 0,
-											"g": 0,
-											"b": 0
-										}
-					   }
-					 ],
-			"ambient_light": {
-								"r": 0.4,
-								"g": 0.4,
-								"b": 0.4
-							},
-			"background": {
-							"upper_left": {
-											"r": 0,
-											"g": 0,
-											"b": 1
-										},
-							"upper_right": {
-											"r": 0,
-											"g": 0,
-											"b": 1
-										},
-							"lower_left": {
-											"r": 1,
-											"g": 1,
-											"b": 1
-										},
-							"lower_right": {
-											"r": 1,
-											"g": 1,
-											"b": 1
-										}
-						},
-			"objects": {
-						"spheres": [
-									{
-										"material": {
-														"type" : "toon",
-														"gradient" : [ 
-																		{
-																			"r": 1,
-																			"g": 0,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0.8,
-																			"g": 0,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0.6,
-																			"g": 0,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0.4,
-																			"g": 0,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0.2,
-																			"g": 0,
-																			"b": 0
-																	    }
-																	],
-														"angles" : [ 
-																		{
-																			"a": 30
-																	    },
-																	    {
-																			"a": 50
-																	    },
-																	    {
-																			"a": 70
-																	    },
-																	    {
-																			"a": 90
-																	    },
-																	    {
-																			"a": 110
-																	    }
-																	]
-													}, 
-										"center": {
-														"x": 0,
-														"y": 0,
-														"z": -1
-													}, 
-										"radius": 0.5
-									},
-									{
-										"material": {
-														"type" : "toon",
-														"gradient" : [ 
-																		{
-																			"r": 0,
-																			"g": 1,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0,
-																			"g": 0.8,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0,
-																			"g": 0.6,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0,
-																			"g": 0.4,
-																			"b": 0
-																	    },
-																	    {
-																			"r": 0,
-																			"g": 0.2,
-																			"b": 0
-																	    }
-																	],
-														"angles" : [ 
-																		{
-																			"a": 30
-																	    },
-																	    {
-																			"a": 50
-																	    },
-																	    {
-																			"a": 70
-																	    },
-																	    {
-																			"a": 90
-																	    },
-																	    {
-																			"a": 110
-																	    }
-																	]
-													}, 
-										"center": {
-														"x": 0,
-														"y": -100,
-														"z": -1
-													}, 
-										"radius": 99.5
-									}
-								]
-						}
-      		} 
+                "name": "atividade.ppm",
+                "codification": "ascii",
+                "width": 1200,
+                "height": 600,
+                "samples": 1,
+                "ray_depth": 1,
+                "t_min": 0.001,
+                "t_max": "infinity"
+            },
+
+    "shader": {
+                "type": "blinnphong"
+            },
+    "camera": {
+                "lower_left_corner":{
+                                        "x": -2,
+                                        "y": -1,
+                                        "z": -1
+                                    },
+                "horizontal":{
+                                "x": 4,
+                                "y": 0,
+                                "z": 0
+                            }, 
+                "vertical":{
+                                "x": 0,
+                                "y": 2,
+                                "z": 0
+                            }, 
+                "origin":{
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        }
+            },
+    "scene": {
+            "light" : [ 
+                        {
+                            "direction": {
+                                            "x": 20,
+                                            "y": 10,
+                                            "z": 5
+                                        },
+                            "intensity": {
+                                            "r": 1,
+                                            "g": 1,
+                                            "b": 1
+                                        }
+                       }
+                     ],
+            "ambient_light": {
+                                "r": 0.4,
+                                "g": 0.4,
+                                "b": 0.4
+                            },
+            "background": {
+                            "upper_left": {
+                                            "r": 0.5,
+                                            "g": 0.7,
+                                            "b": 0.9
+                                        },
+                            "upper_right": {
+                                            "r": 0.5,
+                                            "g": 0.3,
+                                            "b": 0.9
+                                        },
+                            "lower_left": {
+                                            "r": 1,
+                                            "g": 1,
+                                            "b": 1
+                                        },
+                            "lower_right": {
+                                            "r": 1,
+                                            "g": 1,
+                                            "b": 1
+                                        }
+                        },
+            "objects": {
+                        "spheres": [
+                                    {
+                                        "material": {
+                                                        "type" : "blinnphong",
+                                                        "albedo": {
+                                                                    "r": 0.0,
+                                                                    "g": 0.3,
+                                                                    "b": 0.8
+                                                                },
+                                                        "specular": {
+                                                                    "r": 0.9,
+                                                                    "g": 0.9,
+                                                                    "b": 0.9
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 64
+                                                    }, 
+                                        "center": {
+                                                        "x": 0,
+                                                        "y": 0,
+                                                        "z": -1
+                                                    }, 
+                                        "radius": 0.4
+                                    },
+                                    {
+                                        "material": {
+                                                        "type" : "blinnphong",
+                                                        "albedo": {
+                                                                    "r": 0.4,
+                                                                    "g": 0.4,
+                                                                    "b": 0.4
+                                                                },
+                                                        "specular": {
+                                                                    "r": 1,
+                                                                    "g": 1,
+                                                                    "b": 1
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 5
+                                                    }, 
+                                        "center": {
+                                                        "x": 0,
+                                                        "y": -100.5,
+                                                        "z": -1
+                                                    }, 
+                                        "radius": 100
+                                    }
+                                ]
+                        }
+            } 
  }

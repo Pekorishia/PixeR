@@ -16,13 +16,13 @@
 
 #include "toon_shader.h"
 #include "depth_shader.h"
-#include "difuse_shader.h"
+#include "lambertian_shader.h"
 #include "normal_shader.h"
 #include "blinnphong_shader.h"
 
 #include "toon_material.h"
 #include "metal_material.h"
-#include "matted_material.h"
+#include "lambertian_material.h"
 #include "blinnphong_material.h"
 
 #include "../utility/json.hpp"
@@ -76,12 +76,12 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                 // Material creation
                     Material *mat;
 
-                    if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "matted"){
+                    if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "lambertian"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
                         j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
                         j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
                         
-                        mat = new Matted(kd);
+                        mat = new Lambertian(kd);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
@@ -199,8 +199,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
             shade = new DepthShader(world, min_depth, max_depth, foreground, background);
         }
-        else if (j["shader"]["type"] == "difuse"){
-            shade = new DifuseShader(world);
+        else if (j["shader"]["type"] == "lambertian"){
+            shade = new LambertianShader(world);
         }
         else if (j["shader"]["type"] == "normal"){
             shade = new NormalShader(world);

@@ -51,13 +51,27 @@ t_min & t_max | the minimum and maximum distance that the image will show object
 
 Tags | Contents
 ------------ | -------------
-Type | the type of the shader ("difuse", "depth", "normal", "blinnphong").
+Type | the type of the shader ("lambertian", "depth", "normal", "blinnphong").
 min_depth & max_depth* | the minimum and maximum distance that the shader will dye the image (float).
 foreground & background* | the color that will dye the front and back part of the image(rgb).  
 
 *Only needed when using depth shader
 
 **Example**: 
+
+```txt
+"shader": {
+			"type": "lambertian"
+		},
+```
+or
+
+```txt
+"shader": {
+			"type": "toon"
+		},
+```
+or
 
 ```txt
 "shader": {
@@ -209,26 +223,13 @@ material | the material of the sphere.
 center | the center of the sphere (point).
 radius | the radius of the sphere (float).
 
-Material Tags | Contents
------------- | -------------
-type | the type of the material ("matted", "blinnphong", "metal").
-albedo | the color and difuse component of the material (rgb).
-mirrow* | the specular reflexion component of the material (rgb).
-specular* | the specular component of the material (rgb).
-ambient* | the ambient component of the material (rgb).
-alpha* | the specular exponent (float).
-fuzz** | the fuzziness of the material (float).
-
-*Only matters for the blinnphong material
-**Only matters for the metal material
-
 **Example**: 
 
 ```txt
 "spheres": [
 			{
 				"material": {
-								"type" : "matted",
+								"type" : "lambertian",
 								"albedo": {
 											"r": 0.0,
 											"g": 0.3,
@@ -244,71 +245,110 @@ fuzz** | the fuzziness of the material (float).
 			},
 ```
 
-or
+Material Tags | Contents
+------------ | -------------
+type | the type of the material ("lambertian", "toon", "blinnphong", "metal").
+albedo | the color and difuse component of the material; it's not need for toon (rgb).
+mirrow* | the specular reflexion component of the material (rgb).
+specular** | the specular component of the material (rgb).
+ambient** | the ambient component of the material (rgb).
+alpha** | the specular exponent (float).
+fuzz*** | the fuzziness of the material (float).
+gradient**** | the colors of the gradient (rgb vector).
+angles**** | the angles of the colors gradient (float vector).
+
+*Only matters for the blinnphong and metal material
+**Only matters for the blinnphong material
+***Only matters for the metal material
+
+**Example**: 
 
 ```txt
-"spheres": [
-			{
-				"material": {
-								"type" : "metal",
-								"albedo": {
-											"r": 0.0,
-											"g": 0.3,
-											"b": 0.8
-										},
-								"fuzz": 0.3
-							}, 
-				"center": {
-								"x": 0,
-								"y": 0,
-								"z": -1
-							}, 
-				"radius": 0.4
-			},
+	"material": {
+					"type" : "lambertian",
+					"albedo": {
+								"r": 0.0,
+								"g": 0.3,
+								"b": 0.8
+							}
+				},
 ```
 
 or
 
 ```txt
-"spheres": [
-			{
-				"material": {
-								"type" : "blinnphong",
-								"albedo": {
-											"r": 0.0,
-											"g": 0.3,
-											"b": 0.8
-										},
-								"mirrow": {
-											"r": 0.1,
-											"g": 0.1,
-											"b": 0.1
-										},
-								"specular": {
-											"r": 0.9,
-											"g": 0.9,
-											"b": 0.9
-										},
-								"ambient": {
-											"r": 0.1,
-											"g": 0.1,
-											"b": 0.1
-										},
-								"alpha": 64
-							}, 
-				"center": {
-								"x": 0,
-								"y": 0,
-								"z": -1
-							}, 
-				"radius": 0.4
-			}
-		   ]
+	"material": {
+					"type" : "metal",
+					"albedo": {
+								"r": 0.0,
+								"g": 0.3,
+								"b": 0.8
+							},
+					"fuzz": 0.3
+				},
+```
+or
+
+```txt
+	"material": {
+					"type" : "toon",
+					"gradient" : [ 
+									{
+										"r": 0,
+										"g": 1,
+										"b": 0
+								    },
+								    {
+										"r": 0,
+										"g": 0.8,
+										"b": 0
+								    }
+								],
+					"angles" : [ 
+									{
+										"a": 30
+								    },
+								    {
+										"a": 50
+								    }
+								]
+				}, 
+										
+```
+
+or
+
+```txt
+	"material": {
+					"type" : "blinnphong",
+					"albedo": {
+								"r": 0.0,
+								"g": 0.3,
+								"b": 0.8
+							},
+					"mirrow": {
+								"r": 0.1,
+								"g": 0.1,
+								"b": 0.1
+							},
+					"specular": {
+								"r": 0.9,
+								"g": 0.9,
+								"b": 0.9
+							},
+					"ambient": {
+								"r": 0.1,
+								"g": 0.1,
+								"b": 0.1
+							},
+					"alpha": 64
+				}, 
 ```
 
 ### Full scene file example:
 
-```txt{
+```txt
+{
 	"image": { 
 		    	"name": "newScene.ppm",
 		    	"codification": "ascii",
@@ -402,6 +442,11 @@ or
 																	"g": 0.9,
 																	"b": 0.9
 																},
+                                                        "mirrow": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
 														"ambient": {
 																	"r": 0.1,
 																	"g": 0.1,
@@ -429,6 +474,11 @@ or
 																	"g": 1,
 																	"b": 1
 																},
+                                                        "mirrow": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
 														"ambient": {
 																	"r": 0.1,
 																	"g": 0.1,

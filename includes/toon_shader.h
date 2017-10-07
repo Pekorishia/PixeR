@@ -39,17 +39,11 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
             return rgb (0,0,0);             
         }
 
-        // The origin for the shadow ray
-        auto p = r_.get_origin() + ht.t * r_.get_direction();
-
         // get the size of the angles array
         auto angles_size = ht.mat->angles.size();
 
         // actual position of the picked color                    
         auto angle_picked_position = angles_size;
-
-        // actual intensity of the picked light
-        auto light_picked_intensity = 0;
 
         // verify if this pixel is a shadow
         auto shadow = false;
@@ -61,15 +55,12 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
         for( int i = 0; i < Shader::world->lum_size; i++)
         {
             // If the light didn't hit anything before hiting the point, then color it
-            if (! Shader::hit_anything( Ray(p, world->lum[i]->direction), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
+            if (! Shader::hit_anything( Ray(ht.p, world->lum[i]->direction), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
             {
                 // calculate de cosine between the normal vector and the light ray
                 l = (world->lum[i]->direction - r_.get_direction());                
             	cosine_N_light = dot( ht.normal, l )/(ht.normal.length() * l.length());
                 
-                // get the intensity of this light
-                auto light_intensity = world->lum[i]->direction.length();
-
                 // chech if the angle is between the others intervals
             	for (int j = angles_size-1; j >= 0; --j)
             	{
@@ -78,11 +69,9 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
                     if (j==0 && (cosine_N_light) >= ht.mat->angles[0])
                     {
                         // if the actual light is stronger and the angle is the lower one
-                        if (angle_picked_position > j &&
-                            light_picked_intensity < light_intensity)
+                        if (angle_picked_position > j )
                         { 
                             angle_picked_position = j;
-                            light_picked_intensity = light_intensity;
 
                             hue = ht.mat->gradient[j]; 
                         }
@@ -93,11 +82,9 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
                              cosine_N_light <= ht.mat->angles[j-1] )
                     {
                         // if the actual light is stronger and the angle is the lower one
-                        if (angle_picked_position > j &&
-                            light_picked_intensity < light_intensity)
+                        if (angle_picked_position > j )
                         { 
                             angle_picked_position = j;
-                            light_picked_intensity = light_intensity;
 
                             hue = ht.mat->gradient[j]; 
                         }

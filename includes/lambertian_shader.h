@@ -3,14 +3,14 @@
 
 #include "shader.h"
 #include "material.h" 
-#include "matted_material.h"
+#include "lambertian_material.h"
 
-class DifuseShader : public Shader 
+class LambertianShader : public Shader 
 {
 
     public:
 
-        DifuseShader(Scene *world_)
+        LambertianShader(Scene *world_)
         {
             Shader::world = world_;
         }
@@ -25,7 +25,7 @@ class DifuseShader : public Shader
 /*
  * Generates a random ray
  */
-vec3 DifuseShader::random_in_unit_sphere() const
+vec3 LambertianShader::random_in_unit_sphere() const
 {
     vec3 p;
     do {
@@ -37,7 +37,7 @@ vec3 DifuseShader::random_in_unit_sphere() const
 /*
  * Returns the color of the point hitted by the ray.
  */
-rgb DifuseShader::color( const Ray & r_, float t_min, float t_max, int depth_) const
+rgb LambertianShader::color( const Ray & r_, float t_min, float t_max, int depth_) const
 {
     HitRecord ht;
 
