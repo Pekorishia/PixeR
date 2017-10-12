@@ -43,11 +43,13 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
 
         for( int i = 0; i < Shader::world->lum_size; i++){
 
+            vec3 direction_light = Shader::world->lum[i]->get_direction(ht.p);
+ 
         	// If the light didn't hit anything before hiting the point, then color it
-        	if (! Shader::hit_anything( Ray(ht.p, world->lum[i]->direction), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
+        	if (! Shader::hit_anything( Ray(ht.p, direction_light), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
         	{
 	            // Light direction normalized
-	            auto l = unit_vector(world->lum[i]->direction - r_.get_direction());
+	            auto l = unit_vector(direction_light - r_.get_direction());
 
 	            // Difuse component
 	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->intensity;

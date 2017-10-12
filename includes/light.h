@@ -9,12 +9,8 @@ public:
 	vec3 direction;
 	rgb intensity;
 
-	Light( vec3 direction_, rgb intensity_)
-	{
-		direction = direction_;
-		intensity = intensity_;
-	}
-	//~Ligth();
+	virtual vec3 get_direction(const point3 & p_) const = 0;
+	
 	
 };
 

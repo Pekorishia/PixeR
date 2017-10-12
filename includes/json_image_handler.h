@@ -14,6 +14,9 @@
 #include "raytrace.h"
 #include "background.h"
 
+#include "point_light.h"
+#include "direction_light.h"
+
 #include "toon_shader.h"
 #include "depth_shader.h"
 #include "lambertian_shader.h"
@@ -158,7 +161,20 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                j["scene"]["light"][i]["intensity"]["g"],
                                j["scene"]["light"][i]["intensity"]["b"]);
 
-                lum[i] = new Light( direction, intensity);
+                if(j["scene"]["light"][i]["type"] == "point")
+                {
+                    lum[i] = new Point_light( direction, intensity);
+                }
+                else if (j["scene"]["light"][i]["type"] == "spot") 
+                {
+                    lum[i] = new Direction_light( direction, intensity);
+                }
+                else 
+                {
+                    lum[i] = new Direction_light( direction, intensity);
+                }
+
+                
             }
 
         // Background creation
