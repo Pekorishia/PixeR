@@ -12,10 +12,10 @@ public:
 	point3 origin;
 	float angle;
 
-	Light( vec3 direction_, rgb intensity_)
+	Light( vec3 direction_, rgb intensity_, point3 origin)
 	{
-		direction = direction_;
-		intensity = intensity_;
+		Light::direction = direction_;
+		Light::intensity = intensity_;
 	}
 	//~Ligth();
 	

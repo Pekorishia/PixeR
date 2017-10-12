@@ -25,6 +25,10 @@
 #include "lambertian_material.h"
 #include "blinnphong_material.h"
 
+
+#include "perspective_camera.h"
+#include "parallel_camera.h"
+
 #include "../utility/json.hpp"
 
 using json = nlohmann::json;
@@ -228,7 +232,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                        j["camera"]["origin"]["y"],
                        j["camera"]["origin"]["z"]);
 
-        cam = new Camera(llc, horizontal, vertical, origin);
+        cam = new PerspectiveCamera(point3(-2,2,1), point3(0,0,-1), vec3(0,1,0), 60, n_cols /n_rows, 2.0, (point3(-2,2,1)- point3(0,0,-1)).length() );
 
 	
 	// Image Codification

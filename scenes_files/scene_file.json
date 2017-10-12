@@ -15,6 +15,8 @@
                 "type": "blinnphong"
             },
     "camera": {
+                "type":"parallel",
+                
                 "lower_left_corner":{
                                         "x": -2,
                                         "y": -1,
@@ -40,9 +42,9 @@
             "light" : [ 
                         {
                             "direction": {
-                                            "x": 20,
-                                            "y": 10,
-                                            "z": 5
+                                            "x": -8,
+                                            "y": 7,
+                                            "z": 0
                                         },
                             "intensity": {
                                             "r": 1,
@@ -85,8 +87,8 @@
                                                         "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 0.0,
-                                                                    "g": 0.3,
-                                                                    "b": 0.8
+                                                                    "g": 0,
+                                                                    "b": 1
                                                                 },
                                                         "specular": {
                                                                     "r": 0.9,
@@ -94,9 +96,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -110,7 +112,39 @@
                                                         "y": 0,
                                                         "z": -1
                                                     }, 
-                                        "radius": 0.4
+                                        "radius": 0.5
+                                    },
+                                    {
+                                        "material": {
+                                                        "type" : "blinnphong",
+                                                        "albedo": {
+                                                                    "r": 1,
+                                                                    "g": 0.0,
+                                                                    "b": 0.0
+                                                                },
+                                                        "specular": {
+                                                                    "r": 0.9,
+                                                                    "g": 0.9,
+                                                                    "b": 0.9
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 64
+                                                    }, 
+                                        "center": {
+                                                        "x": 1,
+                                                        "y": 0,
+                                                        "z": -1
+                                                    }, 
+                                        "radius": 0.5
                                     },
                                     {
                                         "material": {
@@ -126,9 +160,9 @@
                                                                     "b": 1
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
