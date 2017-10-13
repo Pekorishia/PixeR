@@ -18,13 +18,13 @@
                 "type":"perpendicular",
                 "origin":{
                             "x": 0,
-                            "y": 0,
-                            "z": 1
+                            "y": 1,
+                            "z": 2
                         },
                 "lookAt":{
                             "x": 0,
                             "y": 0,
-                            "z": -2
+                            "z": -5
                         },
                 "upVector":{
                             "x": 0,
@@ -43,13 +43,12 @@
     "scene": {
             "light" : [ 
                         {
-                            "type": "point",
-                            "beamAngle": 90,
-                            "fallOffAngle": 120,
+                            "type": "spot",
+                            "angle": 90,
                             "origin": {
-                                            "x": 1,
-                                            "y": 2,
-                                            "z": 0
+                                            "x": 0,
+                                            "y": 0,
+                                            "z": -5
                                         },
                             "direction": {
                                             "x": -8,

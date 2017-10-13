@@ -172,11 +172,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     point3 origin1 (j["scene"]["light"][i]["origin"]["x"],
                                    j["scene"]["light"][i]["origin"]["y"],
                                    j["scene"]["light"][i]["origin"]["z"]);
+                    
+                    vec3 direction (j["scene"]["light"][i]["direction"]["x"],
+                                    j["scene"]["light"][i]["direction"]["y"],
+                                    j["scene"]["light"][i]["direction"]["z"]);
 
-                    float beamAngle = j["scene"]["light"][i]["beamAngle"];
-                    float fallOffAngle = j["scene"]["light"][i]["fallOffAngle"];
+                    float angle = j["scene"]["light"][i]["angle"];
 
-                    lum[i] = new SpotLight( origin1, intensity, beamAngle, fallOffAngle);
+                    lum[i] = new SpotLight( origin1, direction, intensity, angle);
                 }
                 else 
                 {

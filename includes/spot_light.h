@@ -10,16 +10,15 @@ class SpotLight : public Light
 public:
 
 	point3 origin;
-	float beamAngle;
-	float fallOffAngle;
+	float angle;
 
-	SpotLight( point3 origin_, rgb intensity_, float beamAngle_, float fallOffAngle_)
+	SpotLight( point3 origin_, vec3 direction_, rgb intensity_, float angle_)
 	{
 		Light::intensity = intensity_;
+		Light::direction = direction_;
 
 		origin = origin_;
-		beamAngle = beamAngle_;
-		fallOffAngle = fallOffAngle_;
+		angle = angle_;
 	}
 
 	virtual vec3 getDirection(const point3 & p_) const;
@@ -29,29 +28,17 @@ public:
 
 vec3 SpotLight::getDirection(const point3 & p_) const
 {
-		return p_ - origin;
+	vec3 dir = origin - p_;
+    float actual_angle = dot(-Light::direction, dir) / ((-Light::direction).length() * dir.length());
+    
+    if (actual_angle >= angle) { return dir; }
+
+	return vec3(0, 0, 0);
 }
 
 vec3 SpotLight::getIntensity(const point3 & p_) const
 {
-
-        vec3 v = unit_vector(p_ - origin);
-
-        float angle = std::acos(dot(v, getDirection(p_)));
-
-        if (angle > beamAngle + fallOffAngle) 
-        {
-            return rgb(0, 0, 0);
-        } 
-        else if (angle > beamAngle) {
-            float portion = 1 - ((angle - beamAngle) / fallOffAngle);
-            return rgb(std::max(0.f, intensity[rgb::R] * portion),
-                       std::max(0.f, intensity[rgb::G] * portion),
-                       std::max(0.f, intensity[rgb::B] * portion));
-        } 
-        else {
-            return intensity;
-        }
+       return Light::intensity;
 }
 
 #endif
