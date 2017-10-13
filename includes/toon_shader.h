@@ -55,10 +55,10 @@ rgb ToonShader::color(const Ray & r_, float t_min, float t_max, int depth_) cons
         for( int i = 0; i < Shader::world->lum_size; i++)
         {
             // If the light didn't hit anything before hiting the point, then color it
-            if (! Shader::hit_anything( Ray(ht.p, world->lum[i]->direction), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
+            if (! Shader::hit_anything( Ray(ht.p, world->lum[i]->getDirection(ht.p)), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
             {
                 // calculate de cosine between the normal vector and the light ray
-                l = (world->lum[i]->direction - r_.get_direction());                
+                l = (world->lum[i]->getDirection(ht.p) - r_.get_direction());                
             	cosine_N_light = dot( ht.normal, l )/(ht.normal.length() * l.length());
                 
                 // chech if the angle is between the others intervals

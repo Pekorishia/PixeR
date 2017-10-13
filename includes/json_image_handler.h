@@ -14,8 +14,9 @@
 #include "raytrace.h"
 #include "background.h"
 
+#include "spot_light.h"
 #include "point_light.h"
-#include "direction_light.h"
+#include "directional_light.h"
 
 #include "toon_shader.h"
 #include "depth_shader.h"
@@ -152,26 +153,38 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
         // Light creation
             Light *lum[ j["scene"]["light"].size() ];
 
-            for(int i=0; i<j["scene"]["light"].size(); i++){
-                vec3 direction (j["scene"]["light"][i]["direction"]["x"],
-                                j["scene"]["light"][i]["direction"]["y"],
-                                j["scene"]["light"][i]["direction"]["z"]);
-
+            for(int i=0; i<j["scene"]["light"].size(); i++)
+            {                
                 rgb intensity (j["scene"]["light"][i]["intensity"]["r"],
                                j["scene"]["light"][i]["intensity"]["g"],
                                j["scene"]["light"][i]["intensity"]["b"]);
 
                 if(j["scene"]["light"][i]["type"] == "point")
-                {
-                    lum[i] = new Point_light( direction, intensity);
+                {                    
+                    point3 origin1 (j["scene"]["light"][i]["origin"]["x"],
+                                   j["scene"]["light"][i]["origin"]["y"],
+                                   j["scene"]["light"][i]["origin"]["z"]);
+
+                    lum[i] = new PointLight( origin1, intensity);
                 }
                 else if (j["scene"]["light"][i]["type"] == "spot") 
                 {
-                    lum[i] = new Direction_light( direction, intensity);
+                    point3 origin1 (j["scene"]["light"][i]["origin"]["x"],
+                                   j["scene"]["light"][i]["origin"]["y"],
+                                   j["scene"]["light"][i]["origin"]["z"]);
+
+                    float beamAngle = j["scene"]["light"][i]["beamAngle"];
+                    float fallOffAngle = j["scene"]["light"][i]["fallOffAngle"];
+
+                    lum[i] = new SpotLight( origin1, intensity, beamAngle, fallOffAngle);
                 }
                 else 
                 {
-                    lum[i] = new Direction_light( direction, intensity);
+                    vec3 direction (j["scene"]["light"][i]["direction"]["x"],
+                                    j["scene"]["light"][i]["direction"]["y"],
+                                    j["scene"]["light"][i]["direction"]["z"]);
+
+                    lum[i] = new DirectionLight( direction, intensity);
                 }
 
                 
@@ -232,7 +245,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
             shade = new ToonShader(world);
         }
     // Camera creation
-        vec3 origin (j["camera"]["origin"]["x"],
+        vec3 origin2 (j["camera"]["origin"]["x"],
                      j["camera"]["origin"]["y"],
                      j["camera"]["origin"]["z"]);
 
@@ -254,7 +267,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
             float top = j["camera"]["top"];
 
-            cam = new ParallelCamera(origin, lookAt, upVector, left, right, bottom, top);
+            cam = new ParallelCamera(origin2, lookAt, upVector, left, right, bottom, top);
         }
         else{
 
@@ -266,7 +279,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
             float focus_distance = j["camera"]["focus_distance"];
 
-            cam = new PerspectiveCamera(origin, lookAt, upVector, fov, aspect, aperture, focus_distance );
+            cam = new PerspectiveCamera(origin2, lookAt, upVector, fov, aspect, aperture, focus_distance );
         }
 	
 	// Image Codification

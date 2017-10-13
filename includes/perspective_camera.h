@@ -9,18 +9,19 @@ public:
 
     PerspectiveCamera( point3 e_, point3 d_, vec3 vup_, float fov_, float aspect_, float aperture_, float focus_dist_)
     {
+        Camera::origin = e_; 
+
+        w = unit_vector(e_ -  d_);
+        u = unit_vector(cross(vup_, w));
+        v = cross(w,u);
+
+        
         lens_radius = aperture_ / 2;
 
         float theta = fov_ * M_PI/180; // Radian transformation
 
         float half_height = tan(theta/2);
         float half_width = aspect_ * half_height;
-
-        Camera::origin = e_; 
-
-        w = unit_vector(e_ -  d_);
-        u = unit_vector(cross(vup_, w));
-        v = cross(w,u);
 
         Camera::lower_left_corner = e_ - half_width * focus_dist_* u - half_height * focus_dist_ * v - w * focus_dist_;
         Camera::horizontal = 2 * half_width * focus_dist_ * u; 
