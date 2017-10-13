@@ -10,7 +10,6 @@ public:
     PerspectiveCamera( point3 e_, point3 d_, vec3 vup_, float fov_, float aspect_, float aperture_, float focus_dist_)
     {
         lens_radius = aperture_ / 2;
-        vec3 u, v, w;
 
         float theta = fov_ * M_PI/180; // Radian transformation
 
@@ -42,7 +41,7 @@ vec3 PerspectiveCamera::random_in_unit_sphere() const
 {
     vec3 p;
     do {
-        p = 2.0*vec3(drand48(),drand48(),drand48()) - vec3(1,1,1);
+        p = 2.0*vec3(drand48(),drand48(),0) - vec3(1,1,0);
     }while(dot(p,p) >= 1.0);
     return p;
 }
@@ -56,7 +55,7 @@ Ray PerspectiveCamera::get_ray(float u_, float v_) const
     vec3 offset = u * rd.x() + v * rd.y();
 
     point3 end_point = Camera::lower_left_corner + u_*Camera::horizontal + v_*Camera::vertical ;
-    Ray r( Camera::origin * offset, end_point - origin - offset );
+    Ray r( Camera::origin + offset, end_point - origin - offset );
     return r;
 }
 

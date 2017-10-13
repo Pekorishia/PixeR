@@ -232,24 +232,42 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
             shade = new ToonShader(world);
         }
     // Camera creation
-        point3 llc (j["camera"]["lower_left_corner"]["x"],
-                    j["camera"]["lower_left_corner"]["y"],
-                    j["camera"]["lower_left_corner"]["z"]);
+        vec3 origin (j["camera"]["origin"]["x"],
+                     j["camera"]["origin"]["y"],
+                     j["camera"]["origin"]["z"]);
 
-        vec3 horizontal (j["camera"]["horizontal"]["x"],
-                         j["camera"]["horizontal"]["y"],
-                         j["camera"]["horizontal"]["z"]);
+        vec3 lookAt (j["camera"]["lookAt"]["x"],
+                     j["camera"]["lookAt"]["y"],
+                     j["camera"]["lookAt"]["z"]);
 
-        vec3 vertical (j["camera"]["vertical"]["x"],
-                       j["camera"]["vertical"]["y"],
-                       j["camera"]["vertical"]["z"]);
+        point3 upVector (j["camera"]["upVector"]["x"],
+                         j["camera"]["upVector"]["y"],
+                         j["camera"]["upVector"]["z"]);
 
-        point3 origin (j["camera"]["origin"]["x"],
-                       j["camera"]["origin"]["y"],
-                       j["camera"]["origin"]["z"]);
+        if (j["camera"]["type"] == "parallel")
+        {
+            float left = j["camera"]["left"];
 
-        cam = new PerspectiveCamera(point3(-2,2,1), point3(0,0,-1), vec3(0,1,0), 60, n_cols /n_rows, 2.0, (point3(-2,2,1)- point3(0,0,-1)).length() );
+            float right = j["camera"]["right"];
 
+            float bottom = j["camera"]["bottom"];
+
+            float top = j["camera"]["top"];
+
+            cam = new ParallelCamera(origin, lookAt, upVector, left, right, bottom, top);
+        }
+        else{
+
+            float fov = j["camera"]["fov"];
+
+            float aspect = j["camera"]["aspect"];
+
+            float aperture = j["camera"]["aperture"];
+
+            float focus_distance = j["camera"]["focus_distance"];
+
+            cam = new PerspectiveCamera(origin, lookAt, upVector, fov, aspect, aperture, focus_distance );
+        }
 	
 	// Image Codification
 
