@@ -43,7 +43,7 @@
     "scene": {
             "light" : [ 
                         {
-                            "type": "spot",
+                            "type": "point",
                             "angle": 90,
                             "origin": {
                                             "x": 0,

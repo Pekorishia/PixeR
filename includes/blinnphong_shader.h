@@ -49,7 +49,7 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         	if (! Shader::hit_anything( Ray(ht.p, direction_light), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
         	{
 	            // Light direction normalized
-	            auto l = unit_vector(direction_light - r_.get_direction());
+	            auto l = unit_vector(direction_light);
 
 	            // Difuse component
 	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->getIntensity(ht.p);
