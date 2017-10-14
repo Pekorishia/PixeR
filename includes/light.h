@@ -10,7 +10,7 @@ public:
 	rgb intensity;
 
 	virtual vec3 getDirection(const point3 & p_) const = 0;	
-	virtual vec3 getIntensity(const point3 & p_) const = 0;
+	virtual vec3 getIntensity() const = 0;
 	
 };
 

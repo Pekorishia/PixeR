@@ -37,6 +37,8 @@
 
 using json = nlohmann::json;
 
+#define PI 3.14159265
+
 class JsonImage
 {
     public:
@@ -178,6 +180,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                     j["scene"]["light"][i]["direction"]["z"]);
 
                     float angle = j["scene"]["light"][i]["angle"];
+                    angle = fabs(cos(angle * PI / 180.0));
 
                     lum[i] = new SpotLight( origin1, direction, intensity, angle);
                 }

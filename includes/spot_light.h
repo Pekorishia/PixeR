@@ -22,21 +22,24 @@ public:
 	}
 
 	virtual vec3 getDirection(const point3 & p_) const;
-	virtual vec3 getIntensity(const point3 & p_) const;
+	virtual vec3 getIntensity() const;
 
 };
 
 vec3 SpotLight::getDirection(const point3 & p_) const
 {
 	vec3 dir = origin - p_;
-    float actual_angle = dot(-Light::direction, dir) / ((-Light::direction).length() * dir.length());
+
+	// calculate the cosine between the direction of the light and the position of the light
+	// cos θ = (u * v) / (||u|| * ||v||)
+    float cosine = dot(-Light::direction, dir) / ((-Light::direction).length() * dir.length());
     
-    if (actual_angle >= angle) { return dir; }
+    if (cosine >= angle) { return dir; }
 
 	return vec3(0, 0, 0);
 }
 
-vec3 SpotLight::getIntensity(const point3 & p_) const
+vec3 SpotLight::getIntensity() const
 {
        return Light::intensity;
 }

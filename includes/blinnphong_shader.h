@@ -41,23 +41,23 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
 
         ip += ambient;
 
+        float t;
+
         for( int i = 0; i < Shader::world->lum_size; i++){
 
-            vec3 direction_light = Shader::world->lum[i]->getDirection(ht.p);
+            // Light direction normalized
+            auto l = unit_vector(Shader::world->lum[i]->getDirection(ht.p));
  
         	// If the light didn't hit anything before hiting the point, then color it
-        	if (! Shader::hit_anything( Ray(ht.p, direction_light), 0.001f, std::numeric_limits<float>::infinity(), ht_s) )
+        	if (! Shader::hit_anything( Ray(ht.p, l), 0.001f, Shader::world->lum[i]->getDirection(ht.p).length(), ht_s) )
         	{
-	            // Light direction normalized
-	            auto l = unit_vector(direction_light);
-
 	            // Difuse component
-	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->getIntensity(ht.p);
+	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->getIntensity();
 	            
 	            auto h = unit_vector(l + v); 
 
 	            // Specular component
-	            auto specular = ht.mat->ks * pow ( std::max(0.f, dot(ht.normal, h)) , ht.mat->alpha ) * world->lum[i]->getIntensity(ht.p);
+	            auto specular = ht.mat->ks * pow ( std::max(0.f, dot(ht.normal, h)) , ht.mat->alpha ) * world->lum[i]->getIntensity();
 
 	            if (depth_ > 0)
 	            {

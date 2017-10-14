@@ -16,7 +16,7 @@ public:
 	}
 
 	virtual vec3 getDirection(const point3 & p_) const;
-	virtual vec3 getIntensity(const point3 & p_) const;
+	virtual vec3 getIntensity() const;
 
 };
 
@@ -24,7 +24,7 @@ vec3 DirectionLight::getDirection(const point3 & p_) const
 {
 		return Light::direction;
 }
-vec3 DirectionLight::getIntensity(const point3 & p_) const
+vec3 DirectionLight::getIntensity() const
 {
 		return Light::intensity;
 }
