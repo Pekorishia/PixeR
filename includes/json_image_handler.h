@@ -33,6 +33,8 @@
 #include "perspective_camera.h"
 #include "parallel_camera.h"
 
+#include "triangle_object.h"
+
 #include "../utility/json.hpp"
 
 using json = nlohmann::json;
@@ -78,10 +80,12 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
 
     // Scene Creation
-        Object *list[ j["scene"]["objects"]["spheres"].size() ];
+    int qtd_sphere = j["scene"]["objects"]["spheres"].size();
+    int qtd_triangle = j["scene"]["objects"]["triangles"].size();
+        Object *list[qtd_triangle + qtd_sphere];
 
         // Spheres creation
-            for(int i=0; i<j["scene"]["objects"]["spheres"].size(); i++){
+            for(int i=0; i<j["scene"]["objects"]["spheres"].size(); i++) {
 
                 // Material creation
                     Material *mat;
@@ -150,6 +154,84 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                 auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
                 
                 list[i] = new Sphere(mat, center, radius);
+                
+            }
+
+            for(int i=0; i<j["scene"]["objects"]["triangles"].size(); i++){
+
+                // Material creation
+                    Material *mat;
+
+                    if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "lambertian"){
+                        rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
+                        
+                        mat = new Lambertian(kd);
+                    }
+                    else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "blinnphong"){
+                        rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
+                        
+                        rgb ks (j["scene"]["objects"]["triangles"][i]["material"]["specular"]["r"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["specular"]["g"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["specular"]["b"]);
+
+                        rgb ka (j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["r"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["g"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["b"]);
+
+                        rgb km (j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["r"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["g"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["b"]);
+
+                        auto a = j["scene"]["objects"]["triangles"][i]["material"]["alpha"];
+
+                        mat = new BlinnPhong(kd, ks, km, ka, a);
+                    }
+                    else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "metal"){
+                        rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto fuzz = j["scene"]["objects"]["triangles"][i]["material"]["fuzz"];
+                        mat = new Metal(kd, fuzz);
+                    }
+                    else if(j["scene"]["objects"]["triangles"][i]["material"]["type"] == "toon"){
+                        std::vector<rgb> gradient;
+                        rgb gradient_;
+
+                        std::vector<float> angles;
+                        float angles_;
+
+                        for(int k=0; k<j["scene"]["objects"]["triangles"][i]["material"]["gradient"].size(); k++){
+                            gradient_=rgb(j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["r"],
+                                            j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["g"],
+                                            j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["b"]);
+                            gradient.push_back(gradient_);
+
+                            angles_=j["scene"]["objects"]["triangles"][i]["material"]["angles"][k]["a"];
+                            
+                            angles_ = cos(angles_* PI / 180.0);
+                            angles.push_back(angles_);
+                        }
+                        mat = new Toon(gradient, angles);
+                    }
+                    
+                point3 v0 (j["scene"]["objects"]["triangles"][i]["v0"]["x"],
+                j["scene"]["objects"]["triangles"][i]["v0"]["y"],
+                j["scene"]["objects"]["triangles"][i]["v0"]["z"]);
+
+                point3 v1 (j["scene"]["objects"]["triangles"][i]["v1"]["x"],
+                j["scene"]["objects"]["triangles"][i]["v1"]["y"],
+                j["scene"]["objects"]["triangles"][i]["v1"]["z"]);
+
+                point3 v2 (j["scene"]["objects"]["triangles"][i]["v2"]["x"],
+                j["scene"]["objects"]["triangles"][i]["v2"]["y"],
+                j["scene"]["objects"]["triangles"][i]["v2"]["z"]);
+
+                list[i + qtd_sphere] = new Triangle(mat, v0, v1, v2);
             }
 
         // Light creation
@@ -220,7 +302,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     j["scene"]["ambient_light"]["g"],
                     j["scene"]["ambient_light"]["b"]);
 
-        world  = new Scene(list, j["scene"]["objects"]["spheres"].size(), lum, j["scene"]["light"].size(), bg, al);
+        world  = new Scene(list, qtd_triangle + qtd_sphere , lum, j["scene"]["light"].size(), bg, al);
 
     // Shader creation
         if (j["shader"]["type"] == "depth"){
