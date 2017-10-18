@@ -29,10 +29,11 @@ public:
 vec3 SpotLight::getDirection(const point3 & p_) const
 {
 	vec3 dir = origin - p_;
+	vec3 direcao = origin - Light::direction;
 
 	// calculate the cosine between the direction of the light and the position of the light
 	// cos θ = (u * v) / (||u|| * ||v||)
-    float cosine = dot(-Light::direction, dir) / ((-Light::direction).length() * dir.length());
+    float cosine = dot(direcao, dir) / ((direcao).length() * dir.length());
     
     if (cosine >= angle) { return dir; }
 

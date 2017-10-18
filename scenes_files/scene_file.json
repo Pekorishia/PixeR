@@ -1,12 +1,12 @@
 {
 
 	"image": { 
-                "name": "atividade.ppm",
+                "name": "light_point.ppm",
                 "codification": "ascii",
-                "width": 1200,
-                "height": 600,
-                "samples": 1,
-                "ray_depth": 1,
+                "width": 900,
+                "height": 450,
+                "samples": 10,
+                "ray_depth": 10,
                 "t_min": 0.001,
                 "t_max": "infinity"
             },
@@ -17,14 +17,14 @@
     "camera": {
                 "type":"perspective",
                 "origin":{
-                            "x": 0,
-                            "y": 4,
-                            "z": 10
+                            "x": 7,
+                            "y": 2,
+                            "z": 5
                         },
                 "lookAt":{
                             "x": 0,
                             "y": 0,
-                            "z": -5
+                            "z": -1
                         },
                 "upVector":{
                             "x": 0,
@@ -35,19 +35,19 @@
                 "right":2,
                 "bottom":-1,
                 "top":1,
-                "fov":20,
-                "aspect":2,
+
+                "fov":30,
                 "aperture":0.0,
-                "focus_distance":2
+                "focus_distance":8.31
             },
     "scene": {
             "light" : [ 
                         {
-                            "type": "direction",
+                            "type": "point",
                             "angle": 45,
                             "origin": {
                                             "x": 0,
-                                            "y": 0,
+                                            "y": 1.1,
                                             "z": -1
                                         },
                             "direction": {
@@ -56,16 +56,16 @@
                                             "z": -1
                                         },            
                             "intensity": {
-                                            "r": 1,
-                                            "g": 1,
-                                            "b": 1
+                                            "r": 0.7,
+                                            "g": 0.7,
+                                            "b": 0.7
                      }
                        }
                      ],
             "ambient_light": {
-                                "r": 0.4,
-                                "g": 0.4,
-                                "b": 0.4
+                                "r": 0.1,
+                                "g": 0.1,
+                                "b": 0.1
                             },
             "background": {
                             "upper_left": {
@@ -95,14 +95,14 @@
                                         "material": {
                                                         "type" : "blinnphong",
                                                         "albedo": {
-                                                                    "r": 0.0,
-                                                                    "g": 0,
-                                                                    "b": 1
+                                                                    "r": 0.2,
+                                                                    "g": 0.9,
+                                                                    "b": 0.2
                                                                 },
                                                         "specular": {
-                                                                    "r": 0.9,
-                                                                    "g": 0.9,
-                                                                    "b": 0.9
+                                                                    "r": 0.8,
+                                                                    "g": 0.8,
+                                                                    "b": 0.8
                                                                 },
                                                         "mirrow": {
                                                                     "r": 0,
@@ -114,27 +114,27 @@
                                                                     "g": 0.1,
                                                                     "b": 0.1
                                                                 },
-                                                        "alpha": 64
+                                                        "alpha": 256
                                                     }, 
                                         "center": {
-                                                        "x": -1,
+                                                        "x": 0,
                                                         "y": 0,
-                                                        "z": -3
+                                                        "z": 0
                                                     }, 
-                                        "radius": 0.2
+                                        "radius": 0.5
                                     },
                                     {
                                         "material": {
                                                         "type" : "blinnphong",
                                                         "albedo": {
-                                                                    "r": 0,
-                                                                    "g": 1,
-                                                                    "b": 0
+                                                                    "r": 0.8,
+                                                                    "g": 0.8,
+                                                                    "b": 0.8
                                                                 },
                                                         "specular": {
-                                                                    "r": 1,
-                                                                    "g": 1,
-                                                                    "b": 1
+                                                                    "r": 0.0,
+                                                                    "g": 0.0,
+                                                                    "b": 0.0
                                                                 },
                                                         "mirrow": {
                                                                     "r": 0,
@@ -146,29 +146,27 @@
                                                                     "g": 0.1,
                                                                     "b": 0.1
                                                                 },
-                                                        "alpha": 5
+                                                        "alpha": 8
                                                     }, 
                                         "center": {
                                                         "x": 0,
-                                                        "y": -100.5,
+                                                        "y": -1000.5,
                                                         "z": -1
                                                     }, 
-                                        "radius": 100
-                                    }
-                                ],
-                         "triangles": [
+                                        "radius": 1000
+                                    },
                                     {
                                         "material": {
                                                         "type" : "blinnphong",
                                                         "albedo": {
-                                                                    "r": 0.0,
-                                                                    "g": 0,
-                                                                    "b": 1
+                                                                    "r": 0.9,
+                                                                    "g": 0.2,
+                                                                    "b": 0.1
                                                                 },
                                                         "specular": {
-                                                                    "r": 0.9,
-                                                                    "g": 0.9,
-                                                                    "b": 0.9
+                                                                    "r": 0.8,
+                                                                    "g": 0.8,
+                                                                    "b": 0.8
                                                                 },
                                                         "mirrow": {
                                                                     "r": 0,
@@ -180,23 +178,46 @@
                                                                     "g": 0.1,
                                                                     "b": 0.1
                                                                 },
-                                                        "alpha": 64
+                                                        "alpha": 256
                                                     }, 
-                                        "v0": {
-                                                "x": 2,
-                                                "y": 0,
-                                                "z": -1
-                                            }, 
-                                        "v1": {
-                                                "x": 3,
-                                                "y": 0,
-                                                "z": -1
-                                            }, 
-                                        "v2": {
-                                                "x": 3,
-                                                "y": 1,
-                                                "z": -3
-                                            }
+                                        "center": {
+                                                        "x": -0.86,
+                                                        "y": 0.0,
+                                                        "z": -1.5
+                                                    }, 
+                                        "radius": 0.5
+                                    },
+                                    {
+                                        "material": {
+                                                        "type" : "blinnphong",
+                                                        "albedo": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.2,
+                                                                    "b": 0.9
+                                                                },
+                                                        "specular": {
+                                                                    "r": 0.8,
+                                                                    "g": 0.8,
+                                                                    "b": 0.8
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 256
+                                                    }, 
+                                        "center": {
+                                                        "x": 0.86,
+                                                        "y": 0,
+                                                        "z": -1.5
+                                                    }, 
+                                        "radius": 0.5
                                     }
                                 ]
                         }

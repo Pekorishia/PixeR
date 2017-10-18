@@ -361,13 +361,11 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
             float fov = j["camera"]["fov"];
 
-            float aspect = j["camera"]["aspect"];
-
             float aperture = j["camera"]["aperture"];
 
             float focus_distance = j["camera"]["focus_distance"];
 
-            cam = new PerspectiveCamera(origin2, lookAt, upVector, fov, aspect, aperture, focus_distance );
+            cam = new PerspectiveCamera(origin2, lookAt, upVector, fov, n_cols/n_rows, aperture, focus_distance );
         }
 	
 	// Image Codification
