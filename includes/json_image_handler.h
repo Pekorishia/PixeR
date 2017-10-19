@@ -153,7 +153,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                 auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
                 
-                list[i] = new Sphere(mat, center, radius);
+                list[i+ qtd_triangle] = new Sphere(mat, center, radius);
                 
             }
 
@@ -231,7 +231,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                 j["scene"]["objects"]["triangles"][i]["v2"]["y"],
                 j["scene"]["objects"]["triangles"][i]["v2"]["z"]);
 
-                list[i + qtd_sphere] = new Triangle(mat, v0, v1, v2);
+                list[i] = new Triangle(mat, v0, v1, v2);
             }
 
         // Light creation

@@ -11,7 +11,7 @@ class Triangle : public Object {
 
     public:
 
-        Triangle(Material *m_, point3 v0_, point3 v1_, point3 v2_, bool backface_cull_ = true)
+        Triangle(Material *m_, point3 v0_, point3 v1_, point3 v2_, bool backface_cull_ = false)
         {
             Object::origin = point3 (0,0,0);
             Object::material = m_;
@@ -49,60 +49,77 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
 
     det = dot(e1, h);
 
-    if (det > -epsilon && det < epsilon)
-        return false;
-
-    inv_det = 1.0/det;
-
-    s =  r_.get_origin() - v0;
-
-    u = inv_det * dot(s, h);
-
-    if (u < 0.0 || u > 1.0)
-        return false;
-
-    q = cross(s, e1);
-    v = inv_det * dot(r_.get_direction(), q);
-    if (v < 0.0 || u + v > 1.0)
-        return false;
-    float t = inv_det * dot(e2, q);
-     if (t > epsilon) // ray intersection
-    {
-            ht_.t = t;
-            ht_.p =  r_.point_at(t);
-            ht_.normal =  unit_vector( cross(e1, e2) );  
-            ht_.mat = Object::material;
-        return true;
-    }
-    else // This means that there is a line intersection but not a ray intersection.
-        return false;
-/*
-    // If the culling is activate don't show the backface of the triangle
     if (backface_cull){
-        
-        if (t < t_max_ && t > t_min_){
+        if (det < epsilon)
+            return false;
+
+        s =  r_.get_origin() - v0;
+
+        u = dot(s, h);
+
+        if (u < 0.0 || u > det)
+            return false;
+
+        q = cross(s, e1);
+
+        v = dot(r_.get_direction(), q);
+
+        if (v < 0.0 || u + v > det)
+            return false;
+
+        float t = inv_det * dot(e2, q);
+
+        inv_det = 1.0/det;
+
+        t *=inv_det;
+        u *=inv_det;
+        v *=inv_det;
+
+        if (t > epsilon) // ray intersection
+        {
             ht_.t = t;
             ht_.p =  r_.point_at(t);
             ht_.normal =  unit_vector( cross(e1, e2) );  
             ht_.mat = Object::material;
-
             return true;
-        }   
+        }
+        else // This means that there is a line intersection but not a ray intersection.
+            return false;
     }
-    // Else if the culling isn't activated, show the backface of the triangle
-    else {
+    else{
 
-        if (t < t_max_ && t > t_min_){
-            ht_.t = t;
-            ht_.p =  r_.point_at(t);
-            ht_.normal =  unit_vector(cross (e1, e2) );  
-            ht_.mat = Object::material;
+        if (det > -epsilon && det < epsilon)
+            return false;
 
+        inv_det = 1.0/det;
+
+        s =  r_.get_origin() - v0;
+
+        u = inv_det * dot(s, h);
+
+        if (u < 0.0 || u > 1.0)
+            return false;
+
+        q = cross(s, e1);
+
+        v = inv_det * dot(r_.get_direction(), q);
+
+        if (v < 0.0 || u + v > 1.0)
+            return false;
+
+        float t = inv_det * dot(e2, q);
+
+        if (t > epsilon) // ray intersection
+        {
+                ht_.t = t;
+                ht_.p =  r_.point_at(t);
+                ht_.normal =  unit_vector( cross(e1, e2) );  
+                ht_.mat = Object::material;
             return true;
-        }   
+        }
+        else // This means that there is a line intersection but not a ray intersection.
+            return false;
     }
-
-    return false; */
 }
 
 #endif
