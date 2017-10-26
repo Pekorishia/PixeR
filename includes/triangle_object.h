@@ -75,7 +75,7 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
         u *=inv_det;
         v *=inv_det;
 
-        if (t > epsilon) // ray intersection
+        if (t > epsilon && t < t_max_) // ray intersection
         {
             ht_.t = t;
             ht_.p =  r_.point_at(t);
@@ -109,7 +109,7 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
 
         float t = inv_det * dot(e2, q);
 
-        if (t > epsilon) // ray intersection
+        if (t > epsilon && t <= t_max_) // ray intersection
         {
                 ht_.t = t;
                 ht_.p =  r_.point_at(t);

@@ -1,16 +1,16 @@
 {
     "image": { 
-                "name": "atividade.ppm",
+                "name": "caixa_certo.ppm",
                 "codification": "ascii",
-                "width": 400,
-                "height": 200,
-                "samples": 1000,
-                "ray_depth": 1000,
+                "width": 900,
+                "height": 450,
+                "samples": 1,
+                "ray_depth": 1,
                 "t_min": 0.001,
                 "t_max": "infinity"
             },
     "shader": {
-                "type": "lambertian"
+                "type": "blinnphong"
             },
     "camera": {
                 "type":"perspective",
@@ -22,7 +22,7 @@
                 "lookAt":{
                             "x": 0,
                             "y": 0,
-                            "z": -1
+                            "z": -3
                         },
                 "upVector":{
                             "x": 0,
@@ -43,16 +43,16 @@
             "light" : [
                        {
                             "type": "point",
-                            "angle": 45,
+                            "angle": 15,
                             "origin": {
                                             "x": 0,
                                             "y": 1,
-                                            "z": -1
+                                            "z": -3
                                         },
                             "direction": {
-                                            "x": 0,
-                                            "y": 0,
-                                            "z": -1
+                                            "x": -1,
+                                            "y": -1.25,
+                                            "z": -3
                                         },            
                             "intensity": {
                                             "r": 0.7,
@@ -92,7 +92,7 @@
                         "spheres": [
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,
@@ -113,7 +113,8 @@
                                                                     "g": 0.1,
                                                                     "b": 0.1
                                                                 },
-                                                        "alpha": 64
+                                                        "alpha": 64,
+                                                        "fuzz": 0.0
                                                     }, 
                                         "center": {
                                                         "x": -1,
@@ -121,12 +122,13 @@
                                                         "z": -3
                                                     }, 
                                         "radius": 0.5
+
                                     }
                                 ],
                          "triangles": [
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,
@@ -167,7 +169,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,
@@ -208,7 +210,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 0.6,
@@ -220,9 +222,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -249,7 +251,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 0.6,
@@ -261,9 +263,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -290,7 +292,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 0.6,
                                                                     "g": 0.81,
@@ -302,9 +304,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -331,7 +333,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 0.6,
                                                                     "g": 0.81,
@@ -343,9 +345,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -372,7 +374,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,
@@ -413,7 +415,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertianlambertian",
+                                                        "type" : "blinnphongblinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,
@@ -454,7 +456,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,
@@ -495,7 +497,7 @@
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "blinnphong",
                                                         "albedo": {
                                                                     "r": 1,
                                                                     "g": 1,

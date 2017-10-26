@@ -46,12 +46,15 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         for( int i = 0; i < Shader::world->lum_size; i++){
 
             // Light direction normalized
-            auto l = unit_vector(Shader::world->lum[i]->getDirection(ht.p));
+            vec3 l = Shader::world->lum[i]->getDirection(ht.p);
+
+            auto sr = Ray(ht.p, l);
  
         	// If the light didn't hit anything before hiting the point, then color it
-        	if (! Shader::hit_anything( Ray(ht.p, l), 0.001f, Shader::world->lum[i]->getDirection(ht.p).length(), ht_s) )
+        	if (!Shader::hit_anything( sr, 0.001f, 1, ht_s) )
         	{
 	            // Difuse component
+                l = unit_vector(l);
 	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->getIntensity();
 	            
 	            auto h = unit_vector(l + v); 
@@ -61,7 +64,7 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
 
 	            if (depth_ > 0)
 	            {
-	            	ip += ht.mat->km*color( Ray(ht.p , reflected),  0.001f, std::numeric_limits<float>::infinity(), depth_ - 1);
+	            	ip += ht.mat->km*color( Ray(ht.p , reflected),  0.001f, 1, depth_ - 1);
 	            }
 	            ip += difuse + specular;
 	        }
