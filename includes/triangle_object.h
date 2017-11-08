@@ -5,7 +5,7 @@
 #include "object.h"
 #include "material.h"
 
-#define epsilon 0.00001
+#define error 0.00001
 
 class Triangle : public Object {
 
@@ -50,7 +50,7 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
     det = dot(e1, h);
 
     if (backface_cull){
-        if (det < epsilon)
+        if (det < error)
             return false;
 
         s =  r_.get_origin() - v0;
@@ -75,7 +75,7 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
         u *=inv_det;
         v *=inv_det;
 
-        if (t > epsilon && t < t_max_) // ray intersection
+        if (t > error && t < t_max_) // ray intersection
         {
             ht_.t = t;
             ht_.p =  r_.point_at(t);
@@ -88,7 +88,7 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
     }
     else{
 
-        if (det > -epsilon && det < epsilon)
+        if (det > -error && det < error)
             return false;
 
         inv_det = 1.0/det;
@@ -109,7 +109,7 @@ bool Triangle::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & h
 
         float t = inv_det * dot(e2, q);
 
-        if (t > epsilon && t <= t_max_) // ray intersection
+        if (t > error && t <= t_max_) // ray intersection
         {
                 ht_.t = t;
                 ht_.p =  r_.point_at(t);

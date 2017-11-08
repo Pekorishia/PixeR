@@ -7,6 +7,8 @@
 #include <string> 
 #include <vector>
 #include <math.h> 
+#include <ios>      // std::left
+#include <iomanip> // setw
 
 #include "scene.h"
 #include "sphere.h"
@@ -29,13 +31,16 @@
 #include "lambertian_material.h"
 #include "blinnphong_material.h"
 
-
 #include "perspective_camera.h"
 #include "parallel_camera.h"
 
 #include "triangle_object.h"
 
 #include "../utility/json.hpp"
+// vec3, vec4, ivec4, mat4
+#include "../utility/glm/glm.hpp"
+// translate, rotate, scale, perspective
+#include "../utility/glm/gtc/matrix_transform.hpp"
 
 using json = nlohmann::json;
 
@@ -48,6 +53,32 @@ class JsonImage
 
 		static void imageGenerator (std::stringstream &ss, std::string name);
 };
+
+/// Prints a column-major 4x4 matriz.
+std::ostream & operator<<( std::ostream& os, const glm::mat4& m )
+{
+    for (auto i(0) ; i < 4 ; ++i )
+    {
+        os << "[ ";
+        for ( auto j(0) ; j < 4 ; ++j )
+            os << std::fixed << std::right << std::setw(6) << std::setprecision(2) << m[j][i] << " ";
+        os << "]\n";
+    }
+
+    return os;
+}
+
+/// Prints a 3D vector.
+std::ostream & operator<<( std::ostream& os, const glm::vec4& v )
+{
+        os << "[ ";
+        for ( auto j(0) ; j < 4 ; ++j )
+            os << std::right << std::setw(6) << std::setprecision(2) << v[j] << " ";
+        os << "]";
+
+    return os;
+}
+
 
 /*
  * Opens the json file and generates the image data
@@ -147,16 +178,38 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         mat = new Toon(gradient, angles);
                     }
                     
-                point3 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
+                glm::vec4 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
                 j["scene"]["objects"]["spheres"][i]["center"]["y"],
-                j["scene"]["objects"]["spheres"][i]["center"]["z"]);
+                j["scene"]["objects"]["spheres"][i]["center"]["z"], 
+                j["scene"]["objects"]["spheres"][i]["center"]["homogeneous"]);
 
                 auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
+
+                glm::mat4 transformations = glm::mat4(1.0f);
+
+                // Transformation Creation
+                    for(int k=0; k< j["scene"]["objects"]["spheres"][i]["transformation"].size(); k++) 
+                    {
+                        if (j["scene"]["objects"]["spheres"][i]["transformation"][k]["type"] == "translate")
+                        {
+                            glm::vec3 translate_factor ( j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"]["x"],
+                                                         j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"]["y"],
+                                                         j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"]["z"]);
+                            glm::mat4 translate = glm::translate(
+                                    glm::mat4(1.0f), // Identity.
+                                    translate_factor);
+                           
+                            transformations  = translate * transformations;
+                        }
+                    }
                 
-                list[i+ qtd_triangle] = new Sphere(mat, center, radius);
+                center = transformations * center;
+
+                list[i+ qtd_triangle] = new Sphere(mat, point3 (center[0],center[1],center[2]), radius);
                 
             }
 
+        // Triangle creation
             for(int i=0; i<j["scene"]["objects"]["triangles"].size(); i++){
 
                 // Material creation
@@ -219,19 +272,44 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         mat = new Toon(gradient, angles);
                     }
                     
-                point3 v0 (j["scene"]["objects"]["triangles"][i]["v0"]["x"],
+                glm::vec4 v0 (j["scene"]["objects"]["triangles"][i]["v0"]["x"],
                 j["scene"]["objects"]["triangles"][i]["v0"]["y"],
-                j["scene"]["objects"]["triangles"][i]["v0"]["z"]);
+                j["scene"]["objects"]["triangles"][i]["v0"]["z"],
+                j["scene"]["objects"]["triangles"][i]["v0"]["homogeneous"]);
 
-                point3 v1 (j["scene"]["objects"]["triangles"][i]["v1"]["x"],
+                glm::vec4 v1 (j["scene"]["objects"]["triangles"][i]["v1"]["x"],
                 j["scene"]["objects"]["triangles"][i]["v1"]["y"],
-                j["scene"]["objects"]["triangles"][i]["v1"]["z"]);
+                j["scene"]["objects"]["triangles"][i]["v1"]["z"],
+                j["scene"]["objects"]["triangles"][i]["v1"]["homogeneous"]);
 
-                point3 v2 (j["scene"]["objects"]["triangles"][i]["v2"]["x"],
+                glm::vec4 v2 (j["scene"]["objects"]["triangles"][i]["v2"]["x"],
                 j["scene"]["objects"]["triangles"][i]["v2"]["y"],
-                j["scene"]["objects"]["triangles"][i]["v2"]["z"]);
+                j["scene"]["objects"]["triangles"][i]["v2"]["z"],
+                j["scene"]["objects"]["triangles"][i]["v2"]["homogeneous"]);
 
-                list[i] = new Triangle(mat, v0, v1, v2);
+                glm::mat4 transformations = glm::mat4(1.0f);
+
+                // Transformation Creation
+                    for(int k=0; k< j["scene"]["objects"]["triangles"][i]["transformation"].size(); k++) 
+                    {
+                        if (j["scene"]["objects"]["triangles"][i]["transformation"][k]["type"] == "translate")
+                        {
+                            glm::vec3 translate_factor ( j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["x"],
+                                                         j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["y"],
+                                                         j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["z"]);
+                            glm::mat4 translate = glm::translate(
+                                    glm::mat4(1.0f), // Identity.
+                                    translate_factor);
+                           
+                            transformations  = translate * transformations;
+                        }
+                    }
+                
+                v0 = transformations * v0;
+                v1 = transformations * v1;
+                v2 = transformations * v2;
+                
+                list[i] = new Triangle(mat, point3 (v0[0], v0[1], v0[2]), point3 (v1[0], v1[1], v1[2]), point3 (v2[0], v2[1], v2[2]));
             }
 
         // Light creation
