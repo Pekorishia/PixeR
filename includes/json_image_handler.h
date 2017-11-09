@@ -79,6 +79,12 @@ std::ostream & operator<<( std::ostream& os, const glm::vec4& v )
     return os;
 }
 
+/// User-define literal to convert from degrees to radian.
+constexpr long double operator"" _deg ( long double deg )
+{
+    return deg*3.141592/180;
+}
+
 
 /*
  * Opens the json file and generates the image data
@@ -302,6 +308,20 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                     translate_factor);
                            
                             transformations  = translate * transformations;
+                        }
+                        else if (j["scene"]["objects"]["triangles"][i]["transformation"][k]["type"] == "rotate")
+                        {                           
+                            // The rotation angles for each axis.
+                            //glm::vec3 rotate_factor ( (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["x"]),
+                            //                          (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["y"]),
+                            //                          (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["z"]));
+
+                            glm::vec3 rotate_factor( 45.0_deg, 30.0_deg, 15.0_deg ); 
+                            glm::mat4 rotate = glm::rotate(
+                                    glm::mat4(1.0f), // Identity.
+                                    rotate_factor.z, glm::vec3 (0.0f,0.0f,1.0f) );
+                           
+                            transformations  = rotate * transformations;
                         }
                     }
                 
