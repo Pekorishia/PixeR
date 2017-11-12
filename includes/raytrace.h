@@ -4,8 +4,9 @@
 #include "camera.h"
 #include "scene.h"
 #include "shader.h"
-//#include "../utility/vec3.h"
+#include "progress_bar.h"
 #include "../utility/ray.h"
+
 class Raytrace
 {
     public:
@@ -13,11 +14,15 @@ class Raytrace
                               int n_cols, int n_rows, int n_samples, int ray_depth, float t_min,
                               float t_max );
 };
+
+
 void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader *shade, 
                               int n_cols, int n_rows, int n_samples, int ray_depth, float t_min,
                               float t_max 
                             ) 
 {   
+    progressbar.reset();
+    progressbar.setDimension(n_rows*n_cols);
      // NOTICE: We loop rows from bottom to top.
     for ( auto row{n_rows-1} ; row >= 0 ; --row ) // Y
     {
@@ -41,7 +46,8 @@ void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader 
             int ir = int( 255.99f * hue[rgb::R] );
             int ig = int( 255.99f * hue[rgb::G] );
             int ib = int( 255.99f * hue[rgb::B] );
-            ss << ir << " " << ig << " " << ib << "\n";             
+            ss << ir << " " << ig << " " << ib << "\n";  
+            progressbar.increase();           
         }
     }
 }

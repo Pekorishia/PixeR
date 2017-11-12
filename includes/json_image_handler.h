@@ -5,17 +5,18 @@
 #include <fstream>
 #include <sstream>
 #include <string> 
+#include <complex>  
 #include <vector>
 #include <math.h> 
 #include <ios>      // std::left
 #include <iomanip> // setw
 
 #include "scene.h"
-#include "sphere.h"
-#include "light.h"
 #include "raytrace.h"
 #include "background.h"
 
+
+#include "light.h"
 #include "spot_light.h"
 #include "point_light.h"
 #include "directional_light.h"
@@ -34,6 +35,8 @@
 #include "perspective_camera.h"
 #include "parallel_camera.h"
 
+
+#include "sphere.h"
 #include "triangle_object.h"
 
 #include "../utility/json.hpp"
@@ -85,6 +88,12 @@ constexpr long double operator"" _deg ( long double deg )
     return deg*3.141592/180;
 }
 
+constexpr float deg ( long double deg )
+{
+    return deg*3.141592/180;
+}
+
+
 
 /*
  * Opens the json file and generates the image data
@@ -98,7 +107,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
     json j;
     i >> j;
 
-    // Nummber of columns and rows
+    // Number of columns and rows
     n_cols = j["image"]["width"];
     n_rows = j["image"]["height"];
     // Number of rays that will be fired inside one pixel
@@ -119,7 +128,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
     // Scene Creation
     int qtd_sphere = j["scene"]["objects"]["spheres"].size();
     int qtd_triangle = j["scene"]["objects"]["triangles"].size();
-        Object *list[qtd_triangle + qtd_sphere];
+
+    Object *list[qtd_triangle + qtd_sphere];
 
         // Spheres creation
             for(int i=0; i<j["scene"]["objects"]["spheres"].size(); i++) {
@@ -129,27 +139,27 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                     if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "lambertian"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
                         
                         mat = new Lambertian(kd);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
                         
                         rgb ks (j["scene"]["objects"]["spheres"][i]["material"]["specular"]["r"],
-	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["g"],
-	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["b"]);
+        	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["g"],
+        	                    j["scene"]["objects"]["spheres"][i]["material"]["specular"]["b"]);
 
 	                    rgb ka (j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["r"],
-	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["g"],
-	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["b"]);
+        	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["g"],
+        	                    j["scene"]["objects"]["spheres"][i]["material"]["ambient"]["b"]);
 
                         rgb km (j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["r"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["g"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["b"]);
+                                j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["mirrow"]["b"]);
 
 	                    auto a = j["scene"]["objects"]["spheres"][i]["material"]["alpha"];
 
@@ -157,8 +167,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
-                        j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
                         
                         auto fuzz = j["scene"]["objects"]["spheres"][i]["material"]["fuzz"];
                         mat = new Metal(kd, fuzz);
@@ -171,23 +181,23 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         float angles_;
 
                         for(int k=0; k<j["scene"]["objects"]["spheres"][i]["material"]["gradient"].size(); k++){
-                            gradient_=rgb(j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["r"],
+                            gradient_ = rgb(j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["r"],
                                             j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["g"],
                                             j["scene"]["objects"]["spheres"][i]["material"]["gradient"][k]["b"]);
                             gradient.push_back(gradient_);
 
                             angles_=j["scene"]["objects"]["spheres"][i]["material"]["angles"][k]["a"];
                             
-                            angles_ = cos(angles_* PI / 180.0);
+                            angles_ = cos(deg(angles_));
                             angles.push_back(angles_);
                         }
                         mat = new Toon(gradient, angles);
                     }
                     
                 glm::vec4 center (j["scene"]["objects"]["spheres"][i]["center"]["x"],
-                j["scene"]["objects"]["spheres"][i]["center"]["y"],
-                j["scene"]["objects"]["spheres"][i]["center"]["z"], 
-                j["scene"]["objects"]["spheres"][i]["center"]["homogeneous"]);
+                                j["scene"]["objects"]["spheres"][i]["center"]["y"],
+                                j["scene"]["objects"]["spheres"][i]["center"]["z"], 
+                                j["scene"]["objects"]["spheres"][i]["center"]["homogeneous"]);
 
                 auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
 
@@ -223,27 +233,27 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                     if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "lambertian"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
                         
                         mat = new Lambertian(kd);
                     }
                     else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
                         
                         rgb ks (j["scene"]["objects"]["triangles"][i]["material"]["specular"]["r"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["specular"]["g"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["specular"]["b"]);
+                                j["scene"]["objects"]["triangles"][i]["material"]["specular"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["specular"]["b"]);
 
                         rgb ka (j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["r"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["g"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["b"]);
+                                j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["ambient"]["b"]);
 
                         rgb km (j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["r"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["g"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["b"]);
+                                j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["mirrow"]["b"]);
 
                         auto a = j["scene"]["objects"]["triangles"][i]["material"]["alpha"];
 
@@ -251,8 +261,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     }
                     else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "metal"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
-                        j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);                        
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);                        
                         
                         auto fuzz = j["scene"]["objects"]["triangles"][i]["material"]["fuzz"];
                         mat = new Metal(kd, fuzz);
@@ -265,7 +275,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         float angles_;
 
                         for(int k=0; k<j["scene"]["objects"]["triangles"][i]["material"]["gradient"].size(); k++){
-                            gradient_=rgb(j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["r"],
+                            gradient_ = rgb(j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["r"],
                                             j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["g"],
                                             j["scene"]["objects"]["triangles"][i]["material"]["gradient"][k]["b"]);
                             gradient.push_back(gradient_);
@@ -279,19 +289,19 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     }
                     
                 glm::vec4 v0 (j["scene"]["objects"]["triangles"][i]["v0"]["x"],
-                j["scene"]["objects"]["triangles"][i]["v0"]["y"],
-                j["scene"]["objects"]["triangles"][i]["v0"]["z"],
-                j["scene"]["objects"]["triangles"][i]["v0"]["homogeneous"]);
+                            j["scene"]["objects"]["triangles"][i]["v0"]["y"],
+                            j["scene"]["objects"]["triangles"][i]["v0"]["z"],
+                            j["scene"]["objects"]["triangles"][i]["v0"]["homogeneous"]);
 
                 glm::vec4 v1 (j["scene"]["objects"]["triangles"][i]["v1"]["x"],
-                j["scene"]["objects"]["triangles"][i]["v1"]["y"],
-                j["scene"]["objects"]["triangles"][i]["v1"]["z"],
-                j["scene"]["objects"]["triangles"][i]["v1"]["homogeneous"]);
+                            j["scene"]["objects"]["triangles"][i]["v1"]["y"],
+                            j["scene"]["objects"]["triangles"][i]["v1"]["z"],
+                            j["scene"]["objects"]["triangles"][i]["v1"]["homogeneous"]);
 
                 glm::vec4 v2 (j["scene"]["objects"]["triangles"][i]["v2"]["x"],
-                j["scene"]["objects"]["triangles"][i]["v2"]["y"],
-                j["scene"]["objects"]["triangles"][i]["v2"]["z"],
-                j["scene"]["objects"]["triangles"][i]["v2"]["homogeneous"]);
+                            j["scene"]["objects"]["triangles"][i]["v2"]["y"],
+                            j["scene"]["objects"]["triangles"][i]["v2"]["z"],
+                            j["scene"]["objects"]["triangles"][i]["v2"]["homogeneous"]);
 
                 glm::mat4 transformations = glm::mat4(1.0f);
 
@@ -312,16 +322,24 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         else if (j["scene"]["objects"]["triangles"][i]["transformation"][k]["type"] == "rotate")
                         {                           
                             // The rotation angles for each axis.
-                            //glm::vec3 rotate_factor ( (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["x"]),
-                            //                          (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["y"]),
-                            //                          (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["z"]));
+                            glm::vec3 rotate_factor ( (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["x"]),
+                                                      (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["y"]),
+                                                      (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["z"]));
+ 
+                            glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.z) , glm::vec3 (0.0f,0.0f,1.0f) );
+                            glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.y) , glm::vec3 (0.0f,1.0f,0.0f) );
+                            glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.x) , glm::vec3 (1.0f,0.0f,0.0f) );
 
-                            glm::vec3 rotate_factor( 45.0_deg, 30.0_deg, 15.0_deg ); 
-                            glm::mat4 rotate = glm::rotate(
-                                    glm::mat4(1.0f), // Identity.
-                                    rotate_factor.z, glm::vec3 (0.0f,0.0f,1.0f) );
-                           
-                            transformations  = rotate * transformations;
+                            transformations  = rotateX * rotateY *rotateZ * transformations;
+                        }
+                        else if (j["scene"]["objects"]["triangles"][i]["transformation"][k]["type"] == "scale")
+                        {                           
+                            // The rotation angles for each axis.
+                            float scale_factor = j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"];
+ 
+                            glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3 (scale_factor,scale_factor,scale_factor) );
+
+                            transformations  = scale * transformations;
                         }
                     }
                 
