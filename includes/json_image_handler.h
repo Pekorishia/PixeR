@@ -38,6 +38,7 @@
 
 #include "sphere.h"
 #include "triangle_object.h"
+#include "plane.h"
 
 #include "../utility/json.hpp"
 // vec3, vec4, ivec4, mat4
@@ -128,8 +129,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
     // Scene Creation
     int qtd_sphere = j["scene"]["objects"]["spheres"].size();
     int qtd_triangle = j["scene"]["objects"]["triangles"].size();
+    int qtd_plane = j["scene"]["objects"]["plane"].size();   
 
-    Object *list[qtd_triangle + qtd_sphere];
+    Object *list[qtd_triangle + qtd_sphere + qtd_plane];
 
         // Spheres creation
             for(int i=0; i<j["scene"]["objects"]["spheres"].size(); i++) {
@@ -199,7 +201,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["spheres"][i]["center"]["z"], 
                                 j["scene"]["objects"]["spheres"][i]["center"]["homogeneous"]);
 
-                auto radius = j["scene"]["objects"]["spheres"][i]["radius"];
+                float radius = j["scene"]["objects"]["spheres"][i]["radius"];
 
                 glm::mat4 transformations = glm::mat4(1.0f);
 
@@ -216,6 +218,31 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                     translate_factor);
                            
                             transformations  = translate * transformations;
+                        }
+                        else if(j["scene"]["objects"]["spheres"][i]["transformation"][k]["type"] == "rotate")
+                        {
+                            //glm::vec3 center_ = -center;
+                            glm::mat4 translateA = glm::translate(glm::mat4(1.0f), glm::vec3(-center));
+
+                            glm::vec3 rotate_factor ( (j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"]["x"]),
+                                                      (j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"]["y"]),
+                                                      (j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"]["z"]));
+ 
+                            glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.z) , glm::vec3 (0.0f,0.0f,1.0f) );
+                            glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.y) , glm::vec3 (0.0f,1.0f,0.0f) );
+                            glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.x) , glm::vec3 (1.0f,0.0f,0.0f) );
+
+                            glm::mat4 translate_ = glm::translate(glm::mat4(1.0f), glm::vec3(center));
+
+                            transformations = translateA * transformations;
+                            transformations = rotateX * rotateY * rotateZ * transformations;
+                            transformations = translate_ * transformations;
+                        }
+                        else if(j["scene"]["objects"]["spheres"][i]["transformation"][k]["type"] == "scale")
+                        {
+                            float scale_factor = j["scene"]["objects"]["spheres"][i]["transformation"][k]["change"];
+
+                            radius  = scale_factor * radius;
                         }
                     }
                 
@@ -320,7 +347,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                             transformations  = translate * transformations;
                         }
                         else if (j["scene"]["objects"]["triangles"][i]["transformation"][k]["type"] == "rotate")
-                        {                           
+                        {
+                            glm::mat4 translate = glm::translate( glm::mat4(1.0f), glm::vec3(-v0.x, -v0.y,-v0.z) ); 
+
                             // The rotation angles for each axis.
                             glm::vec3 rotate_factor ( (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["x"]),
                                                       (j["scene"]["objects"]["triangles"][i]["transformation"][k]["change"]["y"]),
@@ -330,7 +359,11 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                             glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.y) , glm::vec3 (0.0f,1.0f,0.0f) );
                             glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f), deg(rotate_factor.x) , glm::vec3 (1.0f,0.0f,0.0f) );
 
-                            transformations  = rotateX * rotateY *rotateZ * transformations;
+                            glm::mat4 translate_ = glm::translate( glm::mat4(1.0f), glm::vec3(v0.x, v0.y,v0.z) ); 
+
+                            transformations = translate * transformations;
+                            transformations = rotateX * rotateY * rotateZ * transformations;
+                            transformations = translate_ * transformations;
                         }
                         else if (j["scene"]["objects"]["triangles"][i]["transformation"][k]["type"] == "scale")
                         {                           
@@ -349,6 +382,62 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                 
                 list[i] = new Triangle(mat, point3 (v0[0], v0[1], v0[2]), point3 (v1[0], v1[1], v1[2]), point3 (v2[0], v2[1], v2[2]));
             }
+
+            // Triangle creation
+            for(int i=0; i<j["scene"]["objects"]["plane"].size(); i++){
+
+                // Material creation
+                    Material *mat;
+
+                    if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "blinnphong"){
+                        rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["plane"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);
+                        
+                        rgb ks (j["scene"]["objects"]["plane"][i]["material"]["specular"]["r"],
+                                j["scene"]["objects"]["plane"][i]["material"]["specular"]["g"],
+                                j["scene"]["objects"]["plane"][i]["material"]["specular"]["b"]);
+
+                        rgb ka (j["scene"]["objects"]["plane"][i]["material"]["ambient"]["r"],
+                                j["scene"]["objects"]["plane"][i]["material"]["ambient"]["g"],
+                                j["scene"]["objects"]["plane"][i]["material"]["ambient"]["b"]);
+
+                        rgb km (j["scene"]["objects"]["plane"][i]["material"]["mirrow"]["r"],
+                                j["scene"]["objects"]["plane"][i]["material"]["mirrow"]["g"],
+                                j["scene"]["objects"]["plane"][i]["material"]["mirrow"]["b"]);
+
+                        auto a = j["scene"]["objects"]["plane"][i]["material"]["alpha"];
+
+                        mat = new BlinnPhong(kd, ks, km, ka, a);
+                    }
+                    
+                    
+                    
+                glm::vec4 v0 (j["scene"]["objects"]["plane"][i]["v0"]["x"],
+                            j["scene"]["objects"]["plane"][i]["v0"]["y"],
+                            j["scene"]["objects"]["plane"][i]["v0"]["z"],
+                            j["scene"]["objects"]["plane"][i]["v0"]["homogeneous"]);
+
+                glm::vec4 v1 (j["scene"]["objects"]["plane"][i]["v1"]["x"],
+                            j["scene"]["objects"]["plane"][i]["v1"]["y"],
+                            j["scene"]["objects"]["plane"][i]["v1"]["z"],
+                            j["scene"]["objects"]["plane"][i]["v1"]["homogeneous"]);
+
+                glm::vec4 v2 (j["scene"]["objects"]["plane"][i]["v2"]["x"],
+                            j["scene"]["objects"]["plane"][i]["v2"]["y"],
+                            j["scene"]["objects"]["plane"][i]["v2"]["z"],
+                            j["scene"]["objects"]["plane"][i]["v2"]["homogeneous"]);
+
+                glm::vec4 v3 (j["scene"]["objects"]["plane"][i]["v3"]["x"],
+                            j["scene"]["objects"]["plane"][i]["v3"]["y"],
+                            j["scene"]["objects"]["plane"][i]["v3"]["z"],
+                            j["scene"]["objects"]["plane"][i]["v3"]["homogeneous"]);
+
+
+                
+                list[i + qtd_triangle + qtd_sphere] = new Plane(mat, point3 (v0[0], v0[1], v0[2]), point3 (v1[0], v1[1], v1[2]), point3 (v2[0], v2[1], v2[2]) , point3(v3[0], v3[1], v3[2]));
+            }
+
 
         // Light creation
             Light *lum[ j["scene"]["light"].size() ];
