@@ -47,94 +47,13 @@ class Plane : public Object {
 bool Plane::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const
 {
 
-    vec3 e1, e2, h, s, q;
-    float det,inv_det,u,v;
- 
-    // e1 = (v3 - v2);
-    // e2 = (v0 - v2);
+    if (t0->hit(r_, t_min_, t_max_, ht_) || t1->hit(r_, t_min_, t_max_, ht_))
+    {
+        return true;
+    }else{
+        return false;
+    }
 
-    // h = cross(r_.get_direction(), e2);
-
-    // det = dot(e1, h);
-
-    
-
-    //     if (det > -error && det < error)
-    //         return false;
-
-    //     inv_det = 1.0/det;
-
-    //     s =  r_.get_origin() - v2;
-
-    //     u = inv_det * dot(s, h);
-
-    //     if (u < 0.0 || u > 1.0)
-    //         return false;
-
-    //     q = cross(s, e1);
-
-    //     v = inv_det * dot(r_.get_direction(), q);
-
-    //     if (v < 0.0 || u + v > 1.0)
-    //         return false;
-
-    //     float t = inv_det * dot(e2, q);
-
-    //     if (t > error && t <= t_max_) // ray intersection
-    //     {
-    //             ht_.t = t;
-    //             ht_.p =  r_.point_at(t);
-    //             ht_.normal =  unit_vector( cross(e1, e2) );  
-    //             ht_.mat = Object::material;
-    //         return true;
-    //     }
-
- 
-    e1 = (v1 - v0);
-    e2 = (v2 - v0);
-
-    h = cross(r_.get_direction(), e2);
-
-    det = dot(e1, h);
-
-    
-
-        if (det > -error && det < error)
-            return false;
-
-        inv_det = 1.0/det;
-
-        s =  r_.get_origin() - v0;
-
-        u = inv_det * dot(s, h);
-
-        if (u < 0.0 || u > 1.0)
-            return false;
-
-        q = cross(s, e1);
-
-        v = inv_det * dot(r_.get_direction(), q);
-
-        if (v < 0.0 || u + v > 1.0)
-            return false;
-
-        float t = inv_det * dot(e2, q);
-
-        if (t > error && t <= t_max_) // ray intersection
-        {
-                ht_.t = t;
-                ht_.p =  r_.point_at(t);
-                ht_.normal =  unit_vector( cross(e1, e2) );  
-                ht_.mat = Object::material;
-            return true;
-        }
-
-
-
-
-        else // This means that there is a line intersection but not a ray intersection.
-            return false;
-    
 }
 
 #endif

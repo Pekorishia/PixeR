@@ -507,7 +507,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     j["scene"]["ambient_light"]["g"],
                     j["scene"]["ambient_light"]["b"]);
 
-        world  = new Scene(list, qtd_triangle + qtd_sphere , lum, j["scene"]["light"].size(), bg, al);
+        world  = new Scene(list, qtd_triangle + qtd_sphere + qtd_plane, lum, j["scene"]["light"].size(), bg, al);
 
     // Shader creation
         if (j["shader"]["type"] == "depth"){

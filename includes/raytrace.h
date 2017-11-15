@@ -23,7 +23,7 @@ void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader 
 {   
     progressbar.reset();
     progressbar.setDimension(n_rows*n_cols);
-     // NOTICE: We loop rows from bottom to top.
+    // NOTICE: We loop rows from bottom to top.
     for ( auto row{n_rows-1} ; row >= 0 ; --row ) // Y
     {
         for( auto col{0} ; col < n_cols ; col++ ) // X
