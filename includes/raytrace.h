@@ -46,6 +46,13 @@ void Raytrace::render( std::stringstream& ss, Camera *cam, Scene *world, Shader 
             int ir = int( 255.99f * hue[rgb::R] );
             int ig = int( 255.99f * hue[rgb::G] );
             int ib = int( 255.99f * hue[rgb::B] );
+            
+
+            if( ig < 0.0f || ir < 0.0f){
+                ir =0.0f;
+               ig = 0.0f;
+               ib = 0.0f;
+            }
             ss << ir << " " << ig << " " << ib << "\n";  
             progressbar.increase();           
         }

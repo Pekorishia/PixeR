@@ -1,0 +1,117 @@
+#ifndef _Dielectrics_H_
+#define _Dielectrics_H_
+
+#include "object.h"
+#include "material.h"
+
+class Dielectrics : public Material
+{
+public:
+
+    float ref_idx;
+
+	Dielectrics(const rgb albedo_, float ri){
+		Material::albedo = albedo_;
+        ref_idx = ri;
+	}
+
+	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
+
+protected:
+
+    vec3 reflect(const vec3 v, const vec3 n) const;	
+    
+    vec3 random_in_unit_sphere() const;
+
+    bool refract(const vec3 & v, const vec3& n, float ni_over_nt, vec3& refracted) const;
+
+    float schlick(float cosine, float ref_idx) const;
+    
+};
+
+
+
+vec3 Dielectrics::random_in_unit_sphere() const
+{
+    vec3 p;
+    do {
+        p = 2.0*vec3(drand48(),drand48(),drand48()) - vec3(1,1,1);
+    }while(dot(p,p) >= 1.0);
+
+    return p;
+}
+
+
+
+vec3 Dielectrics::reflect(const vec3 v, const vec3 n) const
+{
+    float cosI = - dot(n, v);
+    return v + 2*cosI*n;
+    //i = v; 
+}
+
+
+bool Dielectrics::refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) const
+{
+    vec3 uv = unit_vector(v);
+    float dt = dot(v, n);
+    float discriminant =  1.0 - ni_over_nt*ni_over_nt * (1 -dt*dt);
+    if(discriminant > 0){
+        refracted = ni_over_nt*(v - n*dt) - n*sqrt(discriminant);
+        // float cosT = sqrt(1.0 - discriminant);
+        // refracted = ni_over_nt*v + (ni_over_nt*dt - cosT )*n;
+        return true;
+    }else
+        return false;
+}
+
+
+float Dielectrics::schlick(float cosine, float ref_idx) const {
+    float r = (1.f - ref_idx) / (1.f + ref_idx);
+    r = r * r;
+    return (r + (1.f - r) * std::pow((1.f - cosine), 5.f));
+}
+
+
+
+bool Dielectrics::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
+{
+    vec3 outward_normal, refracted ;
+    float ni_over_nt, reflect_prob, cosine;
+    vec3 reflected = reflect(r_.get_direction(), ht_.normal);
+    attenuation_ = vec3(1.0, 1.0, 1.0);
+    if(dot(r_.get_direction(), ht_.normal) > 0)
+    {        
+        outward_normal =-ht_.normal;
+        ni_over_nt = ref_idx;
+        cosine = ref_idx * dot(r_.get_direction(), ht_.normal) / r_.get_direction().length();
+    }
+    else
+    {
+        outward_normal = ht_.normal;
+        ni_over_nt = 1.0/ref_idx;
+        cosine = -dot(r_.get_direction(), ht_.normal) / r_.get_direction().length();
+    }
+
+    if(refract(r_.get_direction(), outward_normal, ni_over_nt, refracted))
+    {
+        reflect_prob = schlick(cosine, ni_over_nt);
+        scattered_ray = Ray(ht_.p, refracted);
+    }
+    else
+    {
+        reflect_prob = 1.0;
+        scattered_ray = Ray(ht_.p, reflected);
+        //return false;
+    }
+
+    if(drand48() <= reflect_prob)
+         scattered_ray = Ray(ht_.p, reflected);
+    else
+        scattered_ray = Ray(ht_.p, refracted);
+
+     return true;
+
+}
+
+#endif
