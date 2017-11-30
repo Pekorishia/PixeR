@@ -2,6 +2,7 @@
 #define _MATERIAL_H_
 
 #include "object.h"
+#include "texture.h"
 #include "scene.h"
 #include "../utility/ray.h"
 #include "../utility/vec3.h"
@@ -15,7 +16,7 @@ class Material{
 	A posição do olho define a intessidade. 
 	Depende da posição da camera, da luz e da normal.*/
 
-		rgb albedo; //Kd o difuso.
+		Texture *albedo; //Kd o difuso.
 		rgb ks;
 		rgb ka;
 		rgb km;

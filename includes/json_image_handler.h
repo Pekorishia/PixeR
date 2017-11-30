@@ -15,6 +15,9 @@
 #include "raytrace.h"
 #include "background.h"
 
+#include "texture.h"
+#include "constant_texture.h"
+#include "checker_texture.h"
 
 #include "light.h"
 #include "spot_light.h"
@@ -149,7 +152,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
                         
-                        mat = new Lambertian(kd);
+                        mat = new Lambertian(new Constant_texture(kd));
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
@@ -170,7 +173,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
 	                    auto a = j["scene"]["objects"]["spheres"][i]["material"]["alpha"];
 
-                        mat = new BlinnPhong(kd, ks, km, ka, a);
+                        mat = new BlinnPhong(new Constant_texture(kd), ks, km, ka, a);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "metal"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
@@ -178,7 +181,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
                         
                         auto fuzz = j["scene"]["objects"]["spheres"][i]["material"]["fuzz"];
-                        mat = new Metal(kd, fuzz);
+                        mat = new Metal(new Constant_texture(kd), fuzz);
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "dielectrics"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
@@ -186,7 +189,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
                         
                         auto ref_idx = j["scene"]["objects"]["spheres"][i]["material"]["ref_idx"];
-                        mat = new Dielectrics(kd, ref_idx);
+                        mat = new Dielectrics(new Constant_texture(kd), ref_idx);
                     }
                     else if(j["scene"]["objects"]["spheres"][i]["material"]["type"] == "toon"){
                         std::vector<rgb> gradient;
@@ -276,7 +279,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
                                 j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
                         
-                        mat = new Lambertian(kd);
+                        mat = new Lambertian(new Constant_texture(kd));
                     }
                     else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
@@ -297,7 +300,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                         auto a = j["scene"]["objects"]["triangles"][i]["material"]["alpha"];
 
-                        mat = new BlinnPhong(kd, ks, km, ka, a);
+                        mat = new BlinnPhong(new Constant_texture(kd), ks, km, ka, a);
                     }
                     else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "metal"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
@@ -305,7 +308,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);                        
                         
                         auto fuzz = j["scene"]["objects"]["triangles"][i]["material"]["fuzz"];
-                        mat = new Metal(kd, fuzz);
+                        mat = new Metal(new Constant_texture(kd), fuzz);
                     }
                     else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "dielectrics"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
@@ -313,7 +316,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);                        
                         
                         auto ref_idx = j["scene"]["objects"]["triangles"][i]["material"]["ref_idx"];
-                        mat = new Dielectrics(kd, ref_idx);
+                        mat = new Dielectrics(new Constant_texture(kd), ref_idx);
                     }
                     else if(j["scene"]["objects"]["triangles"][i]["material"]["type"] == "toon"){
                         std::vector<rgb> gradient;
@@ -429,14 +432,17 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                         auto a = j["scene"]["objects"]["plane"][i]["material"]["alpha"];
 
-                        mat = new BlinnPhong(kd, ks, km, ka, a);
+                        mat = new BlinnPhong(new Constant_texture(kd), ks, km, ka, a);
                     }
                     else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "lambertian"){
                         rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["g"],
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);
+
+                        rgb kd1 (1,1,1);
+
                         
-                        mat = new Lambertian(kd);
+                        mat = new Lambertian(new Checker_texture(new Constant_texture(kd), new Constant_texture(kd1)));
                     }
                     else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "metal"){
                         rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
@@ -444,7 +450,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);                        
                         
                         auto fuzz = j["scene"]["objects"]["triangles"][i]["material"]["fuzz"];
-                        mat = new Metal(kd, fuzz);
+                        mat = new Metal(new Constant_texture(kd), fuzz);
                     }
                     else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "dielectrics"){
                         rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
@@ -452,7 +458,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);                        
                         
                         auto ref_idx = j["scene"]["objects"]["plane"][i]["material"]["ref_idx"];
-                        mat = new Dielectrics(kd, ref_idx);
+                        mat = new Dielectrics(new Constant_texture(kd), ref_idx);
                     }
                     else if(j["scene"]["objects"]["plane"][i]["material"]["type"] == "toon"){
                         std::vector<rgb> gradient;
@@ -527,7 +533,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                         auto a = j["scene"]["objects"]["ellipsoid"][i]["material"]["alpha"];
 
-                        mat = new BlinnPhong(kd, ks, km, ka, a);
+                        mat = new BlinnPhong(new Constant_texture(kd), ks, km, ka, a);
                     }
                     
                     

@@ -3,12 +3,14 @@
 
 #include "object.h"
 #include "material.h" 
+#include "texture.h"
+#include "constant_texture.h"
 
 class Lambertian: public Material 
 {
 	public:
 
-		Lambertian(const rgb albedo_)
+		Lambertian(Texture *albedo_)
 		{
 			Material::albedo = albedo_;
 			Material::ks = rgb(0,0,0);
@@ -39,7 +41,7 @@ bool Lambertian::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuat
 	vec3 p_ = random_in_unit_sphere();
     vec3 target = ht_.p + ht_.normal + p_;
     scattered_ray = Ray(ht_.p, target - ht_.p);
-    attenuation_ = Material::albedo;
+    attenuation_ = Material::albedo->value(0,0, ht_.p);
 
     return true;
 }

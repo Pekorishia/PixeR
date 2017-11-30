@@ -2,6 +2,7 @@
 #define _BlinnPhong_H_
 
 #include "object.h"
+#include "texture.h"
 #include "material.h"
 #include "shader.h" 
 
@@ -9,7 +10,7 @@ class BlinnPhong: public Material
 {
 	public:
 
-		BlinnPhong(const rgb albedo_, const rgb ks_,  const rgb km_, const rgb ka_, float alpha_)
+		BlinnPhong(Texture *albedo_, const rgb ks_,  const rgb km_, const rgb ka_, float alpha_)
 		{
 			Material::albedo = albedo_;
 			Material::ks = ks_;

@@ -2,6 +2,7 @@
 #define _Dielectrics_H_
 
 #include "object.h"
+#include "texture.h"
 #include "material.h"
 
 class Dielectrics : public Material
@@ -10,7 +11,7 @@ public:
 
     float ref_idx;
 
-	Dielectrics(const rgb albedo_, float ri){
+	Dielectrics(Texture *albedo_, float ri){
 		Material::albedo = albedo_;
         ref_idx = ri;
 	}

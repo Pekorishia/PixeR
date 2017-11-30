@@ -55,7 +55,7 @@ rgb BlinnphongShader::color( const Ray & r_, float t_min, float t_max, int depth
         	{
 	            // Difuse component
                 l = unit_vector(l);
-	            auto difuse = ht.mat->albedo * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->getIntensity();
+	            auto difuse = ht.mat->albedo->value(0,0, vec3(0,0,0)) * std::max(0.f, dot(l, ht.normal)) * world->lum[i]->getIntensity();
 	            
 	            auto h = unit_vector(l + v); 
 

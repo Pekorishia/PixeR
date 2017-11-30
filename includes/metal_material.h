@@ -2,6 +2,7 @@
 #define _METAL_H_
 
 #include "object.h"
+#include "texture.h"
 #include "material.h"
 
 class Metal : public Material
@@ -10,7 +11,7 @@ public:
 
     float fuzziness;
 
-	Metal(const rgb albedo_, float fuzz){
+	Metal( Texture *albedo_, float fuzz){
 		Material::albedo = albedo_;
         fuzziness = fuzz;
 	}
@@ -48,7 +49,7 @@ bool Metal::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_,
 {
     vec3 reflected = reflect(unit_vector(r_.get_direction()), ht_.normal);
     scattered_ray = Ray(ht_.p, reflected + fuzziness*random_in_unit_sphere());
-    attenuation_ = Material::albedo;
+    attenuation_ = Material::albedo->value(0,0, vec3(0,0,0));
 
     return (dot(scattered_ray.get_direction(), ht_.normal) > 0);
 }
