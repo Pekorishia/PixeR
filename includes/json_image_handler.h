@@ -40,8 +40,9 @@
 #include "parallel_camera.h"
 
 
-#include "sphere.h"
+#include "mesh.h"
 #include "plane.h"
+#include "sphere.h"
 #include "ellipsoid.h"
 #include "triangle_object.h"
 
@@ -136,8 +137,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
     int qtd_triangle = j["scene"]["objects"]["triangles"].size();
     int qtd_plane = j["scene"]["objects"]["plane"].size();
     int qtd_ellipsoid = j["scene"]["objects"]["ellipsoid"].size();
+    int qtd_mesh= j["scene"]["objects"]["mesh"].size();
 
-    int qtd_obj = qtd_triangle + qtd_sphere + qtd_plane;// + qtd_ellipsoid;
+    int qtd_obj = qtd_triangle + qtd_sphere + qtd_plane + qtd_mesh;// + qtd_ellipsoid;
 
     Object *list[qtd_obj];
 
@@ -551,6 +553,60 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                 
                 list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid] = new Ellipsoid(mat, point3 (center[0], center[1], center[2]) , point3(size[0], size[1], size[2]));
+            }
+
+            // mesh creation
+            for(int i=0; i<j["scene"]["objects"]["mesh"].size(); i++){
+
+                // Material creation
+                    Material *mat;
+                    vector<point3> points;
+                    vector<Triangle*> triangles;
+
+                    if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "lambertian"){
+                        rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);                      
+                    
+                        mat = new Lambertian(new Constant_texture(kd) );
+                    }
+                    
+                    std::string file_mesh = j["scene"]["objects"]["mesh"][i]["name_file"];
+                    float x, y, z;
+                    string a;
+                    ifstream arq;  
+                    arq.open ("../scenes_files/" + file_mesh);
+                    if (arq.is_open() && arq.good())
+                    {
+                        while(!arq.fail())
+                        {
+                            arq >> a;
+
+                            if(a == "v"){
+                                arq >> x;
+                                arq >> y;
+                                arq >> z;
+
+                                points.push_back(point3(x, y, z));
+
+                            }
+
+                            if (a == "f"){
+                                float p1, p2, p3;
+                                arq >> p1;
+                                arq >> p2;
+                                arq >> p3;
+
+                                triangles.push_back(new Triangle(mat, points[p1-1], points[p2-1], points[p3-1]));
+                            }
+                        }
+                        
+
+                        arq.close();
+                    }
+
+                
+                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane] = new Mesh(mat, triangles);
             }
 
 
