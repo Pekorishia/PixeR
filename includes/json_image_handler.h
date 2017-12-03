@@ -22,6 +22,7 @@
 #include "light.h"
 #include "spot_light.h"
 #include "point_light.h"
+#include "diffuse_light.h"
 #include "directional_light.h"
 
 #include "toon_shader.h"
@@ -153,8 +154,16 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
+
                         
                         mat = new Lambertian(new Constant_texture(kd));
+                    }
+                    else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "diffuse_light"){
+                        rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
+                        
+                        mat = new Diffuse_light(new Constant_texture(kd));
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
@@ -282,6 +291,13 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
                         
                         mat = new Lambertian(new Constant_texture(kd));
+                    }
+                    else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "diffuse_light"){
+                        rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["b"]);
+                        
+                        mat = new Diffuse_light(new Constant_texture(kd));
                     }
                     else if (j["scene"]["objects"]["triangles"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["triangles"][i]["material"]["albedo"]["r"],
@@ -560,7 +576,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                 // Material creation
                     Material *mat;
-                    vector<point3> points;
+                    vector<glm::vec4> points;
                     vector<Triangle*> triangles;
 
                     if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "lambertian"){
@@ -570,12 +586,56 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     
                         mat = new Lambertian(new Constant_texture(kd) );
                     }
+                    else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "blinnphong"){
+                        rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);
+                        
+                        rgb ks (j["scene"]["objects"]["mesh"][i]["material"]["specular"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["specular"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["specular"]["b"]);
+
+                        rgb ka (j["scene"]["objects"]["mesh"][i]["material"]["ambient"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["ambient"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["ambient"]["b"]);
+
+                        rgb km (j["scene"]["objects"]["mesh"][i]["material"]["mirrow"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["mirrow"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["mirrow"]["b"]);
+
+                        auto a = j["scene"]["objects"]["mesh"][i]["material"]["alpha"];
+
+                        mat = new BlinnPhong(new Constant_texture(kd), ks, km, ka, a);
+                    }
                     
                     std::string file_mesh = j["scene"]["objects"]["mesh"][i]["name_file"];
                     float x, y, z;
+                    glm::mat4 transformations = glm::mat4(1.0f);
                     string a;
                     ifstream arq;  
-                    arq.open ("../scenes_files/" + file_mesh);
+                    glm::mat4 scale ;
+                    arq.open ("../scenes_files/mesh/" + file_mesh);
+
+                    for(int k=0; k< j["scene"]["objects"]["mesh"][i]["transformation"].size(); k++) 
+                    {
+                        if (j["scene"]["objects"]["mesh"][i]["transformation"][k]["type"] == "translate")
+                        {
+                            glm::vec3 translate_factor ( j["scene"]["objects"]["mesh"][i]["transformation"][k]["change"]["x"],
+                                                         j["scene"]["objects"]["mesh"][i]["transformation"][k]["change"]["y"],
+                                                         j["scene"]["objects"]["mesh"][i]["transformation"][k]["change"]["z"]);
+                            glm::mat4 translate = glm::translate( glm::mat4(1.0f),  translate_factor);
+                           
+                            transformations  = translate * transformations;
+                        }
+                        else if (j["scene"]["objects"]["mesh"][i]["transformation"][k]["type"] == "scale")
+                        {
+                            float scale_factor = j["scene"]["objects"]["mesh"][i]["transformation"][k]["change"];
+             
+                             scale = glm::scale(glm::mat4(1.0f), glm::vec3 (scale_factor,scale_factor,scale_factor) );
+
+                            transformations  = scale * transformations;
+                        }
+                    }
                     if (arq.is_open() && arq.good())
                     {
                         while(!arq.fail())
@@ -587,17 +647,32 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 arq >> y;
                                 arq >> z;
 
-                                points.push_back(point3(x, y, z));
+                                glm::vec4 aux = glm::vec4(x, y, z, 1.f);
+
+                                aux = transformations * aux;
+
+                                points.push_back(aux);
 
                             }
-
-                            if (a == "f"){
+                            else if (a == "f"){
                                 float p1, p2, p3;
                                 arq >> p1;
                                 arq >> p2;
                                 arq >> p3;
 
-                                triangles.push_back(new Triangle(mat, points[p1-1], points[p2-1], points[p3-1]));
+                                // Transformation Creation
+
+                            
+                                // points[p1-1] = transformations * points[p1-1];
+                                // points[p2-1] = transformations * points[p2-1];
+                                // points[p3-1] = transformations * points[p3-1];
+
+                                
+
+                                triangles.push_back(new Triangle(mat, point3(points[p1-1][0], points[p1-1][1],points[p1-1][2]), 
+                                                                      point3(points[p2-1][0], points[p2-1][1],points[p2-1][2]),
+                                                                      point3(points[p3-1][0], points[p3-1][1],points[p3-1][2])
+                                                                ));
                             }
                         }
                         

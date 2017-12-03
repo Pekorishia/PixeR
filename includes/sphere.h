@@ -44,9 +44,14 @@ bool Sphere::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_
     // Third, calculate the delta (b² - 4ac)    
     auto delta = b * b - 4 * a * c;     
 
+
     // Last, return the t component if the ray hit the sphere 
     if (delta >= 0){
         auto t = (-b - sqrt(delta))/(2*a);
+
+        float x = r_.get_origin().x() + t* r_.get_direction().x();
+        float y = r_.get_origin().y() + t* r_.get_direction().y();
+
 
         if (t < t_max_ && t > t_min_){
             ht_.t = t;
