@@ -31,7 +31,21 @@ class Triangle : public Object {
 
         //=== Access methods
         virtual bool hit( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const;
+
+        point3 get_midpoint()const;
 };
+
+
+
+point3 Triangle::get_midpoint() const
+{
+    float xB = (v0.x() + v1.x() + v2.x())/3;
+    float yB = (v0.y() + v1.y() + v2.y())/3;
+    float zB = (v0.z() + v1.z() + v2.z())/3;
+
+    return point3(xB, yB, zB);
+}
+
 
 /*  
  * Returns true if the ray hits the Triangle  or false otherwise  

@@ -1,12 +1,12 @@
 {
     "image": { 
-                "name": "dielectrics.ppm",
+                "name": "atividade.ppm",
                 "codification": "ascii",
-                "width": 900,
-                "height": 450,
+                "width": 450,
+                "height": 225,
                 "samples": 64,
-                "ray_depth": 15,
-                "t_min": 0.001,
+                "ray_depth": 25,
+                "t_min": 0.00001,
                 "t_max": "infinity"
             },
     "shader": {
@@ -16,12 +16,12 @@
                 "type":"pespectiva",
                 "origin":{
                             "x": 0,
-                            "y": 0.55,
+                            "y": 0,
                             "z": 4
                         },
                 "lookAt":{
                             "x": 0,
-                            "y": 0.4,
+                            "y": 0,
                             "z": -1
                         },
                 "upVector":{
@@ -108,15 +108,15 @@
                                         }
                         },
             "objects": {
-                        "spheres":[
+
+                        "spheres": [
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
-                                                    
+                                                        "type" : "dielectrics",
                                                         "albedo": {
-                                                                    "r": 0.2,
-                                                                    "g": 0.9,
-                                                                    "b": 0.2
+                                                                    "r": 1,
+                                                                    "g": 1,
+                                                                    "b": 1
                                                                 },
                                                         "specular": {
                                                                     "r": 0.9,
@@ -124,9 +124,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0.0,
+                                                                    "g": 0.0,
+                                                                    "b": 0.0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -135,24 +135,64 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx": 2.4
+                                                        "ref_idx":1.2
                                                     },
                                         "center": {
-                                                        "x": -0.7,
-                                                        "y": 0.5,
+                                                        "x": 1,
+                                                        "y": -0,
                                                         "z": -1,
                                                         "homogeneous": 1
                                                     }, 
                                         "radius": 0.5
+
                                     },
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
-                                                    
+                                                        "type" : "dielectrics",
                                                         "albedo": {
+                                                                    "r": 1,
+                                                                    "g": 1,
+                                                                    "b": 1
+                                                                },
+                                                        "specular": {
                                                                     "r": 0.9,
+                                                                    "g": 0.9,
+                                                                    "b": 0.9
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0.0,
+                                                                    "g": 0.0,
+                                                                    "b": 0.0
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
                                                                     "g": 0.1,
                                                                     "b": 0.1
+                                                                },
+                                                        "alpha": 64,
+                                                        "fuzz": 0.0,
+                                                        "ref_idx":1.2
+                                                    },
+                                        "center": {
+                                                        "x": 1,
+                                                        "y": -0,
+                                                        "z": -1,
+                                                        "homogeneous": 1
+                                                    }, 
+                                        "radius": -0.48
+
+                                    }
+                                ],
+
+                        "mesh":[
+                                    {
+                                        "material": {
+                                                        "type" : "metal",
+                                                    
+                                                        "albedo": {
+                                                                    "r": 0.8,
+                                                                    "g": 0.8,
+                                                                    "b": 0.8
                                                                 },
                                                         "specular": {
                                                                     "r": 0.9,
@@ -173,14 +213,27 @@
                                                         "fuzz": 0.0,
                                                         "ref_idx": 2.4
                                                     },
-                                        "center": {
-                                                        "x": 0.3,
-                                                        "y": 0.5,
-                                                        "z": -2,
-                                                        "homogeneous": 1
-                                                    }, 
-                                        "radius": 0.5
-                                    },
+                                        "name_file": "bunny.obj",
+                                        "transformation": [
+                                                            {
+                                                                "type": "translate",
+                                                                "change": {
+                                                                            "x": 0,
+                                                                            "y": -0.15,
+                                                                            "z": -0.5
+                                                                        }
+                                                            },
+                                                            {
+                                                                "type": "scale",
+                                                                "change": 4
+                                                            }
+                                                        ]
+                                    }
+
+                        ],
+                        
+                        "plane": [
+
                                     {
                                         "material": {
                                                         "type" : "diffuse_light",
@@ -208,17 +261,32 @@
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
                                                         "ref_idx": 2.4
-                                                    },
-                                        "center": {
-                                                        "x": 1,
-                                                        "y": 0.5,
-                                                        "z": -1,
-                                                        "homogeneous": 1
                                                     }, 
-                                        "radius": 0.5
-                                    }
-                        ],
-                        "plane": [
+                                        "v0": {
+                                                "x": -1,
+                                                "y": 0.6,
+                                                "z": -1,
+                                                "homogeneous": 1
+                                            }, 
+                                        "v1": {
+                                                "x": 1,
+                                                "y": 0.6,
+                                                "z": -1,
+                                                "homogeneous": 1
+                                            }, 
+                                        "v2": {
+                                                "x": 1,
+                                                "y": 0.6,
+                                                "z": -3,
+                                                "homogeneous": 1
+                                            },  
+                                        "v3": {
+                                                "x" : -1,
+                                                "y" : 0.6,
+                                                "z" : -3,
+                                                "homogeneous": 1
+                                        }
+                                    },
                                     {
                                         "material": {
                                                         "type" : "lambertian",
@@ -249,25 +317,25 @@
                                                     }, 
                                         "v0": {
                                                 "x": -100,
-                                                "y": -0,
+                                                "y": -0.5,
                                                 "z": 100,
                                                 "homogeneous": 1
                                             }, 
                                         "v1": {
                                                 "x": 100,
-                                                "y": -0,
+                                                "y": -0.5,
                                                 "z": 100,
                                                 "homogeneous": 1
                                             }, 
                                         "v2": {
                                                 "x": 100,
-                                                "y": -0,
+                                                "y": -0.5,
                                                 "z": -100,
                                                 "homogeneous": 1
                                             },  
                                         "v3": {
                                                 "x" : -100,
-                                                "y" : -0,
+                                                "y" : -0.5,
                                                 "z" : -100,
                                                 "homogeneous": 1
                                         }

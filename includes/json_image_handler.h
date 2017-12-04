@@ -40,7 +40,8 @@
 #include "perspective_camera.h"
 #include "parallel_camera.h"
 
-
+//#include "box.h"
+#include "cube.h"
 #include "mesh.h"
 #include "plane.h"
 #include "sphere.h"
@@ -139,8 +140,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
     int qtd_plane = j["scene"]["objects"]["plane"].size();
     int qtd_ellipsoid = j["scene"]["objects"]["ellipsoid"].size();
     int qtd_mesh= j["scene"]["objects"]["mesh"].size();
+    int qtd_cube= j["scene"]["objects"]["cube"].size();
 
-    int qtd_obj = qtd_triangle + qtd_sphere + qtd_plane + qtd_mesh;// + qtd_ellipsoid;
+    int qtd_obj = qtd_triangle + qtd_sphere + qtd_plane + qtd_mesh + qtd_ellipsoid + qtd_cube;
 
     Object *list[qtd_obj];
 
@@ -457,7 +459,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["g"],
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);
 
-                        rgb kd1 (1,1,1);
+                        rgb kd1 = rgb(1,1,1);
 
                         
                         mat = new Lambertian(new Checker_texture(new Constant_texture(kd), new Constant_texture(kd1)));
@@ -477,6 +479,13 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         
                         auto ref_idx = j["scene"]["objects"]["plane"][i]["material"]["ref_idx"];
                         mat = new Dielectrics(new Constant_texture(kd), ref_idx);
+                    }
+                    else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "diffuse_light"){
+                        rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["plane"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);
+                        
+                        mat = new Diffuse_light(new Constant_texture(kd));
                     }
                     else if(j["scene"]["objects"]["plane"][i]["material"]["type"] == "toon"){
                         std::vector<rgb> gradient;
@@ -571,6 +580,38 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                 list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid] = new Ellipsoid(mat, point3 (center[0], center[1], center[2]) , point3(size[0], size[1], size[2]));
             }
 
+            // cube creation
+            for(int i=0; i<j["scene"]["objects"]["cube"].size(); i++){
+
+                // Material creation
+                    Material *mat;
+
+                    if (j["scene"]["objects"]["cube"][i]["material"]["type"] == "lambertian"){
+                        rgb kd (j["scene"]["objects"]["cube"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["cube"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["cube"][i]["material"]["albedo"]["b"]);
+                        
+                        
+                        mat = new Lambertian(new Constant_texture(kd));
+                    }
+                    
+                    
+                    
+                glm::vec4 mini (j["scene"]["objects"]["cube"][i]["min"]["x"],
+                            j["scene"]["objects"]["cube"][i]["min"]["y"],
+                            j["scene"]["objects"]["cube"][i]["min"]["z"],
+                            j["scene"]["objects"]["cube"][i]["min"]["homogeneous"]);
+
+                glm::vec4 maxi (j["scene"]["objects"]["cube"][i]["max"]["x"],
+                            j["scene"]["objects"]["cube"][i]["max"]["y"],
+                            j["scene"]["objects"]["cube"][i]["max"]["z"],
+                            j["scene"]["objects"]["cube"][i]["max"]["homogeneous"]);
+
+
+                
+                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid+ qtd_cube] = new Cube(mat, point3 (mini[0], mini[1], mini[2]) , point3(maxi[0], maxi[1], maxi[2]));
+            }
+
             // mesh creation
             for(int i=0; i<j["scene"]["objects"]["mesh"].size(); i++){
 
@@ -607,9 +648,20 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                         mat = new BlinnPhong(new Constant_texture(kd), ks, km, ka, a);
                     }
+                    else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "metal"){
+                        rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto fuzz = j["scene"]["objects"]["mesh"][i]["material"]["fuzz"];
+                        mat = new Metal(new Constant_texture(kd), fuzz);
+                    }
                     
                     std::string file_mesh = j["scene"]["objects"]["mesh"][i]["name_file"];
                     float x, y, z;
+                    float xmin = INFINITY, xmax = -INFINITY;
+                    float ymin = INFINITY, ymax = -INFINITY;
+                    float zmin = INFINITY, zmax = -INFINITY;
                     glm::mat4 transformations = glm::mat4(1.0f);
                     string a;
                     ifstream arq;  
@@ -647,6 +699,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 arq >> y;
                                 arq >> z;
 
+                                xmin = min(x, xmin);
+                                ymin = min(y, ymin);
+                                zmin = min(z, zmin);
+
+                                xmax = max(x, xmax);
+                                ymax = max(y, ymax);
+                                zmax = max(z, zmax);
+
                                 glm::vec4 aux = glm::vec4(x, y, z, 1.f);
 
                                 aux = transformations * aux;
@@ -680,8 +740,17 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         arq.close();
                     }
 
+                    glm::vec4 mini1 = glm::vec4(xmin, ymin, zmin,1);
+                    glm::vec4 maxi1 = glm::vec4(xmax, ymax, zmax, 1);
+
+                    mini1 = transformations * mini1;
+                    maxi1 = transformations * maxi1;
+
+                    point3 mini = point3(mini1[0], mini1[1], mini1[2]);
+                    point3 maxi = point3(maxi1[0], maxi1[1], maxi1[2]);
+
                 
-                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane] = new Mesh(mat, triangles);
+                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane + qtd_cube] = new Mesh(mat, triangles, new Cube(mat, mini, maxi));
             }
 
 
