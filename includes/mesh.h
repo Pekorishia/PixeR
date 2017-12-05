@@ -13,7 +13,7 @@ class Mesh : public Object {
 
         Cube* bbox; 
 
-        KDNode* node = new KDNode();
+        KDNode* node = NULL;
 
         vector<Triangle*> triangles;
 
@@ -25,12 +25,14 @@ class Mesh : public Object {
             triangles = triangles_;
             bbox = bbox_;
             node = node->build(triangles_, 0);
+            
 
         }
 
+        void insertNode() const;
+
         virtual bool hit( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const;
 };
-
 
 bool Mesh::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const
 {
@@ -44,11 +46,10 @@ bool Mesh::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ )
     // return false;
 
     
-    bool result = false;
     if(bbox->hit(r_, t_min_, t_max_, ht_)){
-        result = node->hit(node, r_, t_min_, t_max_, ht_);
+        return node->hit(node, r_, t_min_, t_max_, ht_);
     }
-    return result;
+    return false;
 }
 
 #endif

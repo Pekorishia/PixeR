@@ -40,7 +40,7 @@
 #include "perspective_camera.h"
 #include "parallel_camera.h"
 
-//#include "box.h"
+#include "box.h"
 #include "cube.h"
 #include "mesh.h"
 #include "plane.h"
@@ -141,8 +141,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
     int qtd_ellipsoid = j["scene"]["objects"]["ellipsoid"].size();
     int qtd_mesh= j["scene"]["objects"]["mesh"].size();
     int qtd_cube= j["scene"]["objects"]["cube"].size();
+    int qtd_box= j["scene"]["objects"]["box"].size();
 
-    int qtd_obj = qtd_triangle + qtd_sphere + qtd_plane + qtd_mesh + qtd_ellipsoid + qtd_cube;
+    int qtd_obj = qtd_triangle + qtd_sphere + qtd_plane + qtd_mesh + qtd_ellipsoid + qtd_cube + qtd_box;
 
     Object *list[qtd_obj];
 
@@ -577,11 +578,12 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
 
                 
-                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid] = new Ellipsoid(mat, point3 (center[0], center[1], center[2]) , point3(size[0], size[1], size[2]));
+                list[i + qtd_triangle + qtd_sphere + qtd_plane] = new Ellipsoid(mat, point3 (center[0], center[1], center[2]) , point3(size[0], size[1], size[2]));
             }
 
             // cube creation
             for(int i=0; i<j["scene"]["objects"]["cube"].size(); i++){
+
 
                 // Material creation
                     Material *mat;
@@ -607,9 +609,40 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                             j["scene"]["objects"]["cube"][i]["max"]["z"],
                             j["scene"]["objects"]["cube"][i]["max"]["homogeneous"]);
 
+                
+                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane] = new Cube(mat, point3(mini[0], mini[1], mini[2]) , point3(maxi[0], maxi[1], maxi[2]));
+            }
+
+            // box creation
+            for(int i=0; i<j["scene"]["objects"]["box"].size(); i++){
+
+
+                // Material creation
+                    Material *mat;
+
+                    if (j["scene"]["objects"]["box"][i]["material"]["type"] == "lambertian"){
+                        rgb kd (j["scene"]["objects"]["box"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["box"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["box"][i]["material"]["albedo"]["b"]);
+                        
+                        
+                        mat = new Lambertian(new Constant_texture(kd));
+                    }
+                    
+                    
+                    
+                glm::vec4 mini (j["scene"]["objects"]["box"][i]["min"]["x"],
+                            j["scene"]["objects"]["box"][i]["min"]["y"],
+                            j["scene"]["objects"]["box"][i]["min"]["z"],
+                            j["scene"]["objects"]["box"][i]["min"]["homogeneous"]);
+
+                glm::vec4 maxi (j["scene"]["objects"]["box"][i]["max"]["x"],
+                            j["scene"]["objects"]["box"][i]["max"]["y"],
+                            j["scene"]["objects"]["box"][i]["max"]["z"],
+                            j["scene"]["objects"]["box"][i]["max"]["homogeneous"]);
 
                 
-                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid+ qtd_cube] = new Cube(mat, point3 (mini[0], mini[1], mini[2]) , point3(maxi[0], maxi[1], maxi[2]));
+                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane + qtd_cube] = new Box(mat, point3(mini[0], mini[1], mini[2]) , point3(maxi[0], maxi[1], maxi[2]));
             }
 
             // mesh creation
@@ -718,16 +751,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 float p1, p2, p3;
                                 arq >> p1;
                                 arq >> p2;
-                                arq >> p3;
-
-                                // Transformation Creation
-
-                            
-                                // points[p1-1] = transformations * points[p1-1];
-                                // points[p2-1] = transformations * points[p2-1];
-                                // points[p3-1] = transformations * points[p3-1];
-
-                                
+                                arq >> p3;                                
 
                                 triangles.push_back(new Triangle(mat, point3(points[p1-1][0], points[p1-1][1],points[p1-1][2]), 
                                                                       point3(points[p2-1][0], points[p2-1][1],points[p2-1][2]),
@@ -750,7 +774,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     point3 maxi = point3(maxi1[0], maxi1[1], maxi1[2]);
 
                 
-                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane + qtd_cube] = new Mesh(mat, triangles, new Cube(mat, mini, maxi));
+                list[i + qtd_triangle + qtd_sphere + qtd_ellipsoid + qtd_plane + qtd_cube + qtd_box] = new Mesh(mat, triangles, new Cube(mat, mini, maxi));
             }
 
 

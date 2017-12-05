@@ -4,6 +4,7 @@
 
 #include "object.h"
 #include "material.h"
+#include "cube.h"
 
 #define error 0.00001
 
@@ -20,6 +21,8 @@ class Triangle : public Object {
             v1 = v1_;
             v2 = v2_;
             backface_cull = backface_cull_;
+
+            bbox = new Cube(m_, min_vector(v0, min_vector(v1, v2)), max_vector(v0, max_vector(v1, v2)) );
         }
 
         //=== Atributes
@@ -29,10 +32,20 @@ class Triangle : public Object {
         point3 v1;
         point3 v2;
 
+        Cube* bbox;
+
         //=== Access methods
         virtual bool hit( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const;
 
         point3 get_midpoint()const;
+
+        vector<point3*> getPoints(){
+            vector<point3*> points;
+            points.push_back(&v0);
+            points.push_back(&v1);
+            points.push_back(&v2);
+            return points;
+        }
 };
 
 

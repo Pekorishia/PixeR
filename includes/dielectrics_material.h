@@ -87,8 +87,6 @@ bool Dielectrics::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenua
         outward_normal =-ht_.normal;
         ni_over_nt = ref_idx;
         cosine = ref_idx * dot(r_.get_direction(), ht_.normal) / r_.get_direction().length();
-        // cosine = (dot(r_.get_direction(), ht_.normal) / r_.get_direction().length());
-        // cosine = std::sqrt(1 - ((ref_idx * ref_idx) * (1 - (cosine * cosine))));
     }
     else
     {
@@ -100,14 +98,10 @@ bool Dielectrics::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenua
     if(refract(r_.get_direction(), outward_normal, ni_over_nt, refracted))
     {
         reflect_prob = schlick(cosine, ni_over_nt);
-
-         //scattered_ray = Ray(ht_.p, refracted);
     }
     else
     {
         reflect_prob = 1.0;
-
-         //scattered_ray = Ray(ht_.p, reflected);
     }
 
     if(drand48() < reflect_prob)
@@ -116,7 +110,6 @@ bool Dielectrics::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenua
         scattered_ray = Ray(ht_.p, refracted);
 
      return true;
-
 }
 
 #endif

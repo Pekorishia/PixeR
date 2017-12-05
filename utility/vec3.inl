@@ -179,6 +179,24 @@ namespace utility {
     {
         return v / v.length() ;
     }
+
+    inline static vec3 min_vector( const vec3 & v, const vec3 & u)
+    {
+        if (v.length() < u.length())
+        {
+            return v;
+        }
+        return u ;
+    }
+
+    inline static vec3 max_vector( const vec3 & v, const vec3 & u)
+    {
+        if (v.length() > u.length())
+        {
+            return v;
+        }
+        return u ;
+    }
 } // namespace utility
 
 //==============================[ vec3.inl ]==============================//
