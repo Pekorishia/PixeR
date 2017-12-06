@@ -1,10 +1,8 @@
-
 #ifndef _Cube_H_
 #define _Cube_H_
 
 #include "object.h"
 #include "material.h"
-#include "triangle_object.h"
 #include <math.h> 
 
 #define error 0.00001
@@ -36,32 +34,10 @@ class Cube : public Object {
 
 Cube* Cube::wrap(Cube* node, Cube* bbox_tri)const{
 
-    if (node->mini.x() < bbox_tri->mini.x())
-    {
-        node->mini[0] = bbox_tri->mini.x();
-    }
-    if (node->mini.y() < bbox_tri->mini.y())
-    {
-        node->mini[1] = bbox_tri->mini.y();
-    }
-    if (node->mini.z() < bbox_tri->mini.z())
-    {
-        node->mini[2] = bbox_tri->mini.z();
-    }
-
-    if (node->maxi.x() > bbox_tri->maxi.x())
-    {
-        node->maxi[0] = bbox_tri->maxi.x();
-    }
-    if (node->maxi.y() > bbox_tri->maxi.y())
-    {
-        node->maxi[1] = bbox_tri->maxi.y();
-    }
-    if (node->maxi.z() > bbox_tri->maxi.z())
-    {
-        node->maxi[2] = bbox_tri->maxi.z();
-    }
-    return node;
+    point3 mini_ = min_vector(node->mini, bbox_tri->mini);
+    vec3 maxi_1 = max_vector(node->maxi, bbox_tri->maxi);
+    Cube* aux = new Cube(Object::material, mini_, maxi_1);
+    return aux;
 }
 
 /*  

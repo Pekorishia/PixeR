@@ -40,7 +40,7 @@ KDNode* KDNode::build(vector<Triangle*>& tris, int depth)const
     node->left = NULL;
     node->right = NULL;
     Cube* cube_;
-    node->bbox = cube_;
+    node->bbox = NULL;
 
     if(tris.size() == 0)
         return node;
@@ -55,15 +55,8 @@ KDNode* KDNode::build(vector<Triangle*>& tris, int depth)const
         return node;
     }
 
-    point3 midpt = point3(0,0,0);
-
-
-    for( int i =0; i < tris.size(); i++){
-        midpt = midpt + (tris[i]->get_midpoint() * 1.f/tris.size());
-    }
-
-    vector<Triangle*> left_tris;
-    vector<Triangle*> right_tris;
+    vector<Triangle*> left_tris = std::vector<Triangle*>();
+    vector<Triangle*> right_tris = std::vector<Triangle*>();
 
     int axis = depth%3;
     switch(axis){
@@ -78,7 +71,7 @@ KDNode* KDNode::build(vector<Triangle*>& tris, int depth)const
             break;
         }
 
-    node->bbox= tris[0]->bbox;
+    node->bbox = tris[0]->bbox;
 
     for (int i = 1; i < tris.size(); ++i)
     {
@@ -97,8 +90,6 @@ KDNode* KDNode::build(vector<Triangle*>& tris, int depth)const
         right_tris.push_back(tris[i]);
     }
     
-    
-    
     node->left = build(left_tris, depth+1);
     node->right = build(right_tris, depth+1);
     
@@ -108,7 +99,7 @@ bool KDNode::hit (KDNode* node, const Ray & r_, float  t_min_, float  t_max_, Hi
 {
     if (node->bbox->hit(r_, t_min_, t_max_, ht_))
     {
-        if(node->left->triangles.size() > 0 || node->right->triangles.size()){
+        if(node->left->triangles.size() > 0 || node->right->triangles.size()>0){
             bool hitleft = hit(node->left, r_, t_min_, t_max_, ht_);
             bool hitright = hit(node->right, r_, t_min_, t_max_, ht_);
             return hitleft || hitright;

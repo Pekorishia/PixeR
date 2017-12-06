@@ -14,7 +14,7 @@ class Plane : public Object {
 
         Plane();
 
-        Plane(Material *m_, point3 v0_, point3 v1_, point3 v2_, point3 v3_, bool backface_cull_ = false)
+        Plane(Material *m_, point3 v0_, point3 v1_, point3 v2_, point3 v3_, bool backface_cull_ = true)
         {
             Object::origin = point3 (0,0,0);
             Object::material = m_;

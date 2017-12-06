@@ -182,20 +182,56 @@ namespace utility {
 
     inline static vec3 min_vector( const vec3 & v, const vec3 & u)
     {
-        if (v.length() < u.length())
+        vec3 aux = vec3(0,0,0);
+        if (v.x() < u.x())
         {
-            return v;
+            aux[0] = v[0];
+        }else{
+            aux[0] = u[0];
         }
-        return u ;
+
+        if (v.y() < u.y())
+        {
+            aux[1] = v[1];
+        }else{
+            aux[1] = u[1];
+        }
+
+        if (v.z() < u.z())
+        {
+            aux[2] = v[2];
+        }else{
+            aux[2] = u[2];
+        }
+
+        return aux ;
     }
 
     inline static vec3 max_vector( const vec3 & v, const vec3 & u)
     {
-        if (v.length() > u.length())
+        vec3 aux = vec3(0,0,0);
+        if (v.x() > u.x())
         {
-            return v;
+            aux[0] = v[0];
+        }else{
+            aux[0] = u[0];
         }
-        return u ;
+
+        if (v.y() > u.y())
+        {
+            aux[1] = v[1];
+        }else{
+            aux[1] = u[1];
+        }
+
+        if (v.z() > u.z())
+        {
+            aux[2] = v[2];
+        }else{
+            aux[2] = u[2];
+        }
+
+        return aux ;
     }
 } // namespace utility
 

@@ -25,8 +25,6 @@ class Mesh : public Object {
             triangles = triangles_;
             bbox = bbox_;
             node = node->build(triangles_, 0);
-            
-
         }
 
         void insertNode() const;
@@ -36,15 +34,6 @@ class Mesh : public Object {
 
 bool Mesh::hit ( const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const
 {
-    // if(bbox->hit(r_, t_min_, t_max_, ht_)){
-    //     for (int i = 0; i < triangles.size(); i++ ){
-    //         if (triangles[i]->hit(r_, t_min_, t_max_, ht_) ) {
-    //             return true;
-    //         }
-    //     }
-    // }
-    // return false;
-
     
     if(bbox->hit(r_, t_min_, t_max_, ht_)){
         return node->hit(node, r_, t_min_, t_max_, ht_);

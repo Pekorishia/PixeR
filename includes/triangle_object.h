@@ -12,6 +12,8 @@ class Triangle : public Object {
 
     public:
 
+        Triangle();
+
         Triangle(Material *m_, point3 v0_, point3 v1_, point3 v2_, bool backface_cull_ = false)
         {
             Object::origin = point3 (0,0,0);
