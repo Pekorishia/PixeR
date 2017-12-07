@@ -1,6 +1,6 @@
 {
     "image": { 
-                "name": "perlin.ppm",
+                "name": "malha_tris.ppm",
                 "codification": "ascii",
                 "width": 600,
                 "height": 300,
@@ -97,58 +97,19 @@
                                             "b": 0.8
                                         },
                             "lower_left": {
-                                            "r": 1,
-                                            "g": 1,
+                                            "r": 0,
+                                            "g": 0.749,
                                             "b": 1
                                         },
                             "lower_right": {
-                                            "r": 1,
-                                            "g": 1,
+                                            "r": 0,
+                                            "g": 0.749,
                                             "b": 1
                                         }
                         },
             "objects": {
 
-                        "spheres": [
-                                    {
-                                        "material": {
-                                                        "type" : "lambertian",
-                                                        "albedo": {
-                                                                    "r": 1,
-                                                                    "g": 1,
-                                                                    "b": 1
-                                                                },
-                                                        "specular": {
-                                                                    "r": 0.9,
-                                                                    "g": 0.9,
-                                                                    "b": 0.9
-                                                                },
-                                                        "mirrow": {
-                                                                    "r": 0.0,
-                                                                    "g": 0.0,
-                                                                    "b": 0.0
-                                                                },
-                                                        "ambient": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
-                                                                },
-                                                        "alpha": 64,
-                                                        "fuzz": 0.0,
-                                                        "ref_idx":1.2
-                                                    },
-                                        "center": {
-                                                        "x": 0,
-                                                        "y": 0,
-                                                        "z": -1,
-                                                        "homogeneous": 1
-                                                    }, 
-                                        "radius": 1
-
-                                    }
-                                ],
-
-                        "meshs":[
+                        "mesh":[
                                     {
                                         "material": {
                                                         "type" : "lambertian",

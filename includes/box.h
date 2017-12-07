@@ -2,14 +2,14 @@
 #define _Box_H_
 
 #include "object.h"
-#include "triangulo.h"
+#include "triangle_object.h"
 
 
 class Box : public Object {
     public:
 
         vector<point3> vertices;
-        vector<Triangles*> triangles;
+        vector<Triangle*> triangles;
 
         Box();
 
@@ -32,18 +32,18 @@ class Box : public Object {
             vertices.push_back(p6);
             vertices.push_back(p7);
 
-            triangles.push_back(new Triangles(material_, p0, p1, p2)); //FRENTE
-            triangles.push_back(new Triangles(material_, p0, p2, p3)); //FRENTE
-            triangles.push_back(new Triangles(material_, p5, p6, p1)); //CIMA
-            triangles.push_back(new Triangles(material_, p1, p0, p5)); //CIMA
-            triangles.push_back(new Triangles(material_, p0, p3, p4)); //DIREITA
-            triangles.push_back(new Triangles(material_, p0, p4, p5)); //DIREITA
-            triangles.push_back(new Triangles(material_, p3, p2, p4)); //BAIXO
-            triangles.push_back(new Triangles(material_, p4, p2, p7)); //BAIXO
-            triangles.push_back(new Triangles(material_, p1, p7, p2)); //ESQUERDA
-            triangles.push_back(new Triangles(material_, p7, p1, p6)); //ESQUERDA
-            triangles.push_back(new Triangles(material_, p5, p4, p7)); //FUNDO
-            triangles.push_back(new Triangles(material_, p6, p5, p7)); //FUNDO
+            triangles.push_back(new Triangle(material_, p0, p1, p2)); //FRENTE
+            triangles.push_back(new Triangle(material_, p0, p2, p3)); //FRENTE
+            triangles.push_back(new Triangle(material_, p5, p6, p1)); //CIMA
+            triangles.push_back(new Triangle(material_, p1, p0, p5)); //CIMA
+            triangles.push_back(new Triangle(material_, p0, p3, p4)); //DIREITA
+            triangles.push_back(new Triangle(material_, p0, p4, p5)); //DIREITA
+            triangles.push_back(new Triangle(material_, p3, p2, p4)); //BAIXO
+            triangles.push_back(new Triangle(material_, p4, p2, p7)); //BAIXO
+            triangles.push_back(new Triangle(material_, p1, p7, p2)); //ESQUERDA
+            triangles.push_back(new Triangle(material_, p7, p1, p6)); //ESQUERDA
+            triangles.push_back(new Triangle(material_, p5, p4, p7)); //FUNDO
+            triangles.push_back(new Triangle(material_, p6, p5, p7)); //FUNDO
 
             Object::material = material_;
         }

@@ -97,12 +97,30 @@ KDNode* KDNode::build(vector<Triangle*>& tris, int depth)const
 }
 bool KDNode::hit (KDNode* node, const Ray & r_, float  t_min_, float  t_max_, HitRecord & ht_ ) const
 {
-    if (node->bbox->hit(r_, t_min_, t_max_, ht_))
-    {
+    if (node->bbox->hit(r_, t_min_, t_max_, ht_)){
+        HitRecord left_ht, right_ht;
         if(node->left->triangles.size() > 0 || node->right->triangles.size()>0){
-            bool hitleft = hit(node->left, r_, t_min_, t_max_, ht_);
-            bool hitright = hit(node->right, r_, t_min_, t_max_, ht_);
-            return hitleft || hitright;
+            bool hitleft = hit(node->left, r_, t_min_, t_max_, left_ht);
+            bool hitright = hit(node->right, r_, t_min_, t_max_, right_ht);
+            if(hitleft && hitright){
+                if(left_ht.t < right_ht.t)
+                    ht_ = left_ht;
+                else
+                    ht_ = right_ht;
+                return true;
+            }
+            else if (hitleft)
+            {
+                 ht_ = left_ht;
+                 return true;
+            }
+            else if (hitright)
+            {
+                 ht_ = right_ht;
+                 return true;
+            }
+            else
+                return false;
         }
         else{
             for (int i = 0; i < node->triangles.size(); ++i)
@@ -114,6 +132,7 @@ bool KDNode::hit (KDNode* node, const Ray & r_, float  t_min_, float  t_max_, Hi
             return false;
         }
     }
-    return false;
+    else
+        return false;
 }
 #endif

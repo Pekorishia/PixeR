@@ -160,8 +160,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);
 
                         
-                        //mat = new Lambertian(new Constant_texture(kd));
-                        mat = new Lambertian(new NoiseTexture(10));
+                        mat = new Lambertian(new Constant_texture(kd));
+                        //mat = new Lambertian(new NoiseTexture(10));
                     }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "diffuse_light"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
@@ -464,10 +464,11 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
 
                         rgb kd1 = rgb(1,1,1);
 
+                        //mat = new Lambertian(new Constant_texture(kd));
                         
-                        //mat = new Lambertian(new Checker_texture(new Constant_texture(kd), new Constant_texture(kd1)));
+                        mat = new Lambertian(new Checker_texture(new Constant_texture(kd), new Constant_texture(kd1)));
                         //Texture *pertext = ;
-                        mat = new Lambertian(new NoiseTexture());
+                        //mat = new Lambertian(new NoiseTexture());
                     }
                     else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "metal"){
                         rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
