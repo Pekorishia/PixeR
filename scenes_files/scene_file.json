@@ -1,6 +1,6 @@
 {
     "image": { 
-                "name": "malha_tris.ppm",
+                "name": "cooktorrance.ppm",
                 "codification": "ascii",
                 "width": 600,
                 "height": 300,
@@ -10,18 +10,18 @@
                 "t_max": "infinity"
             },
     "shader": {
-                "type": "lambertian"
+                "type": "cooktorrance"
             },
     "camera": {
                 "type":"pespectiva",
                 "origin":{
                             "x": 0,
-                            "y": 0,
-                            "z": 6
+                            "y": 0.55,
+                            "z": 4
                         },
                 "lookAt":{
                             "x": 0,
-                            "y": 0,
+                            "y": 0.4,
                             "z": -1
                         },
                 "upVector":{
@@ -109,15 +109,14 @@
                         },
             "objects": {
 
-                        "mesh":[
+                        "spheres": [
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
-                                                    
+                                                        "type" : "cooktorrance",
                                                         "albedo": {
-                                                                    "r": 1,
+                                                                    "r": 0.3,
                                                                     "g": 1,
-                                                                    "b": 0
+                                                                    "b": 1
                                                                 },
                                                         "specular": {
                                                                     "r": 0.9,
@@ -125,9 +124,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0.0,
+                                                                    "g": 0.0,
+                                                                    "b": 0.0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -136,45 +135,25 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx": 2.4
+                                                        "ref_idx":2.4,
+                                                        "m":0.5
                                                     },
-                                        "max":{
-                                                    "x":0.5,
-                                                    "y":-1,
-                                                    "z":-3,
-                                                    "homogeneous":1
+                                        "center": {
+                                                        "x": 0.3,
+                                                        "y": 0.5,
+                                                        "z": -2,
+                                                        "homogeneous": 1
+                                                    }, 
+                                        "radius": 0.5
 
-                                        },
-                                        "min":{
-                                                    "x":1,
-                                                    "y":0,
-                                                    "z":-2,
-                                                    "homogeneous":1
-
-                                        },
-                                        "name_file": "bunny.obj",
-                                        "transformation": [
-                                                            {
-                                                                "type": "translate",
-                                                                "change": {
-                                                                            "x": 0,
-                                                                            "y": -0.235,
-                                                                            "z": -0.5
-                                                                        }
-                                                            },
-                                                            {
-                                                                "type": "scale",
-                                                                "change": 5
-                                                            }
-                                                        ]
                                     }
-
-                        ],
+                                
+                                ],
                         
                         "plane": [
                                     {
                                         "material": {
-                                                        "type" : "lambertian",
+                                                        "type" : "cooktorrance",
                                                     
                                                         "albedo": {
                                                                     "r": 0.919,
@@ -182,14 +161,14 @@
                                                                     "b": 0.137
                                                                 },
                                                         "specular": {
-                                                                    "r": 0.9,
-                                                                    "g": 0.9,
-                                                                    "b": 0.9
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -198,29 +177,30 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx": 2.4
+                                                        "ref_idx": 2.4,
+                                                        "m": 0.1
                                                     }, 
                                         "v0": {
                                                 "x": -100,
-                                                "y": -1,
+                                                "y": -0,
                                                 "z": 100,
                                                 "homogeneous": 1
                                             }, 
                                         "v1": {
                                                 "x": 100,
-                                                "y": -1,
+                                                "y": -0,
                                                 "z": 100,
                                                 "homogeneous": 1
                                             }, 
                                         "v2": {
                                                 "x": 100,
-                                                "y": -1,
+                                                "y": -0,
                                                 "z": -100,
                                                 "homogeneous": 1
                                             },  
                                         "v3": {
                                                 "x" : -100,
-                                                "y" : -1,
+                                                "y" : -0,
                                                 "z" : -100,
                                                 "homogeneous": 1
                                         }

@@ -29,8 +29,6 @@ class BlinnPhong: public Material
 
 bool BlinnPhong::scatter (const Ray & r_, const HitRecord & ht, vec3 & ip, Ray & scattered_ray) const
 {
-	    
-
     return true;
 }
 

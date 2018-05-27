@@ -31,12 +31,14 @@
 #include "lambertian_shader.h"
 #include "normal_shader.h"
 #include "blinnphong_shader.h"
+#include "cook_torrance_shader.h"
 
 #include "toon_material.h"
 #include "metal_material.h"
 #include "lambertian_material.h"
 #include "blinnphong_material.h"
 #include "dielectrics_material.h"
+#include "cooktorrance_material.h"
 
 #include "perspective_camera.h"
 #include "parallel_camera.h"
@@ -206,6 +208,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         
                         auto ref_idx = j["scene"]["objects"]["spheres"][i]["material"]["ref_idx"];
                         mat = new Dielectrics(new Constant_texture(kd), ref_idx);
+                    }
+                    else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "cooktorrance"){
+                        rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto m = j["scene"]["objects"]["spheres"][i]["material"]["m"];
+                        mat = new CookTorranceMaterial(new Constant_texture(kd), m);
                     }
                     else if(j["scene"]["objects"]["spheres"][i]["material"]["type"] == "toon"){
                         std::vector<rgb> gradient;
@@ -485,6 +495,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         
                         auto ref_idx = j["scene"]["objects"]["plane"][i]["material"]["ref_idx"];
                         mat = new Dielectrics(new Constant_texture(kd), ref_idx);
+                    }
+                    else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "cooktorrance"){
+                        rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["plane"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto m = j["scene"]["objects"]["plane"][i]["material"]["m"];
+                        mat = new CookTorranceMaterial(new Constant_texture(kd), m);
                     }
                     else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "diffuse_light"){
                         rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
@@ -880,6 +898,9 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
         }
         else if (j["shader"]["type"] == "toon"){
             shade = new ToonShader(world);
+        }
+        else if (j["shader"]["type"] == "cooktorrance"){
+            shade = new CookTorranceShader(world);
         }
     // Camera creation
         vec3 origin2 (j["camera"]["origin"]["x"],
