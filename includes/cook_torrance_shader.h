@@ -1,7 +1,8 @@
 #ifndef _CookTorrance_H_
 #define _CookTorrance_H_
 
-#include <math.h>  
+#include <math.h>
+#include <string> 
 
 #include "shader.h"
 
@@ -10,9 +11,12 @@ class CookTorranceShader : public Shader
 
     public:
 
-        CookTorranceShader(Scene *world_)
+    	std::string distribution;
+
+        CookTorranceShader(Scene *world_, string distribution_)
         {
             Shader::world = world_;
+            distribution = distribution_;
         }
 
         virtual rgb color(const Ray & r_, float t_min, float t_max, int depth_) const;
@@ -28,21 +32,25 @@ float CookTorranceShader::schlick(vec3 l, vec3 h, float f0) const {
 }
 
 float CookTorranceShader::d(vec3 h, vec3 n, float m) const {
-
-    float cosine = dot(n, h) / (n.length() * h.length() );
 	float NdotH =  dot(n, h);
 
-	float a = (2/(m*m)) -2;
-	return ((a + 2) / 2 * PI) * pow(NdotH, a); //blinnphong
+	if(CookTorranceShader::distribution == "blinnphong"){
+		float a = (2/(m*m)) -2;
+		return ((a + 2) / 2 * PI) * pow(NdotH, a); //blinnphong
+	}
+	else if(CookTorranceShader::distribution == "beckmann"){
 
-    float e = ( (NdotH*NdotH -1) / (m*m * NdotH*NdotH) );
-    float x = 1.f/(PI * m*m * NdotH*NdotH*NdotH*NdotH);
-    return std::exp(e)*x; //beckmann
+	    float e = ( (NdotH*NdotH -1) / (m*m * NdotH*NdotH) );
+	    float x = 1.f/(PI * m*m * NdotH*NdotH*NdotH*NdotH);
+	    return std::exp(e)*x; //beckmann
+	}
+	else if(CookTorranceShader::distribution == "ggx"){
 
-    float m_2 = m*m;
-    float r1 = 1.0/ (4.0 * m_2* std::pow(NdotH, 4));
-    float r2 = (NdotH * NdotH -1.0)/ (m_2 * NdotH * NdotH);
-    //return std::pow(1.0/(std::pow(m,2.0)*std::pow(NdotH,4.0)), ( std::pow(NdotH,2.0)-1.0)/( std::pow(m,2.0)*pow(NdotH,2.0)));
+	    float x = (m*m -1) * NdotH*NdotH +1;
+	    return (m*m)/ (PI * x*x);
+	}
+
+	return 0.f;
     
 }
 
@@ -71,10 +79,6 @@ rgb CookTorranceShader::color( const Ray & r_, float t_min, float t_max, int dep
 
         vec3 n = (ht.normal);
 
-        auto ambient = rgb(0.1,0,0.1)  * world->ambientLight;
-
-        //cor += ambient;
-
         for( int i = 0; i < Shader::world->lum_size; i++){
 
         	vec3 l = Shader::world->lum[i]->getDirection(ht.p);
@@ -85,7 +89,7 @@ rgb CookTorranceShader::color( const Ray & r_, float t_min, float t_max, int dep
 
             	l = unit_vector(l);
 
-            	auto difuse = ht.mat->albedo->value(0,0, vec3(0,0,0));
+            	rgb albedo = ht.mat->albedo->value(0,0, vec3(0,0,0));
             	
             	vec3 h = unit_vector(l + v);
 
@@ -97,17 +101,12 @@ rgb CookTorranceShader::color( const Ray & r_, float t_min, float t_max, int dep
 			    if(n_v < 0)
 			    	n_v *= -1;
 
-        		float fr = ( schlick(l, h, 0.5)* d(h, n, ht.mat->m)* g(l, v, h, n) ) / 
+        		float fr = ( schlick(l, h, ht.mat->ref_idx)* d(h, n, ht.mat->m)* g(l, v, h, n) ) / 
         					(4 * (n_l) * (n_v));
 
-        		//std::cout <<" fr: "<< fr << " F:" << schlick(l, h, ht.mat->m) << " D:"<< d(h, n, ht.mat->m) << " G:" <<g(l, v, h, n);
-
-
-        		cor = n_l * (( world->lum[i]->getIntensity() * fr ) + difuse);//(difuse + fr * (vec3(1,1,1) - ht.mat->albedo->value(0,0, vec3(0,0,0))));
-        		//cor += difuse * world->lum[i]->getIntensity() * fr;
+        		cor = n_l * (( world->lum[i]->getIntensity() * fr ) + albedo);
 
             }
-
     	}
         
         return cor;

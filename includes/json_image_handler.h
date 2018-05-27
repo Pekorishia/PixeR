@@ -215,7 +215,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
                         
                         auto m = j["scene"]["objects"]["spheres"][i]["material"]["m"];
-                        mat = new CookTorranceMaterial(new Constant_texture(kd), m);
+                        auto ref_idx = j["scene"]["objects"]["spheres"][i]["material"]["ref_idx"];
+                        mat = new CookTorranceMaterial(new Constant_texture(kd), m, ref_idx);
                     }
                     else if(j["scene"]["objects"]["spheres"][i]["material"]["type"] == "toon"){
                         std::vector<rgb> gradient;
@@ -502,7 +503,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["plane"][i]["material"]["albedo"]["b"]);                        
                         
                         auto m = j["scene"]["objects"]["plane"][i]["material"]["m"];
-                        mat = new CookTorranceMaterial(new Constant_texture(kd), m);
+                        auto ref_idx = j["scene"]["objects"]["plane"][i]["material"]["ref_idx"];
+                        mat = new CookTorranceMaterial(new Constant_texture(kd), m, ref_idx);
                     }
                     else if (j["scene"]["objects"]["plane"][i]["material"]["type"] == "diffuse_light"){
                         rgb kd (j["scene"]["objects"]["plane"][i]["material"]["albedo"]["r"],
@@ -689,7 +691,8 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);                        
                         
                         auto m = j["scene"]["objects"]["mesh"][i]["material"]["m"];
-                        mat = new CookTorranceMaterial(new Constant_texture(kd), m);
+                        auto ref_idx = j["scene"]["objects"]["mesh"][i]["material"]["ref_idx"];
+                        mat = new CookTorranceMaterial(new Constant_texture(kd), m, ref_idx);
                     }
                     else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
@@ -908,7 +911,7 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
             shade = new ToonShader(world);
         }
         else if (j["shader"]["type"] == "cooktorrance"){
-            shade = new CookTorranceShader(world);
+            shade = new CookTorranceShader(world, j["shader"]["distribution"]);
         }
     // Camera creation
         vec3 origin2 (j["camera"]["origin"]["x"],

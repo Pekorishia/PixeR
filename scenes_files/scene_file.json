@@ -10,7 +10,8 @@
                 "t_max": "infinity"
             },
     "shader": {
-                "type": "cooktorrance"
+                "type": "cooktorrance",
+                "distribution": "beckmann"
             },
     "camera": {
                 "type":"pespectiva",
@@ -117,8 +118,8 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx": 2.4,
-                                                        "m": 0.1
+                                                        "ref_idx": 0.6,
+                                                        "m": 0.7
                                                     },
                                         "max":{
                                                     "x":0.5,

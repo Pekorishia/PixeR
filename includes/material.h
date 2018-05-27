@@ -24,6 +24,7 @@ class Material{
 		float alpha;
 		std::vector<float> angles;
 		float m;
+		float ref_idx;
 
 		virtual bool scatter(const Ray &r, const struct HitRecord &ht, vec3 & attenuation, Ray &scatterd) const = 0;
 

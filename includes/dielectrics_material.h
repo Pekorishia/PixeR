@@ -9,11 +9,9 @@ class Dielectrics : public Material
 {
 public:
 
-    float ref_idx;
-
 	Dielectrics(Texture *albedo_, float ri){
 		Material::albedo = albedo_;
-        ref_idx = ri;
+        Material::ref_idx = ri;
 	}
 
 	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
