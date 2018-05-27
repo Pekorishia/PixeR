@@ -683,6 +683,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                     
                         mat = new Lambertian(new Constant_texture(kd) );
                     }
+                    else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "cooktorrance"){
+                        rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto m = j["scene"]["objects"]["mesh"][i]["material"]["m"];
+                        mat = new CookTorranceMaterial(new Constant_texture(kd), m);
+                    }
                     else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "blinnphong"){
                         rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
                                 j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["g"],

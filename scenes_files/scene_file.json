@@ -4,8 +4,8 @@
                 "codification": "ascii",
                 "width": 600,
                 "height": 300,
-                "samples": 60,
-                "ray_depth": 55,
+                "samples": 20,
+                "ray_depth": 25,
                 "t_min": 0.00001,
                 "t_max": "infinity"
             },
@@ -16,12 +16,12 @@
                 "type":"pespectiva",
                 "origin":{
                             "x": 0,
-                            "y": 0.55,
+                            "y": 0,
                             "z": 4
                         },
                 "lookAt":{
                             "x": 0,
-                            "y": 0.4,
+                            "y": 0,
                             "z": -1
                         },
                 "upVector":{
@@ -50,33 +50,14 @@
                                             "z": -1
                                         },
                             "direction": {
-                                            "x": -3,
-                                            "y": 3,
+                                            "x": -1,
+                                            "y": 2,
                                             "z": 2
                                         },            
                             "intensity": {
-                                            "r": 0.3,
-                                            "g": 0.3,
+                                            "r": 0.7,
+                                            "g": 0.7,
                                             "b": 0.7
-                                        }
-                       },
-                       {
-                            "type": "directional",
-                            "angle": 15,
-                            "origin": {
-                                            "x": 0,
-                                            "y": 0,
-                                            "z": -1
-                                        },
-                            "direction": {
-                                            "x": 3,
-                                            "y": 3,
-                                            "z": 2
-                                        },            
-                            "intensity": {
-                                            "r": 1,
-                                            "g": 1,
-                                            "b": 0.6
                                         }
                        }
                      ],
@@ -109,13 +90,14 @@
                         },
             "objects": {
 
-                        "spheres": [
+                        "mesh":[
                                     {
                                         "material": {
                                                         "type" : "cooktorrance",
+                                                    
                                                         "albedo": {
-                                                                    "r": 0.3,
-                                                                    "g": 1,
+                                                                    "r": 1,
+                                                                    "g": 0,
                                                                     "b": 1
                                                                 },
                                                         "specular": {
@@ -124,51 +106,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.0,
-                                                                    "g": 0.0,
-                                                                    "b": 0.0
-                                                                },
-                                                        "ambient": {
                                                                     "r": 0.1,
                                                                     "g": 0.1,
                                                                     "b": 0.1
-                                                                },
-                                                        "alpha": 64,
-                                                        "fuzz": 0.0,
-                                                        "ref_idx":2.4,
-                                                        "m":0.5
-                                                    },
-                                        "center": {
-                                                        "x": 0.3,
-                                                        "y": 0.5,
-                                                        "z": -2,
-                                                        "homogeneous": 1
-                                                    }, 
-                                        "radius": 0.5
-
-                                    }
-                                
-                                ],
-                        
-                        "plane": [
-                                    {
-                                        "material": {
-                                                        "type" : "cooktorrance",
-                                                    
-                                                        "albedo": {
-                                                                    "r": 0.919,
-                                                                    "g": 0.556,
-                                                                    "b": 0.137
-                                                                },
-                                                        "specular": {
-                                                                    "r": 0,
-                                                                    "g": 0,
-                                                                    "b": 0
-                                                                },
-                                                        "mirrow": {
-                                                                    "r": 0,
-                                                                    "g": 0,
-                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -178,29 +118,91 @@
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
                                                         "ref_idx": 2.4,
-                                                        "m": 0.1
+                                                        "m": 0.9
+                                                    },
+                                        "max":{
+                                                    "x":0.5,
+                                                    "y":-1,
+                                                    "z":-3,
+                                                    "homogeneous":1
+
+                                        },
+                                        "min":{
+                                                    "x":1,
+                                                    "y":0,
+                                                    "z":-2,
+                                                    "homogeneous":1
+
+                                        },
+                                        "name_file": "bunny.obj",
+                                        "transformation": [
+                                                            {
+                                                                "type": "translate",
+                                                                "change": {
+                                                                            "x": 0,
+                                                                            "y": -0.135,
+                                                                            "z": -0.5
+                                                                        }
+                                                            },
+                                                            {
+                                                                "type": "scale",
+                                                                "change": 10
+                                                            }
+                                                        ]
+                                    }
+
+                        ],
+                        
+                        "planes": [
+                                    {
+                                        "material": {
+                                                        "type" : "lambertian",
+                                                    
+                                                        "albedo": {
+                                                                    "r": 0.919,
+                                                                    "g": 0.556,
+                                                                    "b": 0.137
+                                                                },
+                                                        "specular": {
+                                                                    "r": 0.9,
+                                                                    "g": 0.9,
+                                                                    "b": 0.9
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 64,
+                                                        "fuzz": 0.0,
+                                                        "ref_idx": 2.4
                                                     }, 
                                         "v0": {
                                                 "x": -100,
-                                                "y": -0,
+                                                "y": -1,
                                                 "z": 100,
                                                 "homogeneous": 1
                                             }, 
                                         "v1": {
                                                 "x": 100,
-                                                "y": -0,
+                                                "y": -1,
                                                 "z": 100,
                                                 "homogeneous": 1
                                             }, 
                                         "v2": {
                                                 "x": 100,
-                                                "y": -0,
+                                                "y": -1,
                                                 "z": -100,
                                                 "homogeneous": 1
                                             },  
                                         "v3": {
                                                 "x" : -100,
-                                                "y" : -0,
+                                                "y" : -1,
                                                 "z" : -100,
                                                 "homogeneous": 1
                                         }
