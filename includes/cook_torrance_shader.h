@@ -28,7 +28,7 @@ class CookTorranceShader : public Shader
 
 float CookTorranceShader::schlick(vec3 l, vec3 h, float f0) const {
     float cosine = std::max(0.f, dot(l, h));
-    return f0 + std::pow(1-cosine, 5)*(1-f0);
+    return f0 + std::pow(1.f-cosine, 5)*(1-f0);
 }
 
 float CookTorranceShader::d(vec3 h, vec3 n, float m) const {
@@ -77,17 +77,15 @@ rgb CookTorranceShader::color( const Ray & r_, float t_min, float t_max, int dep
 
         vec3 v = unit_vector(-r_.get_direction());
 
-        vec3 n = (ht.normal);
+        vec3 n = unit_vector(ht.normal);
 
         for( int i = 0; i < Shader::world->lum_size; i++){
 
-        	vec3 l = Shader::world->lum[i]->getDirection(ht.p);
+        	vec3 l = unit_vector(Shader::world->lum[i]->getDirection(ht.p));
 
             auto sr = Ray(ht.p, l);
 
-            if (!Shader::hit_anything( sr, 0.001f, 1, ht_s) ){
-
-            	l = unit_vector(l);
+            if (!Shader::hit_anything( sr, 0.f, 1, ht_s) ){
 
             	rgb albedo = ht.mat->albedo->value(0,0, vec3(0,0,0));
             	
@@ -104,7 +102,9 @@ rgb CookTorranceShader::color( const Ray & r_, float t_min, float t_max, int dep
         		float fr = ( schlick(l, h, ht.mat->ref_idx)* d(h, n, ht.mat->m)* g(l, v, h, n) ) / 
         					(4 * (n_l) * (n_v));
 
-        		cor = n_l * (( world->lum[i]->getIntensity() * fr ) + albedo);
+        		vec3 spec = n_l * fr * world->lum[i]->getIntensity();
+                vec3 dif  = n_l * albedo * world->lum[i]->getIntensity() * (1.f - ht.mat->ref_idx);
+                cor = dif + spec;
 
             }
     	}
