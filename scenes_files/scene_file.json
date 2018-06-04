@@ -1,10 +1,10 @@
 {
     "image": { 
-                "name": "cooktorrance_tea_pot.ppm",
+                "name": "cooktorrance_m=8_beckmann.ppm",
                 "codification": "ascii",
                 "width": 600,
                 "height": 300,
-                "samples": 32,
+                "samples": 10,
                 "ray_depth": 25,
                 "t_min": 0.00001,
                 "t_max": "infinity"
@@ -18,7 +18,7 @@
                 "origin":{
                             "x": 0,
                             "y": 0,
-                            "z": 4
+                            "z": 6
                         },
                 "lookAt":{
                             "x": 0,
@@ -51,9 +51,9 @@
                                             "z": -1
                                         },
                             "direction": {
-                                            "x": 1,
-                                            "y": 5,
-                                            "z": 2
+                                            "x": 0,
+                                            "y": 1,
+                                            "z": 0
                                         },            
                             "intensity": {
                                             "r": 0.9,
@@ -91,13 +91,50 @@
                         },
             "objects": {
 
-                        "spheres1": [
+                        "spheres": [
                                     {
                                         "material": {
                                                         "type" : "cooktorrance",
                                                         "albedo": {
                                                                     "r": 0.3,
                                                                     "g": 1,
+                                                                    "b": 0.4
+                                                                },
+                                                        "specular": {
+                                                                    "r": 0.9,
+                                                                    "g": 0.9,
+                                                                    "b": 0.9
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0.2,
+                                                                    "g": 0.2,
+                                                                    "b": 0.2
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 64,
+                                                        "fuzz": 0.0,
+                                                        "ref_idx":0.1,
+                                                        "m": 0.8
+                                                    },
+                                        "center": {
+                                                        "x": -0.5,
+                                                        "y": -100.95,
+                                                        "z": -2,
+                                                        "homogeneous": 1
+                                                    }, 
+                                        "radius": 100.0
+
+                                    },
+                                    {
+                                        "material": {
+                                                        "type" : "cooktorrance",
+                                                        "albedo": {
+                                                                    "r": 0,
+                                                                    "g": 0,
                                                                     "b": 1
                                                                 },
                                                         "specular": {
@@ -117,12 +154,12 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx":0.6,
-                                                        "m":0.1
+                                                        "ref_idx":0.1,
+                                                        "m": 0.8
                                                     },
                                         "center": {
-                                                        "x": -0.5,
-                                                        "y": -0.5,
+                                                        "x": 1.0,
+                                                        "y": -0.45,
                                                         "z": -2,
                                                         "homogeneous": 1
                                                     }, 
@@ -139,7 +176,7 @@
                                                         "albedo": {
                                                                     "r": 0.7,
                                                                     "g": 0,
-                                                                    "b": 0
+                                                                    "b": 0.7
                                                                 },
                                                         "specular": {
                                                                     "r": 0.9,
@@ -147,9 +184,9 @@
                                                                     "b": 0.9
                                                                 },
                                                         "mirrow": {
-                                                                    "r": 0.1,
-                                                                    "g": 0.1,
-                                                                    "b": 0.1
+                                                                    "r": 0,
+                                                                    "g": 0,
+                                                                    "b": 0
                                                                 },
                                                         "ambient": {
                                                                     "r": 0.1,
@@ -158,8 +195,8 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx": 0.7,
-                                                        "m": 0.4
+                                                        "ref_idx": 0.5,
+                                                        "m": 0.8
                                                     },
                                         "max":{
                                                     "x":0.5,
@@ -175,26 +212,26 @@
                                                     "homogeneous":1
 
                                         },
-                                        "name_file": "tea_pot.obj",
+                                        "name_file": "bunny.obj",
                                         "transformation": [
                                                             {
                                                                 "type": "translate",
                                                                 "change": {
                                                                             "x": 0,
-                                                                            "y": -3.3,
-                                                                            "z": -13
+                                                                            "y": -0.135,
+                                                                            "z": -0.5
                                                                         }
                                                             },
                                                             {
                                                                 "type": "scale",
-                                                                "change": 0.3
+                                                                "change": 10
                                                             }
                                                         ]
                                     }
 
                         ],
                         
-                        "plane": [
+                        "plane1": [
                                     {
                                         "material": {
                                                         "type" : "cooktorrance",

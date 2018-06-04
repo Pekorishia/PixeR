@@ -90,21 +90,33 @@ rgb CookTorranceShader::color( const Ray & r_, float t_min, float t_max, int dep
             	rgb albedo = ht.mat->albedo->value(0,0, vec3(0,0,0));
             	
             	vec3 h = unit_vector(l + v);
+                vec3 h_t = -1*unit_vector(l + ht.mat->ref_idx*v); //tenho duvida sobre esse V
 
 			    float n_v = dot(n, v);
 			    float n_l = dot(n, l);
+                float ht_v = dot(h_t, v);
+                float ht_l = dot(h_t, l);
 
 			    if(n_l < 0)
 			    	n_l *= -1;
 			    if(n_v < 0)
 			    	n_v *= -1;
+                if(ht_v < 0)
+                    ht_v *=-1;
+                if(ht_l < 0)
+                    ht_l *=-1;
 
         		float fr = ( schlick(l, h, ht.mat->ref_idx)* d(h, n, ht.mat->m)* g(l, v, h, n) ) / 
         					(4 * (n_l) * (n_v));
 
-        		vec3 spec = n_l * fr * world->lum[i]->getIntensity();
-                vec3 dif  = n_l * albedo * world->lum[i]->getIntensity() * (1.f - ht.mat->ref_idx);
-                cor = dif + spec;
+
+                float ft = ( ht_v* ht_l* (1-schlick(l, h_t, ht.mat->ref_idx))* d(h_t, n, ht.mat->m)* g(l, v, h_t, n)* ht.mat->ref_idx*ht.mat->ref_idx)/ 
+                            ((n_l) * (n_v) * (l + ht.mat->ref_idx*v).length() * (l + ht.mat->ref_idx*v).length());
+
+                float fs = fr + ft;
+        		vec3 spec =world->lum[i]->getIntensity() *  fs;
+                vec3 dif  = world->lum[i]->getIntensity() * albedo * (1.f - ht.mat->ref_idx);
+                cor += n_l *(dif + spec);
 
             }
     	}
