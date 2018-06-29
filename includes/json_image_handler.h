@@ -35,6 +35,7 @@
 
 #include "toon_material.h"
 #include "metal_material.h"
+#include "beerlaw_material.h"
 #include "lambertian_material.h"
 #include "blinnphong_material.h"
 #include "dielectrics_material.h"
@@ -684,6 +685,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                                 j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);                      
                     
                         mat = new Lambertian(new Constant_texture(kd) );
+                    }
+                    else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "beerlaw"){
+                        rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto ref_idx = j["scene"]["objects"]["mesh"][i]["material"]["ref_idx"];
+                        mat = new BeerLaw(new Constant_texture(kd), ref_idx);
                     }
                     else if (j["scene"]["objects"]["mesh"][i]["material"]["type"] == "cooktorrance"){
                         rgb kd (j["scene"]["objects"]["mesh"][i]["material"]["albedo"]["r"],

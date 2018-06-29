@@ -16,7 +16,7 @@ public:
         fuzziness = fuzz;
 	}
 
-	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
+	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const;
     virtual vec3 emitted(float u, float v, const vec3& p) const{
         return vec3 (0,0,0);
     }
@@ -48,7 +48,7 @@ vec3 Metal::reflect(const vec3 v, const vec3 n) const
     return v - 2*dot(v, n)*n;
 }
 
-bool Metal::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
+bool Metal::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const
 {
     vec3 reflected = reflect(unit_vector(r_.get_direction()), ht_.normal);
     scattered_ray = Ray(ht_.p, reflected + fuzziness*random_in_unit_sphere());

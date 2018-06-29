@@ -17,7 +17,7 @@ public:
         Material::ref_idx = ref_idx_;
 	}
 
-	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
+	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const;
     virtual vec3 emitted(float u, float v, const vec3& p) const{
         return vec3 (0,0,0);
     }
@@ -25,7 +25,7 @@ public:
 };
 
 
-bool CookTorranceMaterial::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
+bool CookTorranceMaterial::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const
 {
     return true;
 }

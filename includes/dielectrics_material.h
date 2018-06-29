@@ -14,7 +14,7 @@ public:
         Material::ref_idx = ri;
 	}
 
-	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
+	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const;
     virtual vec3 emitted(float u, float v, const vec3& p) const{
         return vec3 (0,0,0);
     }
@@ -67,17 +67,16 @@ bool Dielectrics::refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& 
 
 
 float Dielectrics::schlick(float cosine, float ref_idx) const {
-    float r = (1.f - ref_idx) / (1.f + ref_idx);
-    r = r * r;
+    float r = ((ref_idx - 1.f)*(ref_idx - 1.f)) / ((ref_idx + 1.f)*(ref_idx + 1.f));
     return (r + (1.f - r) * std::pow((1.f - cosine), 5.f));
 }
 
 
 
-bool Dielectrics::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
+bool Dielectrics::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const
 {
     vec3 outward_normal, refracted ;
-    float ni_over_nt, reflect_prob, cosine;
+    float ni_over_nt, cosine;
 
     vec3 reflected = reflect(r_.get_direction(), ht_.normal);
     attenuation_ = Material::albedo->value(0,0,vec3(0,0,0));

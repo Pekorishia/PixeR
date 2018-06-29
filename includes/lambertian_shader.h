@@ -4,6 +4,7 @@
 #include "shader.h"
 #include "material.h" 
 #include "lambertian_material.h"
+#include "beerlaw_material.h"
 
 class LambertianShader : public Shader 
 {
@@ -45,10 +46,21 @@ rgb LambertianShader::color( const Ray & r_, float t_min, float t_max, int depth
     if ( Shader::hit_anything( r_, t_min, t_max, ht) ) 
     {
         Ray scattered_ray = r_;
+        Ray scattered_ray2 = Ray(point3(0,0,0), vec3(0,0,0));
+        float reflect_prob = 0.f;
         rgb attenuation = rgb(1,1,1);
         vec3 emitted = ht.mat->emitted(0,0,ht.p);
-        if (depth_ > 0 and ht.mat->scatter(r_, ht, attenuation, scattered_ray)){
-            return emitted + attenuation * color(scattered_ray, t_min, t_max, depth_-1);
+        if ( BeerLaw* b = dynamic_cast<BeerLaw*>(ht.mat)){
+            if (depth_ > 0 ){
+                if(ht.mat->scatter(r_, ht, attenuation, scattered_ray, reflect_prob, scattered_ray2) )
+                    return emitted + attenuation * ( (reflect_prob * color(scattered_ray, t_min, t_max, depth_-1)) + ( (1-reflect_prob) * color(scattered_ray2, t_min, t_max, depth_-1)));
+                else
+                    return emitted + attenuation * color(scattered_ray, t_min, t_max, depth_-1);
+            }
+        }else{
+            if (depth_ > 0 and ht.mat->scatter(r_, ht, attenuation, scattered_ray, reflect_prob, scattered_ray2) ){
+                return emitted + attenuation * color(scattered_ray, t_min, t_max, depth_-1);
+            }
         }
         
         return emitted;

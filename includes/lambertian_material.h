@@ -18,7 +18,7 @@ class Lambertian: public Material
 			Material::alpha = 0;
 		}
 
-	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const;
+	virtual bool scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const;
 	
 	virtual vec3 emitted(float u, float v, const vec3& p) const{
 		 	return vec3(0,0,0);
@@ -40,7 +40,7 @@ vec3 Lambertian::random_in_unit_sphere() const
     return p;
 }
 
-bool Lambertian::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray) const
+bool Lambertian::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation_, Ray & scattered_ray, float &reflect_prob , Ray &scatterd2 ) const
 {
 	vec3 p_ = random_in_unit_sphere();
     vec3 target = ht_.p + ht_.normal + p_;
