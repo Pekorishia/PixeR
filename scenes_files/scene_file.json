@@ -15,12 +15,12 @@
     "camera": {
                 "type":"pespectiva",
                 "origin":{
-                            "x": 0.5,
-                            "y": 0,
+                            "x": 0.3,
+                            "y": 1,
                             "z": 6
                         },
                 "lookAt":{
-                            "x": 1,
+                            "x": 0,
                             "y": 0,
                             "z": -1
                         },
@@ -107,7 +107,7 @@
                                         }
                         },
             "objects": {
-                "spheres": [
+                "spheres1": [
                                     {
                                         "material": {
                                                         "type" : "beerlaw",
@@ -171,7 +171,7 @@
                                                                 },
                                                         "alpha": 64,
                                                         "fuzz": 0.0,
-                                                        "ref_idx": 2.4
+                                                        "ref_idx": 1.4
                                                     },
                                         "max":{
                                                     "x":0.0,
@@ -185,8 +185,8 @@
                                                     "z":-2,
                                                     "homogeneous":1
                                         },
-                                        "name_file": "tea_pot.obj",
-                                        "transformation1": [
+                                        "name_file": "tea_pot1.obj",
+                                        "transformation": [
                                                             {
                                                                 "type": "translate",
                                                                 "change": {
@@ -197,7 +197,7 @@
                                                             },
                                                             {
                                                                 "type": "scale",
-                                                                "change": 0.3
+                                                                "change": 1.0
                                                             }
                                                         ]
                                     }

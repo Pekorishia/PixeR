@@ -83,16 +83,15 @@ bool BeerLaw::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation
     vec3 r = reflect(d, n);
     attenuation_ = Material::albedo->value(0,0,vec3(0,0,0));
 
-    if( dot(d,n) <= 0){
+    if( dot(d,n) < 0){
         refract(d, n, ref_idx, t);
-        cosine = -1*dot(d,n);
+        cosine = dot(-d,n);
         attenuation_ = rgb(1,1,1);
     }else{
-        rgb  c_absorb = vec3(0.1,0.5,0.4);
         rgb absorb;
-        absorb[0] =  std::exp(ht_.t * -1*c_absorb.x());
-        absorb[1] =  std::exp(ht_.t * -1*c_absorb.y());
-        absorb[2] =  std::exp(ht_.t * -1*c_absorb.z());
+        absorb[0] =  std::min(1.f, std::max(0.f, std::exp(ht_.t * -1*attenuation_.x())));
+        absorb[1] =  std::min(1.f, std::max(0.f, std::exp(ht_.t * -1*attenuation_.y())));
+        absorb[2] =  std::min(1.f, std::max(0.f, std::exp(ht_.t * -1*attenuation_.z())));
         attenuation_ = absorb;
         if( refract(d, -n, 1/ref_idx, t))
             cosine = dot(t, n);
