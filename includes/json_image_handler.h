@@ -210,6 +210,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         auto ref_idx = j["scene"]["objects"]["spheres"][i]["material"]["ref_idx"];
                         mat = new Dielectrics(new Constant_texture(kd), ref_idx);
                     }
+                    else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "beerlaw"){
+                        rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto ref_idx = j["scene"]["objects"]["spheres"][i]["material"]["ref_idx"];
+                        mat = new BeerLaw(new Constant_texture(kd), ref_idx);
+                    }
                     else if (j["scene"]["objects"]["spheres"][i]["material"]["type"] == "cooktorrance"){
                         rgb kd (j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["r"],
                                 j["scene"]["objects"]["spheres"][i]["material"]["albedo"]["g"],
@@ -622,6 +630,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         
                         mat = new Lambertian(new Constant_texture(kd));
                     }
+                    else if (j["scene"]["objects"]["cube"][i]["material"]["type"] == "beerlaw"){
+                        rgb kd (j["scene"]["objects"]["cube"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["cube"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["cube"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto ref_idx = j["scene"]["objects"]["cube"][i]["material"]["ref_idx"];
+                        mat = new BeerLaw(new Constant_texture(kd), ref_idx);
+                    }
                     
                     
                     
@@ -653,6 +669,14 @@ std::string JsonImage::jsonImageHandler(std::stringstream &ss, std::string file,
                         
                         
                         mat = new Lambertian(new Constant_texture(kd));
+                    }
+                    else if (j["scene"]["objects"]["box"][i]["material"]["type"] == "beerlaw"){
+                        rgb kd (j["scene"]["objects"]["box"][i]["material"]["albedo"]["r"],
+                                j["scene"]["objects"]["box"][i]["material"]["albedo"]["g"],
+                                j["scene"]["objects"]["box"][i]["material"]["albedo"]["b"]);                        
+                        
+                        auto ref_idx = j["scene"]["objects"]["box"][i]["material"]["ref_idx"];
+                        mat = new BeerLaw(new Constant_texture(kd), ref_idx);
                     }
                     
                     
