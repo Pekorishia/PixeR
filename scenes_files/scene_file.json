@@ -73,8 +73,8 @@
                                             "z": 2
                                         },            
                             "intensity": {
-                                            "r": 1,
-                                            "g": 1,
+                                            "r": 0,
+                                            "g": 0,
                                             "b": 0.6
                                         }
                        }
@@ -107,13 +107,13 @@
                                         }
                         },
             "objects": {
-                "spheres1": [
+                "spheres": [
                                     {
                                         "material": {
                                                         "type" : "beerlaw",
                                                         "albedo": {
-                                                                    "r": 0.3,
-                                                                    "g": 0.6,
+                                                                    "r": 0,
+                                                                    "g": 1,
                                                                     "b": 1
                                                                 },
                                                         "specular": {
@@ -143,7 +143,44 @@
                                                     }, 
                                         "radius": 0.5
 
-                                    }],
+                                    },
+                                    {
+                                        "material": {
+                                                        "type" : "beerlaw",
+                                                        "albedo": {
+                                                                    "r": 0,
+                                                                    "g": 1,
+                                                                    "b": 1
+                                                                },
+                                                        "specular": {
+                                                                    "r": 0.9,
+                                                                    "g": 0.9,
+                                                                    "b": 0.9
+                                                                },
+                                                        "mirrow": {
+                                                                    "r": 0.0,
+                                                                    "g": 0.0,
+                                                                    "b": 0.0
+                                                                },
+                                                        "ambient": {
+                                                                    "r": 0.1,
+                                                                    "g": 0.1,
+                                                                    "b": 0.1
+                                                                },
+                                                        "alpha": 64,
+                                                        "fuzz": 0.0,
+                                                        "ref_idx":2.4
+                                                    },
+                                        "center": {
+                                                        "x": 1.7,
+                                                        "y": -0.5,
+                                                        "z": -2,
+                                                        "homogeneous": 1
+                                                    }, 
+                                        "radius": -0.54
+
+                                    }
+                        ],
                         "box":[
                                     {
                                         "material": {
