@@ -89,7 +89,7 @@ bool BeerLaw::scatter (const Ray & r_, const HitRecord & ht_, vec3 & attenuation
         attenuation_ = rgb(1,1,1);
     }else{
         rgb absorb;
-        float distan = r_.point_at(ht_.t).length();
+        float distan = ht_.t;
         absorb[0] =  std::min(1.f, std::max(0.f, std::exp(distan * -1 * attenuation_.x())));
         absorb[1] =  std::min(1.f, std::max(0.f, std::exp(distan * -1 * attenuation_.y())));
         absorb[2] =  std::min(1.f, std::max(0.f, std::exp(distan * -1 * attenuation_.z())));

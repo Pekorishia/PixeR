@@ -1,6 +1,6 @@
 {
     "image": { 
-                "name": "beerlaw.ppm",
+                "name": "beerlaw1.ppm",
                 "codification": "ascii",
                 "width": 600,
                 "height": 300,
@@ -15,9 +15,9 @@
     "camera": {
                 "type":"pespectiva",
                 "origin":{
-                            "x": 0.3,
-                            "y": 1,
-                            "z": 6
+                            "x": 5.0,
+                            "y": 2,
+                            "z": 4
                         },
                 "lookAt":{
                             "x": 0,
@@ -107,7 +107,7 @@
                                         }
                         },
             "objects": {
-                "spheres": [
+                "spheres1": [
                                     {
                                         "material": {
                                                         "type" : "beerlaw",
@@ -187,9 +187,9 @@
                                                         "type" : "beerlaw",
                                                     
                                                         "albedo": {
-                                                                    "r": 1,
-                                                                    "g": 0.742,
-                                                                    "b": 0
+                                                                    "r": 8,
+                                                                    "g": 8.0,
+                                                                    "b": 3
                                                                 },
                                                         "specular": {
                                                                     "r": 0.9,
@@ -211,14 +211,14 @@
                                                         "ref_idx": 1.4
                                                     },
                                         "max":{
-                                                    "x":0.0,
-                                                    "y":-1,
-                                                    "z":-3,
+                                                    "x":-2.0,
+                                                    "y":-1.0,
+                                                    "z":-4,
                                                     "homogeneous":1
                                         },
                                         "min":{
-                                                    "x":1,
-                                                    "y":0,
+                                                    "x":-1,
+                                                    "y":0.0,
                                                     "z":-2,
                                                     "homogeneous":1
                                         },
